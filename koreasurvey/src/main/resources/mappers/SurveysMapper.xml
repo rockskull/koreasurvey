@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.quantumsoft.koreasurvey.SurveysMapper">
+<select id="selectSurveysByUserId" parameterType="Integer"
+	resultType="kr.quantumsoft.koreasurvey.model.Surveys">
+	SELECT *,
+		(
+			SELECT COUNT(*) FROM `questions` WHERE `surveyid` = `s`.`id`
+		) AS `qcount`
+	FROM `surveys` `s`
+	WHERE `userid` = #{userid} AND `deleted` IS NULL
+	ORDER BY `id` DESC
+	LIMIT #{offset}, #{limit}
+</select>
+<insert id="insertSurveys" parameterType="kr.quantumsoft.koreasurvey.model.Surveys"
+	useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO `surveys` (
+		`userid`,
+		`useremail`,
+		`category`,
+		`title`,
+		`detail`,
+		`totalcost`,
+		`unitcost`,
+		`to`
+	) VALUES (
+		#{userid},
+		#{useremail},
+		#{category},
+		#{title},
+		#{detail},
+		#{totalcost},
+		#{unitcost},
+		#{to}
+	)
+</insert>
+<update id="updateSurveys" parameterType="kr.quantumsoft.koreasurvey.model.Surveys">
+	UPDATE `surveys`
+	SET
+		`title` = #{title},
+		`category` = #{category},
+		`detail` = #{detail},
+		`totalcost` = #{totalcost},
+		`unitcost` = #{unitcost},
+		`to` = #{to}
+	WHERE `id` = #{id}
+</update>
+<select id="selectSurveysforAjax" parameterType="HashMap"
+	resultType="kr.quantumsoft.koreasurvey.model.Surveys">
+	SELECT *,
+		(
+			SELECT COUNT(*) FROM `questions` WHERE `surveyid` = `s`.`id`
+		) AS `qcount`
+	FROM `surveys` `s`
+	WHERE `deleted` IS NULL
+	ORDER BY `id` DESC
+	LIMIT #{offset}, 10
+</select>
+<select id="selectSurveysById" parameterType="Integer"
+	resultType="kr.quantumsoft.koreasurvey.model.Surveys">
+	SELECT *,
+		(
+			SELECT COUNT(*) FROM `questions` WHERE `surveyid` = `s`.`id`
+		) AS `qcount`
+	FROM `surveys` `s` WHERE `id` = #{id}
+</select>
+<update id="deleteSurveyById" parameterType="Integer">
+	UPDATE `surveys`
+	SET
+		`deleted` = CURRENT_TIMESTAMP()
+	WHERE `id` = #{id}
+</update>
+</mapper>

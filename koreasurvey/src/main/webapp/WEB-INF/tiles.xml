@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+     "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+     "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+       
+<tiles-definitions>
+	
+	<!-- 마스터 페이지 main -->
+    <definition name="defaultLayout" template="/WEB-INF/views/tiles/basicLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="top" value="/WEB-INF/views/tiles/top.jsp" />
+		<put-attribute name="contents" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+		<put-attribute name="scripter" value="/WEB-INF/views/tiles/scripter.jsp" />
+		<put-attribute name="definition" value="default" />
+	</definition>
+	
+	<definition name="accountLayout" template="/WEB-INF/views/tiles/basicLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="top" value="/WEB-INF/views/tiles/accountTop.jsp" />
+		<put-attribute name="contents" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+		<put-attribute name="scripter" value="/WEB-INF/views/tiles/scripter.jsp" />
+		<put-attribute name="definition" value="default" />
+	</definition>
+	
+	<definition name="home" extends="defaultLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/main/index.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="mainTop" extends="defaultLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/main/top.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="account" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/index.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="charge" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/charge.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="survey" extends="defaultLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/surveys/index.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<!-- 설문 관리 뷰 -->
+	
+	<definition name="surveyList" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/surveyIndex.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="surveyNew" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/surveyNew.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+	
+	<definition name="surveyEdit" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/surveyEdit.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+</tiles-definitions>

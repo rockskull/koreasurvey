@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+		
+	<bean name="devDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://192.168.200.44:3306/"/>
+		<property name="username" value="space"/>
+		<property name="password" value="dnwn1004"/>
+	</bean>
+	
+	<bean name="relDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/"/>
+		<property name="username" value="space"/>
+		<property name="password" value="dnwn1004"/>
+	</bean>
+	
+	<bean id="dataSource" class="kr.quantumsoft.koreasurvey.initiator.RoutingDataSource">
+		<property name="targetDataSources">
+			<map>
+				<entry key="dev" value-ref="devDataSource"></entry>
+				<entry key="rel" value-ref="relDataSource"></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="transactionManger"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> <!-- SqlSessionFactoryBean 빈을 사용하겠다 -->
+		<property name="dataSource" ref="dataSource"></property> <!-- 데이터에 접근하기 위한 정보값을 레퍼로 함. -->
+		<property name="mapperLocations" value="classpath*:/mapper/**/*.xml"></property> <!-- 만든 DAO 객체 위치 -->
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"></constructor-arg> <!-- 실제 사용할 sqlSession 녀석 -->
+	</bean>
+</beans>
