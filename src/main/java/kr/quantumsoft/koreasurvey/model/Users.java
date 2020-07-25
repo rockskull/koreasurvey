@@ -51,21 +51,30 @@ public class Users implements Serializable, UserDetails {
 	private Integer recommanderid;
 	private String recommanderemail;
 	private Integer point;
+	private String permission;
 	private Date created;
-	
+
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-		
+		final String permission = this.getPermission();
 		GrantedAuthority memberGA = new GrantedAuthority() {
 			
 			@Override
 			public String getAuthority() {
 				// TODO Auto-generated method stub
-				return "MEMBER";
+				return permission;
 			}
 		};
 		
