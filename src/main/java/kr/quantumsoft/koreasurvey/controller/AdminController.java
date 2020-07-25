@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class AdminController {
     @Autowired
     private TradingsService tradingsService;
 
+    private static final List<String> REGION_STRINGS = Arrays.asList("서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "대전광역시", "울산광역시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
 
     @RequestMapping("")
@@ -59,6 +61,7 @@ public class AdminController {
         }
         Map<String, Object> items = new HashMap<String, Object>();
         items.put("data", user);
+        items.put("regions", REGION_STRINGS);
         return new ModelAndView("admin/users/detail", items);
     }
 

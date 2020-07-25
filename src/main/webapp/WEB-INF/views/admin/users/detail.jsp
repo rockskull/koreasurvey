@@ -15,19 +15,30 @@
         </tr>
         <tr>
             <td>출생년도</td>
-            <td>${data.age}</td>
+            <td><input class="form-control" value="${data.age}"></td>
             <td>성별</td>
-            <td>${data.gender}</td>
+            <td>
+                <select class="form-control">
+                    <option  ${data.gender eq '남성' ? 'selected' : ''}>남</option>
+                    <option ${data.gender eq '여성' ? 'selected' : ''}>여</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td>지역</td>
-            <td>${data.area}</td>
+            <td>
+                <select class="form-control">
+                    <c:forEach items="${regions}" var="item">
+                        <option ${item eq data.area ? 'selected' : ''}>${item}</option>
+                    </c:forEach>
+
+                </select>
+            </td>
             <td>추천인</td>
             <td>
                 <c:choose>
                     <c:when test="${data.recommanderid != 0}"><a href="/admin/user/detail/${data.recommanderid}">${data.recommanderemail}</a></c:when>
                     <c:otherwise>없음</c:otherwise>
-
                 </c:choose>
             </td>
             <td></td>
