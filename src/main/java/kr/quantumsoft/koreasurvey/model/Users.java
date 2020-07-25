@@ -68,18 +68,27 @@ public class Users implements Serializable, UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-		final String permission = this.getPermission();
-		GrantedAuthority memberGA = new GrantedAuthority() {
-			
+		authList.add(new GrantedAuthority() {
+
 			@Override
 			public String getAuthority() {
 				// TODO Auto-generated method stub
-				return permission;
+				return "MEMBER";
 			}
-		};
-		
-		authList.add(memberGA);
-		
+		});
+		if (this.getPermission().equals("ADMIN")) {
+			authList.add(new GrantedAuthority() {
+
+				@Override
+				public String getAuthority() {
+					// TODO Auto-generated method stub
+					return "ADMIN";
+				}
+			});
+
+		}
+
+
 		return authList;
 	}
 
