@@ -18,7 +18,9 @@ package kr.quantumsoft.koreasurvey.service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -93,6 +95,18 @@ public class UsersService implements UserDetailsService {
 	
 	public Integer updateUser(Users user) {
 		return repo.updateUser(user);
+	}
+
+	public List<Users> search(String email, String start, String end) {
+		HashMap<String, String> param = new HashMap<String, String>();
+		if (StringUtils.isNotEmpty(end) && StringUtils.isNotEmpty(start)) {
+			param.put("start", start);
+			param.put("end", end);
+		}
+		if (StringUtils.isNotEmpty(email)) {
+			param.put("email", email);
+		}
+		return repo.search(param);
 	}
 	
 }

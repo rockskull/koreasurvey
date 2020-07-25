@@ -68,4 +68,14 @@
 		`area` = #{area}
 	WHERE `id` = #{id}
 </update>
+<select id="search" parameterType="HashMap" resultType="kr.quantumsoft.koreasurvey.model.Users">
+	SELECT * FROM `users` WHERE 1=1
+	<if test="email != null">
+		and email = #{email}
+	</if>
+	<if test="start != null and end != null">
+		and created BETWEEN #{start} and #{end}
+	</if>
+</select>
+
 </mapper>

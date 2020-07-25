@@ -77,8 +77,8 @@
 	<definition name="adminLayout" template="/WEB-INF/views/tiles/adminLayout.jsp">
 	</definition>
 
-	<definition name="admin/*" extends="adminLayout">
-		<put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp"/>
+	<definition name="admin/*/*" extends="adminLayout">
+		<put-attribute name="content" value="/WEB-INF/views/admin/{1}/{2}.jsp"/>
 	</definition>
 
 </tiles-definitions>
