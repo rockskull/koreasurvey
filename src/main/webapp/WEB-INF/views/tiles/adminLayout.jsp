@@ -35,16 +35,16 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/admin/users">회원관리</a>
+                    <a href="/admin/user/list">회원관리</a>
                 </li>
                 <li>
-                    <a href="/admin/users">설문관리</a>
+                    <a href="/admin/survey/list">설문관리</a>
                 </li>
                 <li>
-                    <a href="/admin/users">적립금관리</a>
+                    <a href="/admin/point/list">적립금관리</a>
                 </li>
                 <li>
-                    <a href="/admin/users">공지사항관리</a>
+                    <a href="/admin/notice/list">공지사항관리</a>
                 </li>
 
             </ul>
