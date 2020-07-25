@@ -23,7 +23,7 @@
 		<put-attribute name="scripter" value="/WEB-INF/views/tiles/scripter.jsp" />
 		<put-attribute name="definition" value="default" />
 	</definition>
-	
+
 	<definition name="home" extends="defaultLayout">
 		<put-attribute name="contents" value="/WEB-INF/views/main/index.jsp" />
 		<put-attribute name="definition" cascade="true" value="main" />
@@ -73,4 +73,12 @@
 		<put-attribute name="definition" cascade="true" value="main" />
 		<put-attribute name="menu" cascade="true" value="about" />
 	</definition>
+
+	<definition name="adminLayout" template="/WEB-INF/views/tiles/adminLayout.jsp">
+	</definition>
+
+	<definition name="admin/*" extends="adminLayout">
+		<put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp"/>
+	</definition>
+
 </tiles-definitions>
