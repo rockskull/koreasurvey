@@ -28,12 +28,14 @@
 					<i class="ti-home f-16"></i>
 					<div class="f-10">홈</div>
 				</a>
-				<c:if test="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id eq 5}">
 				<a href="<c:url value="/account/surveys" />" class="col">
-				</c:if>
-				<c:if test="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id ne 5}">
-				<a href="javascript:alert('설문을 등록할 권한이 없습니다.')" class="col">
-				</c:if>
+
+				<%--				<c:if test="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id eq 5}">--%>
+<%--				<a href="<c:url value="/account/surveys" />" class="col">--%>
+<%--				</c:if>--%>
+<%--				<c:if test="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.id ne 5}">--%>
+<%--				<a href="javascript:alert('설문을 등록할 권한이 없습니다.')" class="col">--%>
+<%--				</c:if>--%>
 					<i class="ti-write f-16"></i><br />
 					<div class="f-10">설문 등록</div>
 				</a>
@@ -90,6 +92,7 @@
 	<script type="text/javascript" src="<c:url value="/resources/js/jquery.slimscroll.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/resources/js/waves.min.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script type="text/javascript" src="<c:url value="/resources/js/bootstrap4-toggle.min.js" />"></script>
 
 	<script src="<c:url value="/resources/js/pcoded.min.js" />"></script>
 	<script src="<c:url value="/resources/js/horizontal-layout.min.js" />"></script>
