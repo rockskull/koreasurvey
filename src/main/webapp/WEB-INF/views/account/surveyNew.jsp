@@ -52,7 +52,7 @@
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-sm-2 col-form-label">문항당 배당액</label>
+											<label class="col-sm-2 col-form-label">인당 배당액</label>
 											<div class="col-sm-2">
 												<input type="text" class="form-control" id="unitcost" name="unitcost" />
 											</div>
