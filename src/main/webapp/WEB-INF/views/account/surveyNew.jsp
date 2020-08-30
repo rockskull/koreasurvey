@@ -88,14 +88,59 @@
 									<div id="exclude">
 										<div class="form-group row">
 											<label class="col-sm-2 col-form-label">연령대</label>
-											<div class="col-sm-10" id="age-range">
-												<button class="btn btn-default" data-age="0">전체</button>
-												<button class="btn btn-default" data-age="10">10대</button>
-												<button class="btn btn-default" data-age="20">20대</button>
-												<button class="btn btn-default" data-age="30">30대</button>
-												<button class="btn btn-default" data-age="40">40대</button>
-												<button class="btn btn-default" data-age="50">50대</button>
-												<button class="btn btn-default" data-age="60">60대+</button>
+											<div class="btn-group-toggle" data-toggle="buttons" id="age-range">
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="all"> 전체
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="10"> 10대
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="20"> 20대
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="30"> 30대
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="40"> 40대
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="50"> 50대
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="60"> 60대+
+												</label>
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 col-form-label">성별</label>
+											<div class="btn-group-toggle" data-toggle="buttons" id="gender">
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="all"> 전체
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="M"> 남성
+												</label>
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="age" value="F"> 여성
+												</label>
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 col-form-label">지역 </label>
+											<div class="btn-group-toggle" data-toggle="buttons" id="region">
+												<label class="btn btn-primary btn-sm">
+													<input type="checkbox" name="region" value="all"> 전체
+												</label>
+												<c:forEach var="item" items="${regions}">
+													<label class="btn btn-primary btn-sm">
+														<input type="checkbox" name="region" value="<c:out value="${item}" />" > <c:out value="${item}"></c:out>
+
+													</label>
+												</c:forEach>
+
 											</div>
 										</div>
 									</div>

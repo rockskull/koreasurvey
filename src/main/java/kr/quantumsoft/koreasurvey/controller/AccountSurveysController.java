@@ -118,6 +118,7 @@ public class AccountSurveysController {
 		
 		model.addAttribute("new", new Surveys());
 		model.addAttribute("user", user);
+		model.addAttribute("regions", ProjectConstants.REGION_STRINGS);
 		return "surveyNew";
 	}
 	
