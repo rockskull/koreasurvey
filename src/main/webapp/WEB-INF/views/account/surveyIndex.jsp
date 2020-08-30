@@ -80,6 +80,9 @@
 										<a href="<c:url value="/account/surveys/new" />" class="btn btn-success col-sm-12 mb-2"><i class="fa fa-magic"></i> 새로운 설문 등록</a>
 <%--										<button id="delete" class="btn btn-danger col-sm-12 mb-2"><i class="fa fa-trash-o"></i> 선택 설문 삭제</button>--%>
 									</div>
+									<div class="text-left col-sm-12">
+										<p>등록된 설문은 수정하실 수 없습니다. 문의사항이 있으시면 0000-0000로 연락주세요.</p>
+									</div>
 <%--									<div class="text-right col-sm-12">--%>
 <%--										<button id="edit" class="btn btn-primary col-sm-12"><i class="fa fa-wrench"></i> 선택 설문 편집</button>--%>
 <%--									</div>--%>
