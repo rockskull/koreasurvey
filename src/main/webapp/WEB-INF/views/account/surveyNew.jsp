@@ -83,9 +83,9 @@
 										</div> -->
 									</div>
 									<h4 class="sub-title">설문대상을 제한합니다.
-										<input type="checkbox" data-toggle="toggle" data-size="sm">
+										<input type="checkbox" data-toggle="toggle" data-size="sm" id="exclude-toggle">
 									</h4>
-									<div id="exclude">
+									<div id="exclude" style="display: none">
 										<div class="form-group row">
 											<label class="col-sm-2 col-form-label">연령대</label>
 											<div class="btn-group-toggle" data-toggle="buttons" id="age-range">
@@ -137,7 +137,6 @@
 												<c:forEach var="item" items="${regions}">
 													<label class="btn btn-primary btn-sm">
 														<input type="checkbox" name="region" value="<c:out value="${item}" />" > <c:out value="${item}"></c:out>
-
 													</label>
 												</c:forEach>
 
@@ -252,6 +251,15 @@
 	</div>
 </div>
 <c:set var="javascript" scope="request">
+$("#exclude-toggle").change(function() {
+	if ($(this).prop('checked')) {
+		$("#exclude").show();
+	} else {
+		console.log("TODO Reset Event ");
+		$("#exclude").hide();
+	}
+
+})
 $("#age-range button").click(function () {
 	$(this).attr("disabled", true);
 	console.log($(this).data("age"));
