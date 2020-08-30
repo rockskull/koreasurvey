@@ -162,7 +162,7 @@ public class SurveysController {
 		
 			tradingService.insertTradings(trading);
 			
-			if(user.getRecommanderid() == 0) return;
+			if(user.getRecommanderid() == null || user.getRecommanderid() == 0) return;
 			
 			// 첫번째 윗사람
 			Users firstParent = userService.selectUserById(user.getRecommanderid());
