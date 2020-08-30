@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import kr.quantumsoft.koreasurvey.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.quantumsoft.koreasurvey.model.Answers;
 import kr.quantumsoft.koreasurvey.model.Surveys;
 import kr.quantumsoft.koreasurvey.model.Users;
-import kr.quantumsoft.koreasurvey.service.AnswersService;
-import kr.quantumsoft.koreasurvey.service.MetropolitanService;
-import kr.quantumsoft.koreasurvey.service.SurveysService;
-import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.vo.StatisticsVO;
 
 /**
@@ -49,6 +46,10 @@ public class HomeController {
 	
 	@Autowired
 	AnswersService answerService;
+
+	@Autowired
+	private NoticeService noticeService;
+
 	
 	public static final List<HashMap<String, String>> listHeaders = Arrays.asList(
 			new HashMap<String, String>() {{
@@ -198,6 +199,7 @@ public class HomeController {
 		model.addAttribute("headers", tmpHeaderList);
 		model.addAttribute("user", user);
 		model.addAttribute("isSelection", isSelection);
+		model.addAttribute("notices", noticeService.getNoticeTop3());
 		
 		return "home";
 	}
