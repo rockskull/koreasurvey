@@ -43,12 +43,13 @@
 										<table class="table table-hover m-b-0">
 											<thead>
 												<tr>
-													<th>선택</th>
+<%--													<th>선택</th>--%>
 													<!-- <th>순번</th> -->
+													<th>설문 번호</th>
 													<th>설문 제목</th>
 													<th>문항 수</th>
 													<th>총 배당액</th>
-													<th>문항당 배당액</th>
+													<th>인당 배당액</th>
 													<th>응답수</th>
 													<th>남은 배당액</th>
 													<th>종료 시간</th>
@@ -58,8 +59,8 @@
 											<tbody>
 											<c:forEach items="${list}" var="item" varStatus="status">
 												<tr>
-													<td><input class="check-item" type="checkbox" data-item-id="${item.id }" /></td>
-													<%-- <td>${status.index}</td> --%>
+<%--													<td><input class="check-item" type="checkbox" data-item-id="${item.id }" /></td>--%>
+													 <td>${item.id}</td>
 													<td>${item.title }</td>
 													<td>${item.qcount } 개</td>
 													<td>${item.totalcost } P</td>
@@ -77,11 +78,11 @@
 								<div class="card-footer row">
 									<div class="text-left col-sm-12">
 										<a href="<c:url value="/account/surveys/new" />" class="btn btn-success col-sm-12 mb-2"><i class="fa fa-magic"></i> 새로운 설문 등록</a>
-										<button id="delete" class="btn btn-danger col-sm-12 mb-2"><i class="fa fa-trash-o"></i> 선택 설문 삭제</button>
+<%--										<button id="delete" class="btn btn-danger col-sm-12 mb-2"><i class="fa fa-trash-o"></i> 선택 설문 삭제</button>--%>
 									</div>
-									<div class="text-right col-sm-12">
-										<button id="edit" class="btn btn-primary col-sm-12"><i class="fa fa-wrench"></i> 선택 설문 편집</button>
-									</div>
+<%--									<div class="text-right col-sm-12">--%>
+<%--										<button id="edit" class="btn btn-primary col-sm-12"><i class="fa fa-wrench"></i> 선택 설문 편집</button>--%>
+<%--									</div>--%>
 								</div>
 							</div>
 						</div>
