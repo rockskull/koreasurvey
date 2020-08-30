@@ -120,7 +120,7 @@ public class SurveysController {
 	
 	@ResponseBody
 	@RequestMapping(value="submitAnswer", method=RequestMethod.POST)
-	public void submitAnswer(/*RequestArrayVO req, List<Answers> answer, */String reqJson, Authentication auth) {
+	public Integer submitAnswer(/*RequestArrayVO req, List<Answers> answer, */String reqJson, Authentication auth) {
 		Users user = (Users)auth.getPrincipal();
 		Integer totalAmount = 0;
 		
@@ -161,29 +161,31 @@ public class SurveysController {
 			trading.setUserid(user.getId());
 		
 			tradingService.insertTradings(trading);
-			
-			if(user.getRecommanderid() == null || user.getRecommanderid() == 0) return;
-			
-			// 첫번째 윗사람
-			Users firstParent = userService.selectUserById(user.getRecommanderid());
-			firstParent.setPoint(firstParent.getPoint()+parentPoint);
-			userService.updateUser(firstParent);
-			
-			trading.setAmount(parentPoint);
-			trading.setUserid(firstParent.getId());
-			
-			tradingService.insertTradings(trading);
-			
-			if(firstParent.getRecommanderid() == 0) return;
-			
-			// 두번째 윗사람
-			Users secondParent = userService.selectUserById(firstParent.getRecommanderid());
-			secondParent.setPoint(secondParent.getPoint()+parentPoint);
-			userService.updateUser(secondParent);
-			
-			trading.setUserid(secondParent.getId());
-			
-			tradingService.insertTradings(trading);
+
+			if(user.getRecommanderid() != null && user.getRecommanderid() != 0) {
+
+				// 첫번째 윗사람
+				Users firstParent = userService.selectUserById(user.getRecommanderid());
+				firstParent.setPoint(firstParent.getPoint()+parentPoint);
+				userService.updateUser(firstParent);
+
+				trading.setAmount(parentPoint);
+				trading.setUserid(firstParent.getId());
+
+				tradingService.insertTradings(trading);
+				if(firstParent.getRecommanderid() != null && firstParent.getRecommanderid() != 0) {
+					// 두번째 윗사람
+					Users secondParent = userService.selectUserById(firstParent.getRecommanderid());
+					secondParent.setPoint(secondParent.getPoint()+parentPoint);
+					userService.updateUser(secondParent);
+
+					trading.setUserid(secondParent.getId());
+
+					tradingService.insertTradings(trading);
+				}
+			}
+			return totalAmount;
 		}
+		return -1;
 	}
 }

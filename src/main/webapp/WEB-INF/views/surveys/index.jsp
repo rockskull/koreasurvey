@@ -169,7 +169,7 @@ $(function() {
 		}
 		
 		$.post("submitAnswer", {reqJson : JSON.stringify(listAnswer)}, function(result) {
-			alert("설문 조사를 완료하였습니다.");
+			alert(result + "원이 적립되었습니다.");
 			
 			location.href="<c:url value="/" />";
 		});
