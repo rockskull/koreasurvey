@@ -82,6 +82,25 @@
 											</div>
 										</div> -->
 									</div>
+									<h4 class="sub-title">설문대상을 제한합니다.
+										<input type="checkbox" data-toggle="toggle" data-size="sm">
+									</h4>
+									<div id="exclude">
+										<div class="form-group row">
+											<label class="col-sm-2 col-form-label">연령대</label>
+											<div class="col-sm-10" id="age-range">
+												<button class="btn btn-default" data-age="0">전체</button>
+												<button class="btn btn-default" data-age="10">10대</button>
+												<button class="btn btn-default" data-age="20">20대</button>
+												<button class="btn btn-default" data-age="30">30대</button>
+												<button class="btn btn-default" data-age="40">40대</button>
+												<button class="btn btn-default" data-age="50">50대</button>
+												<button class="btn btn-default" data-age="60">60대+</button>
+											</div>
+										</div>
+									</div>
+
+
 									<h4 class="sub-title">설문지의 문항들을 추가하여 입력합니다.</h4>
 									<div id="listQuestion">
 										<div class="item">
@@ -188,6 +207,11 @@
 	</div>
 </div>
 <c:set var="javascript" scope="request">
+$("#age-range button").click(function () {
+	$(this).attr("disabled", true);
+	console.log($(this).data("age"));
+});
+
 function updateTotalCost(countItem) {
 	var totalcost = Number($("#unitcost").val())*countItem*$("#people").val();
 	
@@ -201,6 +225,7 @@ function updateTotalCost(countItem) {
 }
 
 $(function() {
+
 	$("#people, #unitcost").keyup(function() {
 		updateTotalCost($("#listQuestion > .item").length);
 	});
