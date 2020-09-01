@@ -24,7 +24,7 @@
 															<p class="text-muted">문항의 제목과 유형을 선택한 후 내용을 작성하시면 됩니다.</p>
 															<div class="row">
 																<div class="col-12">
-																	<textarea rows="5" class="form-control question-content" placeholder="설문 문항을 작성해 주십시오."></textarea>
+                                                                    <textarea rows="5" class="form-control question-content d-none"  placeholder="설문 문항을 작성해 주십시오."></textarea>
 																</div>
 															</div>
 															<div class="row mt-4 question-options">

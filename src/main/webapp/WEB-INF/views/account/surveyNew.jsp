@@ -173,7 +173,7 @@
 														<p class="text-muted">문항의 제목과 유형을 선택한 후 내용을 작성하시면 됩니다.</p>
 														<div class="row">
 															<div class="col-12">
-																<textarea rows="5" class="form-control question-content" placeholder="설문 문항을 작성해 주십시오."></textarea>
+																<textarea rows="5" class="form-control question-content d-none" placeholder="설문 문항을 작성해 주십시오."></textarea>
 															</div>
 														</div>
 														<div class="row mt-4 question-options">
@@ -251,6 +251,7 @@
 	</div>
 </div>
 <c:set var="javascript" scope="request">
+
 $("#exclude-toggle").change(function() {
 	if ($(this).prop('checked')) {
 		$("#exclude").show();
@@ -381,7 +382,21 @@ $(function() {
 	$("#cancel").click(function() {
 		location.href="/koreasurvey/account/surveys/";
 	});
-	
+    $(document).on("change", ".question-type", function() {
+        console.log("q-type",$(this).val());
+        console.log($(this).parent().parent().parent().parent().parent().find(".question-content"));
+        if($(this).val() === "0") {
+            $(this).parent().parent().parent().parent().parent().find(".add-options-link").removeClass("d-none");
+            $(this).parent().parent().parent().parent().parent().find(".question-options").removeClass("d-none");
+            $(this).parent().parent().parent().parent().parent().find(".question-content").addClass("d-none");
+
+        } else {
+            $(this).parent().parent().parent().parent().parent().find(".add-options-link").addClass("d-none");
+            $(this).parent().parent().parent().parent().parent().find(".question-options").addClass("d-none");
+            $(this).parent().parent().parent().parent().parent().find(".question-content").removeClass("d-none");
+        }
+    });
+
 	$("#addQuestion").click(function() {
 		$.get("/koreasurvey/resources/import.txt", function(result) {
 			$("#listQuestion").append(result);
@@ -411,15 +426,7 @@ $(function() {
 			  contextmenu: "link image imagetools table configurepermanentpen"
 			}); */
 			
-			$(".question-type").change(function() {
-				if($(this).val() === "0") {
-					$(this).parent().parent().parent().parent().parent().find(".add-options-link").removeClass("d-none");
-					$(this).parent().parent().parent().parent().parent().find(".question-options").removeClass("d-none");
-				} else {
-					$(this).parent().parent().parent().parent().parent().find(".add-options-link").addClass("d-none");
-					$(this).parent().parent().parent().parent().parent().find(".question-options").addClass("d-none");
-				}
-			});
+
 			
 			$(".add-options").click(function() {
 				html = "<div class=\"col-12\">";
