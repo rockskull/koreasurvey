@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <%@ page session="false"%>
 <div class="pcoded-content">
 	<div class="page-header card">
@@ -65,7 +67,7 @@
 													<td>${item.qcount } 개</td>
 													<td>${item.totalcost } P</td>
 													<td>${item.unitcost } P</td>
-													<td>${item.answerUserCount } 명</td>
+													<td>${item.answerUserCount } / <fmt:formatNumber type="number"  pattern="0" value="${item.totalcost / item.unitcost} " />명</td>
 													<td>${item.totalcost-item.qcount*item.unitcost*item.answerUserCount } P</td>
 													<td>${item.to }</td>
 													<td><span class="text-primary">진행중</span></td>
