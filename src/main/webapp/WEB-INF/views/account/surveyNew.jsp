@@ -260,12 +260,8 @@ $("#exclude-toggle").change(function() {
 	}
 
 })
-$("#age-range button").click(function () {
-	$(this).attr("disabled", true);
-	console.log($(this).data("age"));
-});
 
-function updateTotalCost(countItem) {
+	function updateTotalCost(countItem) {
 	var totalcost = Number($("#unitcost").val())*countItem*$("#people").val();
 	
 	if(totalcost > ${user.point }) {
@@ -284,6 +280,11 @@ $(function() {
 	});
 	
 	$("#save").click(function() {
+        if (confirm("저장 후에는 항목을 수정하실 수 없습니다. 질문과 항목을 모두 확인하셨습니까?") == false) {
+            return false;
+        }
+
+
 		if($("#id").val() === "") {
 			$.post("saveSurveyDoc", $("#doc").find("select, textarea, input").serialize(), function(id) {
 				$("#id").val(id);
@@ -294,7 +295,7 @@ $(function() {
 						surveyid : id,
 						title : $(this).find(".question-view").find(".view-title").html(),
 						question : $(this).find(".question-view").find(".view-content").html(),
-						type : $(this).find(".question-edit").find(".question-type").val()
+						type : $(this).find(".question-edit").find(".question-type").val(),
 					};
 					
 					$.post("saveQuestion", questionItem, function(questionId) {
@@ -368,7 +369,7 @@ $(function() {
 				});
 			});
 		}
-		
+
 		alert("저장되었습니다.");
 		location.href="/koreasurvey/account/surveys/";
 	});
