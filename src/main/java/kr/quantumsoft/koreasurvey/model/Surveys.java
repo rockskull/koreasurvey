@@ -50,6 +50,7 @@ public class Surveys implements Serializable {
 	private String to;
 	private Date created;
 	private Integer qcount;
+	private Integer status;
 	
 	private Boolean isJoined = false;
 	private Integer answerUserCount;
@@ -130,5 +131,13 @@ public class Surveys implements Serializable {
 	}
 	public void setAnswerUserCount(Integer answerUserCount) {
 		this.answerUserCount = answerUserCount;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }
