@@ -70,7 +70,27 @@
 													<td>${item.answerUserCount } / <fmt:formatNumber type="number"  pattern="0" value="${item.totalcost / item.unitcost} " />명</td>
 													<td>${item.totalcost-item.qcount*item.unitcost*item.answerUserCount } P</td>
 													<td>${item.to }</td>
-													<td><span class="text-primary">진행중</span></td>
+													<td><span class="text-primary">
+
+														<c:choose>
+															<c:when test = "${item.status == 0}">
+																종료
+															</c:when>
+															<c:when test = "${item.status == 1}">
+																진행
+															</c:when>
+															<c:when test = "${item.status == 2}">
+																중지
+															</c:when>
+															<c:when test = "${item.status == 3}">
+																차단
+															</c:when>
+
+															<c:otherwise>
+																알수없음
+															</c:otherwise>
+														</c:choose>
+													</span></td>
 												</tr>
 											</c:forEach>
 											</tbody>
