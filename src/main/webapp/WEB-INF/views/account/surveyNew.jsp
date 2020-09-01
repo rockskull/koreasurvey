@@ -205,7 +205,7 @@
 														</div>
 													</div>
 													<div class="card-footer text-center">
-														<button type="button" class="btn btn-round question-save"><i class="fa fa-archive"></i> 문항 임시 저장</button>
+														<button type="button" class="btn btn-round question-save"><i class="fa fa-archive"></i> 저장</button>
 														<button type="button" class="btn btn-round question-cancel"><i class="fa fa-times"></i> 취소</button>
 													</div>
 												</div>
