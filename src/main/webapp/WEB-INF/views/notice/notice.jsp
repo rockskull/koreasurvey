@@ -45,12 +45,12 @@
                                         <span class="text"><c:out value="${item.title}"/></span>
                                         <span class="date">
                                             <fmt:formatDate var="resultRegDt" value="${item.created}" pattern="yyyy.MM.dd"/>
-                                            <c:out value="${resultRegDt}"></c:out>
+                                            ${resultRegDt}
                                         </span><span class="status"></span>
                                     </div>
-                                    <p class="content">
+                                    <div class="content">
                                             ${item.content}
-                                    </p>
+                                    </div>
                                 </li>
                             </c:forEach>
 
