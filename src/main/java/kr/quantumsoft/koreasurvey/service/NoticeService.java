@@ -13,6 +13,10 @@ public class NoticeService {
     private NoticeRepository noticeRepository;
 
     public List<Notice> getNoticeTop3() {
-        return noticeRepository.getNoticeTop3();
+        return noticeRepository.getNoticeList(3);
+    }
+
+    public List<Notice> getNotices(int size) {
+        return noticeRepository.getNoticeList(size);
     }
 }

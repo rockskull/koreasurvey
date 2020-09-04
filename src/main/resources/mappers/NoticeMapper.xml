@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.quantumsoft.koreasurvey.NoticeMapper">
 
-<select id="selectTop"  resultType="kr.quantumsoft.koreasurvey.model.Notice">
-	SELECT * FROM notice limit 3
+<select id="selectTop"  parameterType="Integer" resultType="kr.quantumsoft.koreasurvey.model.Notice">
+	SELECT * FROM notice limit #{id}
 </select>
 </mapper>

@@ -32,8 +32,8 @@ public class NoticeRepository {
 	
 	private final String namespace = "kr.quantumsoft.koreasurvey.NoticeMapper";
 
-	public List<Notice> getNoticeTop3() {
-		return session.selectList(String.format("%s.selectTop", namespace));
+	public List<Notice> getNoticeList(int size) {
+		return session.selectList(String.format("%s.selectTop", namespace), size);
 	}
 
 
