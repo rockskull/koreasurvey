@@ -29,3 +29,8 @@
 							<!-- <i class="feather icon-more-horizontal"></i> -->
 						</div>
 					</div>
+				</div>
+			</nav>
+
+			<div class="pcoded-main-container">
+				<div class="pcoded-wrapper">
