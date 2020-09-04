@@ -49,12 +49,12 @@
 						<div class="col-xl-6">
 							<div class="card">
 								<div class="card-header">
-<%--									<h5>내 포인트 현황</h5>--%>
+									<h5>친구 초대 </h5>
 								</div>
 								<div class="card-block">
 									<div class="row">
 										<div class="col-sm-12">
-											<button type="button" class="btn btn-primary col-sm mb-2">친구추천</button>
+											<button type="button" class="btn btn-primary col-sm mb-2" data-toggle="modal" data-target="#exampleModal">친구 초대하기</button>
 											<p>초대한 친구가 설문에 참여할 때마다 적립금이 쌓입니다.</p>
 										</div>
 									</div>
@@ -155,7 +155,6 @@
 								</div>
 								<div class="card-footer">
 									<div class="text-right">
-										
 									</div>
 								</div>
 							</div>
@@ -167,8 +166,52 @@
 			</div>
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+
+					<img class="img-fluid" src="<c:url value="/resources/images/basic-logo.png"  />" alt="Logo">
+<%--					<h5 class="modal-title" id="exampleModalLabel">친구초대 링크 </h5>--%>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<c:set var="req" value="${pageContext.request}" />
+
+					<p>링크를 복사한 후 친구에게 전달하세요. </br>
+						초대한 친구가 설문에 참여할 때마다 적립금이 쌓입니다.</p>
+<%--					<input class="form-control" disabled>--%>
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" id="copy-invite-link" value="${req.scheme}://${req.serverName}:${req.serverPort}<c:url value="/account/join?email=${user.email}"  />" disabled>
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" type="button" id="copy-invite-link-btn">초대링크 복사</button>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+<%--					<button type="button" class="btn btn-primary">Save changes</button>--%>
+				</div>
+			</div>
+		</div>
+	</div>
 <c:set var="javascript" scope="request">
+function copyToClipboard(id) {
+	var copyText = document.getElementById(id);
+	copyText.select();
+	document.execCommand("Copy");
+}
+
+
 $(function() {
+	$("#copy-invite-link-btn").click(function() {
+		alert("클립보드에 복사되었습니다");
+		console.log($("#copy-invite-link").val());
+		copyToClipboard("copy-invite-link");
+	});
 	$("#withdraw").click(function() {
 		alert("만원 단위로 출금 가능합니다.");
 	});
