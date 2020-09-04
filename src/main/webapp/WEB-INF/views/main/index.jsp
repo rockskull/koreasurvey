@@ -36,7 +36,7 @@
 
 										 <div class="col-xl-12">
 												<div class="card">
-													<div class="card-block cursor-pointer" data-survey-id="0">
+													<div class="card-block cursor-pointer">
 														<div class="row">
 															<div class="col-xl-12">
 																<c:if test="${empty user }">
@@ -64,7 +64,7 @@
 																			</div>
 
 																			<div id="notice-section">
-																				<h3>공지사항 <a href="#">더보기</a></h3>
+																				<h3>공지사항 <a href="<c:url value="/notice" />">더보기</a></h3>
 																				<table class="table">
 																					<tbody>
 																					<c:forEach items="${notices}" var="noticeItem">
