@@ -22,7 +22,15 @@
 </style>
 <div class="pcoded-content">
     <div class="page-header card">
-        <h1>공지사항</h1>
+        <div class="row align-items-end mt-5">
+            <div class="col-12">
+                <div class="page-header-title">
+                    <div class="d-inline text-center">
+                        <h1>공지사항</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="pcoded-inner-content">
