@@ -18,12 +18,14 @@
 															<div>
 																<h4><c:out value="${user.point}"></c:out>P</h4>
 															</div>
-															<button class="btn btn-info" style="width : 100%">출금</button>
+															<a href="<c:url value="/account" />">
+																<button class="btn btn-info" style="width : 100%">출금</button>
+															</a>
 														</div>
 
 														<div class="col-xl-3">
 															<div id="intive-section" style="margin-bottom:10px;">
-																<a href="#">
+																<a href="<c:url value="/account" />">
 																	<button class="btn btn-primary" style="width : 100%">친구 초대하기</button>
 																</a>
 															</div>
