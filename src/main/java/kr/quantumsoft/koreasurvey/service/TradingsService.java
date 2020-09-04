@@ -53,4 +53,13 @@ public class TradingsService {
 	public List<Tradings> selectTradingsByUserId(HashMap<String, Object> param) {
 		return repo.selectTradingsByUserId(param);
 	}
+
+	public List<Tradings> selectTradingsByUserId(int userId, int page, int pageSize) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("userid", userId);
+		params.put("start", userId);
+		params.put("offset", page == 1 ? 0 : page * pageSize);
+		params.put("limit", pageSize);
+		return repo.selectTradingsLimitByUserId(params);
+	}
 }
