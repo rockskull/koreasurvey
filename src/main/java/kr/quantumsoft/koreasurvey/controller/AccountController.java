@@ -87,9 +87,9 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String getJoin(Model model) {
+	public String getJoin(Model model, @RequestParam(value = "email", required = false) String email) {
 		model.addAttribute("join", new Users());
-		
+		model.addAttribute("email", email);
 		return "account/join";
 	}
 	
@@ -127,6 +127,13 @@ public class AccountController {
 		}
 		
 		return listEmail;
+	}
+
+	@ResponseBody
+	@RequestMapping("/tradings")
+	public List<Tradings> tradings(Authentication auth, @RequestParam("page") int page) {
+		Users user = (Users)auth.getPrincipal();
+		return tradingService.selectTradingsByUserId(user.getId(), page, 5);
 	}
 	
 	@RequestMapping(value={"", "/"})

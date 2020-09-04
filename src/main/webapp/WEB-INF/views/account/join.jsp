@@ -152,16 +152,7 @@
 									</form:select>
 								</div>
 								<div class="form-group form-primary">
-									<form:input path="recommanderemail" cssClass="form-control" /> <span class="form-bar"></span> <label class="float-label">추천인 이메일을 입력해 주십시오.</label>
-								</div>
-								<div class="row m-t-25 text-left">
-									<div class="col-md-12">
-										<div class="checkbox-fade fade-in-primary">
-											<label>
-											<span class="text-inverse">본 사이트 가입에 감사드립니다.</span>
-											</label>
-										</div>
-									</div>
+									<input id="recommanderemail" name="recommanderemail" class="form-control" type="text" value="<c:out value="${email}"/>" > <span class="form-bar"></span> <label class="float-label">추천인 이메일을 입력해 주십시오.</label>
 								</div>
 								<div class="row m-t-30">
 									<div class="col-md-12">
