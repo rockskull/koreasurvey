@@ -45,21 +45,39 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="col-xl-6">
 							<div class="card">
 								<div class="card-header">
-									<h5>최근 1주일 수입/지출 현황</h5>
+<%--									<h5>내 포인트 현황</h5>--%>
+								</div>
+								<div class="card-block">
+									<div class="row">
+										<div class="col-sm-12">
+											<button type="button" class="btn btn-primary col-sm mb-2">친구추천</button>
+											<p>초대한 친구가 설문에 참여할 때마다 적립금이 쌓입니다.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h5>수입/지출 현황</h5>
 								</div>
 								<div class="card-block">
 									<div class="table-responsive">
 										<table class="table table-hover m-b-0">
 											<thead>
-												<tr>
-													<th>날짜</th>
-													<th>금액</th>
-													<th>방법</th>
-												</tr>
+											<tr>
+												<th>날짜</th>
+												<th>금액</th>
+												<th>방법</th>
+											</tr>
 											</thead>
 											<tbody>
 											<c:forEach items="${tradings}" var="tItem">
@@ -67,12 +85,12 @@
 													<td><fmt:formatDate value="${tItem.created }" pattern="yyyy-MM-dd" /></td>
 													<c:if test="${tItem.type lt 0 }">
 														<c:if test="${tItem.amount lt 0 }">
-														<td class="text-c-blue">${tItem.amount }</td>
-														<td>설문 작성</td>
+															<td class="text-c-blue">${tItem.amount }</td>
+															<td>설문 작성</td>
 														</c:if>
 														<c:if test="${tItem.amount gt 0 }">
-														<td class="text-c-red">+${tItem.amount }</td>
-														<td>설문 환급</td>
+															<td class="text-c-red">+${tItem.amount }</td>
+															<td>설문 환급</td>
 														</c:if>
 													</c:if>
 													<c:if test="${tItem.type eq 0 }">
@@ -95,7 +113,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
