@@ -29,7 +29,7 @@
 							<!-- <i class="feather icon-more-horizontal"></i> -->
 						</div>
 					</div>
-					<%-- <div class="navbar-container container-fluid">
+					<div class="navbar-container container-fluid">
 						<ul class="nav-right">
 							<li class="user-profile header-notification">
 							<c:if test="${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal }">
@@ -83,7 +83,7 @@
 							</c:if>
 							</li>
 						</ul>
-					</div> --%>
+					</div>
 				</div>
 			</nav>
 
