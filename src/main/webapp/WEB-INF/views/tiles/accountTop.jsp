@@ -29,6 +29,62 @@
 							<!-- <i class="feather icon-more-horizontal"></i> -->
 						</div>
 					</div>
+					<div class="navbar-container container-fluid">
+						<ul class="nav-right">
+							<li class="user-profile header-notification">
+								<c:if test="${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal }">
+									<div class="dropdown-primary dropdown">
+										<div class="dropdown-toggle">
+											<img src="<c:url value="/resources/images/unknown-users.png" />" class="img-radius" alt="User-Image">
+											<a href="<c:url value="/account/login" />">로그인</a>
+										</div>
+									</div>
+								</c:if>
+								<c:if test="${not empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal }">
+									<div class="dropdown-primary dropdown">
+										<div class="dropdown-toggle" data-toggle="dropdown">
+											<span class="text-success mr-3">내 포인트 <span class="f-20 text-danger"><fmt:formatNumber value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.point }" maxFractionDigits="3" /> P</span></span>
+											<img src="<c:url value="/resources/images/unknown-users.png" />" class="img-radius" alt="User-Image">
+											<span>${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.email }</span> <i class="feather icon-chevron-down"></i>
+										</div>
+										<ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+											<!-- <li>
+                                                <a href="#!">
+                                                    <i class="feather icon-settings"></i>
+                                                    Settings
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="feather icon-user"></i>
+                                                    Profile
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="email-inbox.html">
+                                                    <i class="feather icon-mail"></i>
+                                                    My Messages
+                                                </a>
+                                            </li>-->
+											<li>
+												<a href="<c:url value="/account" />">
+													<i class="feather icon-settings"></i>
+													내 정보 관리
+												</a>
+											</li>
+											<li>
+												<a href="<c:url value="/account/logoutProcess" />">
+													<i class="feather icon-log-out"></i>
+													로그아웃
+												</a>
+											</li>
+										</ul>
+									</div>
+								</c:if>
+							</li>
+						</ul>
+					</div>
+
 				</div>
 			</nav>
 
