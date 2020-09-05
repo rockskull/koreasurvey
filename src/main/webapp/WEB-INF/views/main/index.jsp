@@ -32,7 +32,7 @@
 								<div class="page-wrapper">
 									<div class="page-body">
 
-										<div class="row" id="surveyArea">
+										<div class="row" id="surveyArea" style="margin-bottom: 30px;">
 
 										 <div class="col-xl-12">
 												<div class="card">
@@ -108,37 +108,51 @@
 <c:set var="javascript" scope="request">
 var startPage = 0;
 var loadingAjax = false;
+function makeDom(list) {
+	var addhtml = "";
+	list.forEach(function(item) {
+
+		addhtml += "<div class=\"col-xl-12\">";
+		addhtml += "<div class=\"card\">";
+		console.log(item.isJoined);
+		if (item.isJoined) {
+		addhtml += "<div class=\"card-block cursor-pointer\" data-survey-id=\""+item.id+"\" data-survey-join=\""+item.isJoined+"\">";
+		} else {
+		addhtml += "<div class=\"card-block cursor-pointer\" >";
+		}
+		addhtml += "<div class=\"row\">";
+		addhtml += "<div class=\"col-xl-12\">";
+		addhtml += "<div>";
+		if(item.category != null) {
+		//addhtml += "<span class=\"mr-2\">"+item.category+"</span>";
+		}
+		addhtml += "<span class=\"badge badge-inverse-warning\">"+item.unitcost*item.qcount+" P</span>";
+		if (item.isJoined) {
+		addhtml += "<span class=\"badge badge-inverse-success\">참여완료</span>";
+		}
+
+		addhtml += "</div>";
+		addhtml += "<span class=\"f-w-700 f-26\">";
+		addhtml += item.title;
+		addhtml += "<span class=\"text-c-green m-l-10 f-16\">"+((item.answerUserCount/(item.totalcost/(item.unitcost*item.qcount)))*100).toFixed(2)+"% 진행</span>";
+		if(item.to != null) {
+		//addhtml += "<span class=\"text-c-red m-l-10 f-16\">"+item.to.substring(0,10)+"까지 진행</span>";
+		}
+		addhtml += "</span>";
+		addhtml += "</div>";
+		addhtml += "</div>";
+		addhtml += "</div>";
+		addhtml += "</div>";
+		addhtml += "</div>";
+	});
+
+	return addhtml;
+}
 
 $(function() {
 	$.post("getSurveyList", {start: startPage}, function(list) {
-		var addhtml = "";
-		list.forEach(function(item) {
-			addhtml += "<div class=\"col-xl-12\">";
-			addhtml += "<div class=\"card\">";
-			addhtml += "<div class=\"card-block cursor-pointer\" data-survey-id=\""+item.id+"\" data-survey-join=\""+item.isJoined+"\">";
-			addhtml += "<div class=\"row\">";
-			addhtml += "<div class=\"col-xl-12\">";
-			addhtml += "<div>";
-			if(item.category != null) {
-				//addhtml += "<span class=\"mr-2\">"+item.category+"</span>";
-			}
-			addhtml += "<span class=\"badge badge-inverse-warning\">"+item.unitcost*item.qcount+" P</span>";
-			addhtml += "</div>";
-			addhtml += "<span class=\"f-w-700 f-26\">";
-			addhtml += item.title;
-			addhtml += "<span class=\"text-c-green m-l-10 f-16\">"+((item.answerUserCount/(item.totalcost/(item.unitcost*item.qcount)))*100).toFixed(2)+"% 진행</span>";
-			if(item.to != null) {
-				//addhtml += "<span class=\"text-c-red m-l-10 f-16\">"+item.to.substring(0,10)+"까지 진행</span>";
-			}
-			addhtml += "</span>";
-			addhtml += "</div>";
-			addhtml += "</div>";
-			addhtml += "</div>";
-			addhtml += "</div>";
-			addhtml += "</div>";
-		});
-		
-		$("#surveyArea").append(addhtml);
+
+		$("#surveyArea").append(makeDom(list));
 		
 		$("*[data-survey-id]").click(function() {
 			<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
@@ -165,33 +179,9 @@ $(function() {
 			loadingAjax = true;
 	    	
 	    	$.post("getSurveyList", {start: startPage}, function(list) {
-				var addhtml = "";
-				list.forEach(function(item) {
-					addhtml += "<div class=\"col-xl-12\">";
-					addhtml += "<div class=\"card proj-progress-card\">";
-					addhtml += "<div class=\"card-block cursor-pointer survey-card\" data-survey-id=\""+item.id+"\">";
-					addhtml += "<div class=\"row\">";
-					addhtml += "<div class=\"col-xl-12\">";
-					addhtml += "<div>";
-					addhtml += "<span class=\"mr-2\">"+item.category+"</span>";
-					addhtml += "<span class=\"badge badge-inverse-warning\">"+item.unitcost+" P</span>";
-					addhtml += "</div>";
-					addhtml += "<span class=\"f-w-700 f-26\">";
-					addhtml += item.title;
-					addhtml += "<span class=\"text-c-green m-l-10 f-16\">"+((item.answerUserCount/(item.totalcost/(item.unitcost*item.qcount)))*100).toFixed(2)+"% 진행</span>";
-					addhtml += "<span class=\"text-c-red m-l-10 f-16\">"+item.to.substring(0,10)+"까지 진행</span>";
-					addhtml += "</span>";
-					addhtml += "</div>";
-					addhtml += "</div>";
-					addhtml += "</div>";
-					addhtml += "</div>";
-					addhtml += "</div>";
-				});
-				
-				$("#surveyArea").append(addhtml);
-				
+				$("#surveyArea").append(makeDom(list));
 				$(".cursor-pointer").unbind();
-				
+
 				$(".cursor-pointer").click(function() {
 					<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
 					<c:if test="${not empty user }">
