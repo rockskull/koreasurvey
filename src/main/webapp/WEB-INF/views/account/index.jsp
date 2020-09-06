@@ -93,7 +93,7 @@
                                         </tbody>
                                     </table>
                                     <div style="margin-top: 10px;">
-                                        <button class="btn btn-default" id="more" style="width : 100%">더보기</button>
+                                        <button class="btn btn-default" id="more" style="width : 100%">+ 더보기</button>
                                     </div>
                                 </div>
                             </div>
@@ -208,6 +208,55 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="withdraw-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <img class="img-fluid" src="<c:url value="/resources/images/basic-logo.png"  />" alt="Logo">
+                <%--					<h5 class="modal-title" id="exampleModalLabel">친구초대 링크 </h5>--%>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>출금을 신청하시면 입력해주신 입금계좌로 입금해드립니다.(최대 2-3 영업일 소요)</p>
+                <div class="form-group">
+                    <label for="withdrawal-amount">출금 금액</label>
+                    <input type="number" class="form-control" id="withdrawal-amount" name="withdrawal-amount" aria-describedby="withdrawal-amount-help">
+                    <small id="withdrawal-amount-help" class="form-text text-muted">출금 가능 금액 : ${user.point}원</small>
+                </div>
+                <div class="form-group">
+                    <label for="bank-address">입금 계좌</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <select class="custom-select" name="bank-option">
+                                <option value="">선택</option>
+                                <option value="">은행은행</option>
+                            </select>
+                        </div>
+                        <input type="text" class="form-control" name="bank-address" id="bank-address">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="account-holder">예금주</label>
+                    <input type="text" class="form-control" id="account-holder" name="account-holder" aria-describedby="withdrawal-amount-help">
+                </div>
+                <div>
+                    <p>계좌번호 입력 실수, 예금주 오류로 인한 사고에 Korea Survey는 책임지지 않습니다. </br>
+                        보통예금계좌만 등록해주세요.(CMA, 가상계좌, 적금 등은 이체 불가 )</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">출금신청</button>
+                <%--					<button type="button" class="btn btn-primary">Save changes</button>--%>
+            </div>
+        </div>
+    </div>
+</div>
 <c:set var="javascript" scope="request">
     function copyToClipboard(id) {
     var copyText = document.getElementById(id);
@@ -222,9 +271,6 @@
     console.log($("#copy-invite-link").val());
     copyToClipboard("copy-invite-link");
     });
-    $("#withdraw").click(function() {
-    alert("만원 단위로 출금 가능합니다.");
-    });
 
     $("#charge").click(function() {
     alert("충전 가능 기간이 아닙니다.\n관리자에게 문의하십시오.");
@@ -233,7 +279,13 @@
 </c:set>
 <c:set var="js" scope="request">
     <script src="<c:url value="/resources/js/moment.js" />"></script>
+    <script>
+        $("#withdraw").click(function() {
+            alert("만원 단위로 출금 가능합니다.");
+            $("#withdraw-modal").modal("show");
+        });
 
+    </script>
     <script>
 
         function getTradingType(item) {
