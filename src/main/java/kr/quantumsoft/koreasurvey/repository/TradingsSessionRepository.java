@@ -57,6 +57,6 @@ public class TradingsSessionRepository {
 	}
 
 	public List<Tradings> selectTradingsLimitByUserId(HashMap<String, Object> param) {
-		return session.selectList(String.format("%s.selectTradingsLimitByUserId", namespace), param);
+		return session.selectList(String.format("%s.selectTradingsByUserId", namespace), param);
 	}
 }

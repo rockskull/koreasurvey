@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +133,7 @@ public class AccountController {
 	@ResponseBody
 	@RequestMapping("/tradings")
 	public List<Tradings> tradings(Authentication auth, @RequestParam("page") int page) {
-		Users user = (Users)auth.getPrincipal();
+		Users user = SpringSecurityUtil.getUserFromAuth(auth);
 		return tradingService.selectTradingsByUserId(user.getId(), page, 5);
 	}
 	

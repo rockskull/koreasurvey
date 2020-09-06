@@ -26,18 +26,8 @@
 		AND `created` BETWEEN #{from} AND #{to} 
 		</if>
 	ORDER BY `id` DESC
-</select>
-
-	<select id="selectTradingsLimitByUserId" parameterType="HashMap"
-			resultType="kr.quantumsoft.koreasurvey.model.Tradings">
-		SELECT *
-		FROM `tradings`
-		WHERE
-		`userid` = #{userid}
-		<if test="type != null">
-			AND `type` = #{type}
-		</if>
-		ORDER BY `id` DESC
+	<if test="offset != null">
 		limit #{offset}, #{limit}
-	</select>
+	</if>
+</select>
 </mapper>
