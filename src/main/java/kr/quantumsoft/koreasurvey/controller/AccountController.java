@@ -93,7 +93,16 @@ public class AccountController {
 		model.addAttribute("email", email);
 		return "account/join";
 	}
-	
+
+	@RequestMapping(value="/modify", method=RequestMethod.GET)
+	public String getModify(Model model, Authentication authentication) {
+		model.addAttribute("join", new Users());
+
+		model.addAttribute("user", SpringSecurityUtil.getUserFromAuth(authentication));
+		return "account/modify";
+	}
+
+
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String postJoin(Users user) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
