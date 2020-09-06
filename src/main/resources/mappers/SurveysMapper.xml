@@ -55,7 +55,7 @@
 			SELECT COUNT(*) FROM `questions` WHERE `surveyid` = `s`.`id`
 		) AS `qcount`
 	FROM `surveys` `s`
-	WHERE `deleted` IS NULL
+	WHERE `deleted` IS NULL and status=#{status}
 	ORDER BY `id` DESC
 	LIMIT #{offset}, 10
 </select>

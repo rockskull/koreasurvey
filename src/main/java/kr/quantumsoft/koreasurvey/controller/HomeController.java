@@ -4,6 +4,7 @@ import kr.quantumsoft.koreasurvey.model.Answers;
 import kr.quantumsoft.koreasurvey.model.Surveys;
 import kr.quantumsoft.koreasurvey.model.Users;
 import kr.quantumsoft.koreasurvey.service.*;
+import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import kr.quantumsoft.koreasurvey.vo.StatisticsVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -255,6 +256,7 @@ public class HomeController {
     public List<Surveys> getList(Integer start, Authentication auth) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("offset", start);
+        param.put("status", ProjectConstants.SURVEY_STATE_RUNNING);
 
         List<Surveys> resultSurveys = surveyService.selectSurveysforAjax(param);
 

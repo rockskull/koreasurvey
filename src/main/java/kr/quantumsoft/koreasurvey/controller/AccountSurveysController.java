@@ -138,7 +138,8 @@ public class AccountSurveysController {
 		
 		survey.setUseremail(user.getEmail());
 		survey.setUserid(user.getId());
-		
+
+		survey.setStatus(ProjectConstants.SURVEY_STATE_RUNNING);
 		surveyService.insertSurveys(survey);
 		
 		return "redirect:/account/surveys";
@@ -154,6 +155,7 @@ public class AccountSurveysController {
 		/*if(doc.getTo().isEmpty() && doc.getTo() != null) {
 			doc.setTo(null);
 		}*/
+		doc.setStatus(ProjectConstants.SURVEY_STATE_RUNNING);
 		
 		surveyService.insertSurveys(doc);
 		
