@@ -114,11 +114,12 @@ function makeDom(list) {
 
 		addhtml += "<div class=\"col-xl-12\">";
 		addhtml += "<div class=\"card\">";
-		console.log(item.isJoined);
+		console.log(item);
 		if (item.isJoined) {
-		addhtml += "<div class=\"card-block cursor-pointer\" data-survey-id=\""+item.id+"\" data-survey-join=\""+item.isJoined+"\">";
+			addhtml += "<div class=\"card-block cursor-pointer\" >";
 		} else {
-		addhtml += "<div class=\"card-block cursor-pointer\" >";
+			addhtml += "<div class=\"survey card-block cursor-pointer\" data-survey-id=\""+item.id+"\" data-survey-join=\""+item.isJoined+"\">";
+
 		}
 		addhtml += "<div class=\"row\">";
 		addhtml += "<div class=\"col-xl-12\">";
@@ -154,7 +155,7 @@ $(function() {
 
 		$("#surveyArea").append(makeDom(list));
 		
-		$("*[data-survey-id]").click(function() {
+		$(".survey").click(function() {
 			<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
 			<c:if test="${not empty user }">
 			if($(this).data("survey-id") === 0) {
@@ -180,23 +181,6 @@ $(function() {
 	    	
 	    	$.post("getSurveyList", {start: startPage}, function(list) {
 				$("#surveyArea").append(makeDom(list));
-				$(".cursor-pointer").unbind();
-
-				$(".cursor-pointer").click(function() {
-					<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
-					<c:if test="${not empty user }">
-					if($(this).data("survey-id") === 0) {
-						location.href = "mainTop";
-					} else {
-						if($(this).data("survey-join")) {
-							alert("이미 참여한 설문입니다.");
-						} else {
-							location.href = "surveys/?surveyId="+$(this).data("survey-id");
-						}
-					}
-					</c:if>
-				});
-				
 				startPage += 10;
 				
 				loadingAjax = false;
