@@ -117,13 +117,13 @@
 											<label class="col-sm-2 col-form-label">성별</label>
 											<div class="btn-group-toggle" data-toggle="buttons" id="gender">
 												<label class="btn btn-primary btn-sm">
-													<input type="checkbox" name="age" value="all"> 전체
+													<input type="checkbox" name="gender" value="all"> 전체
 												</label>
 												<label class="btn btn-primary btn-sm">
-													<input type="checkbox" name="age" value="M"> 남성
+													<input type="checkbox" name="gender" value="M"> 남성
 												</label>
 												<label class="btn btn-primary btn-sm">
-													<input type="checkbox" name="age" value="F"> 여성
+													<input type="checkbox" name="gender" value="F"> 여성
 												</label>
 											</div>
 										</div>
@@ -251,8 +251,26 @@
 	</div>
 </div>
 <c:set var="javascript" scope="request">
+	$("input[name=age]").change(function() {
+		if ($(this).val() === "all") {
+			$("input[name=age]").click();
+		}
+	});
 
-$("#exclude-toggle").change(function() {
+	$("input[name=gender]").change(function() {
+		if ($(this).val() === "all") {
+			$("input[name=gender]").click();
+		}
+	});
+
+	$("input[name=region]").change(function() {
+		if ($(this).val() === "all") {
+			$("input[name=region]").click();
+		}
+	});
+
+
+	$("#exclude-toggle").change(function() {
 	if ($(this).prop('checked')) {
 		$("#exclude").show();
 	} else {
@@ -284,7 +302,7 @@ $(function() {
         if (confirm("저장 후에는 항목을 수정하실 수 없습니다. 질문과 항목을 모두 확인하셨습니까?") == false) {
             return false;
         }
-
+		console.log($("#doc").find("select, textarea, input").serialize());
 
 		if($("#id").val() === "") {
 			$.post("saveSurveyDoc", $("#doc").find("select, textarea, input").serialize(), function(id) {
