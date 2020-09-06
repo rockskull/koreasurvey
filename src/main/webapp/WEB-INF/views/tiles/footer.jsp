@@ -16,7 +16,7 @@
 				</a>
 				<a href="<c:url value="/account/login" />" class="col">
 					<i class="ti-write f-16"></i><br />
-					<div class="f-10">설문 등록</div>
+					<div class="f-10">설문 관리</div>
 				</a>
 				<a href="<c:url value="/account/login" />" class="col">
 					<i class="ti-user f-16"></i><br />
@@ -37,7 +37,7 @@
 <%--				<a href="javascript:alert('설문을 등록할 권한이 없습니다.')" class="col">--%>
 <%--				</c:if>--%>
 					<i class="ti-write f-16"></i><br />
-					<div class="f-10">설문 등록</div>
+					<div class="f-10">설문 관리</div>
 				</a>
 				
 				<a href="<c:url value="/account" />" class="col">
