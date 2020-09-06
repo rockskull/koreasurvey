@@ -44,7 +44,8 @@
 		`detail` = #{detail},
 		`totalcost` = #{totalcost},
 		`unitcost` = #{unitcost},
-		`to` = #{to}
+		`to` = #{to},
+		`status` = #{status}
 	WHERE `id` = #{id}
 </update>
 <select id="selectSurveysforAjax" parameterType="HashMap"

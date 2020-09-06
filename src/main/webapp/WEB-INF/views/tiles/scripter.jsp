@@ -6,3 +6,5 @@
 ${javascript}
 //]]>
 </script>
+
+${js}

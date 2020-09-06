@@ -18,7 +18,13 @@ package kr.quantumsoft.koreasurvey.service;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.model.Users;
+import kr.quantumsoft.koreasurvey.repository.AnswersSessionRepository;
+import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import kr.quantumsoft.koreasurvey.model.Surveys;
@@ -45,7 +51,17 @@ import kr.quantumsoft.koreasurvey.repository.SurveysSessionRepository;
 public class SurveysService {
 	@Autowired
 	SurveysSessionRepository repo;
-	
+
+	@Autowired
+	private UsersService usersService;
+
+
+	@Autowired
+	private AnswersSessionRepository answersSessionRepository;
+
+	private static final Logger logger = LoggerFactory.getLogger(SurveysService.class);
+
+
 	public Integer insertSurveys(Surveys survey) {
 		return repo.insertSurveys(survey);
 	}
@@ -55,7 +71,13 @@ public class SurveysService {
 	}
 	
 	public List<Surveys> selectSurveysByUserId(HashMap<String, Object> param) {
-		return repo.selectSurveysByUserId(param);
+		List<Surveys> listSurveys = repo.selectSurveysByUserId(param);
+		for(Surveys surveyItem : listSurveys) {
+			Integer countUsers = answersSessionRepository.countAnswersUsers(surveyItem.getId());
+			if(countUsers == null) countUsers = 0;
+			surveyItem.setAnswerUserCount(countUsers);
+		}
+		return listSurveys;
 	}
 	
 	public List<Surveys> selectSurveysforAjax(HashMap<String, Object> param) {
@@ -69,4 +91,24 @@ public class SurveysService {
 	public Integer deleteSurveyById(Integer id) {
 		return repo.deleteSurveyById(id);
 	}
+
+    public void exitSurvey(int surveyId, Users auth) {
+		Surveys survey = this.selectSurveysById(surveyId);
+		//TODO : 이 서베이가 이 사람이 만든게 맞는지 확인한다.
+		if (!survey.getUserid().equals(auth.getId())) {
+			throw new RuntimeException("권한이 없습니다");
+		}
+		Integer countUsers = answersSessionRepository.countAnswersUsers(surveyId);
+		if(countUsers == null) countUsers = 0;
+		survey.setAnswerUserCount(countUsers);
+		//TODO : 반환 되어야 하는 포인트를 가져온다.
+		int point = survey.getTotalcost()-survey.getQcount()*survey.getUnitcost()*survey.getAnswerUserCount();
+		logger.debug("[exit-survey] Target Point (total, survey-id) : {}, {}", point, surveyId);
+
+		//TODO:  유저에게 다시 돌려준다.
+		usersService.addPoint(auth.getId(), point, ProjectConstants.TRADING_SUBMIT);
+		//TODO : 서베이 정보를 업데이트 한다.
+		survey.setStatus(ProjectConstants.SURVEY_STATE_SUSPEND);
+		this.updateSurveys(survey);
+    }
 }

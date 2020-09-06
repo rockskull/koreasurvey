@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kr.quantumsoft.koreasurvey.model.Tradings;
+import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,7 +53,9 @@ import kr.quantumsoft.koreasurvey.model.Users;
 public class UsersService implements UserDetailsService {
 	@Autowired
 	private UsersSessionRepository repo;
-	
+	@Autowired
+	private TradingsService tradingService;
+
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
 	 */
@@ -107,6 +111,22 @@ public class UsersService implements UserDetailsService {
 			param.put("email", email);
 		}
 		return repo.search(param);
+	}
+
+	public void addPoint(int userId, int point, int tradingType) {
+		Users user = this.selectUserById(userId);
+		if (user == null) {
+			throw new RuntimeException("Failed Get UserInfo");
+		}
+		user.setPoint(user.getPoint()+point);
+		this.updateUser(user);
+
+		Tradings updateTrading = new Tradings();
+		updateTrading.setAmount(point);
+		updateTrading.setType(tradingType);
+		updateTrading.setUserid(user.getId());
+
+		tradingService.insertTradings(updateTrading);
 	}
 	
 }

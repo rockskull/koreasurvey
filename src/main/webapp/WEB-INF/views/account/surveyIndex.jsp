@@ -28,7 +28,7 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<h5>내 설문 현황</h5>
+									<h3>내 설문 현황</h3>
 									<div class="card-header-right">
 										<ul class="list-unstyled card-option">
 											<li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
@@ -54,7 +54,7 @@
 													<th>인당 배당액</th>
 													<th>응답수</th>
 													<th>남은 배당액</th>
-													<th>종료 시간</th>
+													<th>그만 두기</th>
 													<th>상태</th>
 												</tr>
 											</thead>
@@ -69,7 +69,16 @@
 													<td>${item.unitcost } P</td>
 													<td>${item.answerUserCount } / <fmt:formatNumber type="number"  pattern="0" value="${item.totalcost / item.unitcost} " />명</td>
 													<td>${item.totalcost-item.qcount*item.unitcost*item.answerUserCount } P</td>
-													<td>${item.to }</td>
+													<td>
+														<c:choose>
+															<c:when test = "${item.status == 1}">
+																<button class="btn btn-danger btn-sm exit-btn" data-item-id="${item.id}">그만두기</button></td>
+															</c:when>
+															<c:otherwise>
+																<button class="btn btn-danger btn-sm"  disabled>그만두기</button></td>
+															</c:otherwise>
+														</c:choose>
+
 													<td><span class="text-primary">
 
 														<c:choose>
@@ -155,4 +164,20 @@ $(function() {
 		}
 	});
 });
+</c:set>
+
+<c:set var="js" scope="request">
+	<script>
+		$(".exit-btn").click(function () {
+		    var itemId = $(this).data("item-id");
+			if (confirm("설문을 그만두고 0000P를 돌려받으시겠습니까?")) {
+			    $.post("surveys/exit-survey", {"survey-id" : itemId}, function (resp) {
+					alert("처리가 완료되었습니다");
+					location.reload();
+				}).fail(function() {
+					alert("오류가 발생하였습니다");
+				})
+			}
+		});
+	</script>
 </c:set>

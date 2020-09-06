@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.quantumsoft.koreasurvey.model.Options;
@@ -85,7 +87,20 @@ public class AccountSurveysController {
 	
 	@Autowired
 	TradingsService tradingService;
-	
+
+	@ResponseBody
+	@RequestMapping(value = "/exit-survey", method = RequestMethod.POST)
+	public void exit(@RequestParam("survey-id") int surveyId, Authentication auth) {
+		Users user = SpringSecurityUtil.getUserFromAuth(auth);
+		if (user ==  null) {
+			throw new RuntimeException("");
+		}
+		surveyService.exitSurvey(surveyId, user);
+		return;
+	}
+
+
+
 	@RequestMapping(value={"", "/"})
 	public String index(Model model, Authentication auth) {
 		Users user = (Users)auth.getPrincipal();
@@ -99,12 +114,7 @@ public class AccountSurveysController {
 		
 		List<Surveys> listSurveys = surveyService.selectSurveysByUserId(param);
 		
-		for(Surveys surveyItem : listSurveys) {
-			Integer countUsers = answerService.countAnswersUsers(surveyItem.getId());
-			if(countUsers == null) countUsers = 0;
-			surveyItem.setAnswerUserCount(countUsers);
-		}
-		
+
 		model.addAttribute("user", user);
 		model.addAttribute("list", listSurveys);
 		return "surveyList";

@@ -1,17 +1,10 @@
 package kr.quantumsoft.koreasurvey.controller;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
+import kr.quantumsoft.koreasurvey.model.Answers;
+import kr.quantumsoft.koreasurvey.model.Surveys;
+import kr.quantumsoft.koreasurvey.model.Users;
 import kr.quantumsoft.koreasurvey.service.*;
+import kr.quantumsoft.koreasurvey.vo.StatisticsVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.quantumsoft.koreasurvey.model.Answers;
-import kr.quantumsoft.koreasurvey.model.Surveys;
-import kr.quantumsoft.koreasurvey.model.Users;
-import kr.quantumsoft.koreasurvey.vo.StatisticsVO;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Handles requests for the application home page.
