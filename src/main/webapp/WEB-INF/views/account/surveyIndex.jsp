@@ -72,7 +72,9 @@
 													<td>
 														<c:choose>
 															<c:when test = "${item.status == 1}">
-																<button class="btn btn-danger btn-sm exit-btn" data-item-id="${item.id}">그만두기</button></td>
+																<button class="btn btn-danger btn-sm exit-btn"
+																		data-point="${item.totalcost-item.qcount*item.unitcost*item.answerUserCount }"
+																		data-item-id="${item.id}">그만두기</button></td>
 															</c:when>
 															<c:otherwise>
 																<button class="btn btn-danger btn-sm"  disabled>그만두기</button></td>
@@ -158,7 +160,6 @@ $(function() {
 			
 			$.post("<c:url value="/account/surveys/deleteSurveys" />", {listSurveyId : JSON.stringify(listDelete)}, function(result) {
 				alert("선택한 설문을 삭제하였습니다.");
-				
 				location.reload();
 			});
 		}
@@ -170,7 +171,8 @@ $(function() {
 	<script>
 		$(".exit-btn").click(function () {
 		    var itemId = $(this).data("item-id");
-			if (confirm("설문을 그만두고 0000P를 돌려받으시겠습니까?")) {
+		    var point = $(this).data("point");
+			if (confirm("설문을 그만두고 " + point + "P를 돌려받으시겠습니까?")) {
 			    $.post("surveys/exit-survey", {"survey-id" : itemId}, function (resp) {
 					alert("처리가 완료되었습니다");
 					location.reload();

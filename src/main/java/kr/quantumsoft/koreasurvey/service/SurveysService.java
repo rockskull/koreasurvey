@@ -106,7 +106,7 @@ public class SurveysService {
 		logger.debug("[exit-survey] Target Point (total, survey-id) : {}, {}", point, surveyId);
 
 		//TODO:  유저에게 다시 돌려준다.
-		usersService.addPoint(auth.getId(), point, ProjectConstants.TRADING_SUBMIT);
+		usersService.addPoint(auth.getId(), point, ProjectConstants.TRADING_USE);
 		//TODO : 서베이 정보를 업데이트 한다.
 		survey.setStatus(ProjectConstants.SURVEY_STATE_SUSPEND);
 		this.updateSurveys(survey);
