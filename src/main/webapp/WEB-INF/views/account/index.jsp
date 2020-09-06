@@ -146,7 +146,27 @@
 													<td>${joinItem.title }</td>
 													<td>${joinItem.unitcost } P</td>
 													<td>${joinItem.unitcost } P</td>
-													<td><span class="text-primary">진행 중</span></td>
+													<td><span class="text-primary">
+															<c:choose>
+																<c:when test = "${joinItem.status == 0}">
+																	종료
+																</c:when>
+																<c:when test = "${joinItem.status == 1}">
+																	진행
+																</c:when>
+																<c:when test = "${joinItem.status == 2}">
+																	중지
+																</c:when>
+																<c:when test = "${joinItem.status == 3}">
+																	차단
+																</c:when>
+
+																<c:otherwise>
+																	알수없음
+																</c:otherwise>
+															</c:choose>
+
+													</span></td>
 												</tr>
 											</c:forEach>
 											</tbody>
