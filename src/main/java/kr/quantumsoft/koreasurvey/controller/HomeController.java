@@ -1,6 +1,7 @@
 package kr.quantumsoft.koreasurvey.controller;
 
 import kr.quantumsoft.koreasurvey.model.Answers;
+import kr.quantumsoft.koreasurvey.model.SurveyExclude;
 import kr.quantumsoft.koreasurvey.model.Surveys;
 import kr.quantumsoft.koreasurvey.model.Users;
 import kr.quantumsoft.koreasurvey.service.*;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -251,6 +253,24 @@ public class HomeController {
         return "mainTop";
     }
 
+    private boolean between(int i, int minValueInclusive, int maxValueInclusive) {
+        return (i >= minValueInclusive && i <= maxValueInclusive);
+    }
+
+    private boolean checkExcludeUserInfo(SurveyExclude surveyExclude, Users user) {
+        if (surveyExclude.getExcludeType().equals(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE)) {
+            int ageExclude = Integer.parseInt(surveyExclude.getExcludeValue());
+            return between(user.getCalcAge(), ageExclude, (ageExclude + 9));
+        } else if (surveyExclude.getExcludeType().equals(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER)) {
+            return (user.getGender().equals("남성") ? "M" : "F").equals(surveyExclude.getExcludeValue());
+        } else if (surveyExclude.getExcludeType().equals(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION)) {
+            return user.getArea().equals(surveyExclude.getExcludeValue());
+        }
+
+
+        return false;
+    }
+
     @ResponseBody
     @RequestMapping(value = "/getSurveyList", method = RequestMethod.POST)
     public List<Surveys> getList(Integer start, Authentication auth) {
@@ -259,29 +279,42 @@ public class HomeController {
         param.put("status", ProjectConstants.SURVEY_STATE_RUNNING);
 
         List<Surveys> resultSurveys = surveyService.selectSurveysforAjax(param);
+        List<Surveys> filterSurveys = new ArrayList<Surveys>();
 
         if (auth != null) {
             Users user = (Users) auth.getPrincipal();
 
+            for (Surveys surveyItem : resultSurveys) {
+                Integer countUsers = answerService.countAnswersUsers(surveyItem.getId());
+                if (countUsers == null) countUsers = 0;
+                surveyItem.setAnswerUserCount(countUsers);
+
+                if (surveyItem.isExclude()) {
+                    List<SurveyExclude> surveyExcludes = surveyService.getSurveyExcludeListBySurveyId(surveyItem.getId());
+                    for (SurveyExclude surveyExclude : surveyExcludes) {
+                        if (this.checkExcludeUserInfo(surveyExclude, user)) {
+                            filterSurveys.add(surveyItem);
+                            break;
+                        }
+                    }
+                } else {
+                    filterSurveys.add(surveyItem);
+                }
+            }
+
             List<Answers> joinedList = answerService.selectAnswersByUserIdGroupBySurveyId(user.getId());
 
             for (Answers answer : joinedList) {
-                for (Surveys survey : resultSurveys) {
+                for (Surveys survey : filterSurveys) {
                     if (answer.getSurveyid() == survey.getId()) {
                         survey.setIsJoined(true);
                         break;
                     }
                 }
             }
-
-            for (Surveys surveyItem : resultSurveys) {
-                Integer countUsers = answerService.countAnswersUsers(surveyItem.getId());
-                if (countUsers == null) countUsers = 0;
-                surveyItem.setAnswerUserCount(countUsers);
-            }
         }
 
-        return resultSurveys;
+        return filterSurveys;
     }
 
 

@@ -16,6 +16,7 @@
 package kr.quantumsoft.koreasurvey.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -218,6 +219,10 @@ List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Integer getCalcAge() {
+		return Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date())) - this.age;
 	}
 
 }

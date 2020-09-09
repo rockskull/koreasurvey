@@ -15,5 +15,8 @@
 			#{surveyId}
 		);
 	</insert>
-
+	<select id="getSurveyExcludeListBySurveyId" parameterType="Integer" resultType="kr.quantumsoft.koreasurvey.model.SurveyExclude">
+		SELECT * FROM survey_exclude
+		WHERE surveyid = #{surveyid}
+	</select>
 </mapper>

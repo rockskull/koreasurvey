@@ -34,4 +34,8 @@ public class SurveyExcludeRepository {
 		return session.insert(String.format("%s.insertSurveyExclude", namespace), exclude);
 	}
 
+	public List<SurveyExclude> getSurveyExcludeListBySurveyId(Integer surveyId) {
+		return session.selectList(String.format("%s.getSurveyExcludeListBySurveyId", namespace), surveyId);
+	}
+
 }

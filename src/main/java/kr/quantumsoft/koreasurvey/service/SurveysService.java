@@ -18,8 +18,10 @@ package kr.quantumsoft.koreasurvey.service;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.model.SurveyExclude;
 import kr.quantumsoft.koreasurvey.model.Users;
 import kr.quantumsoft.koreasurvey.repository.AnswersSessionRepository;
+import kr.quantumsoft.koreasurvey.repository.SurveyExcludeRepository;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,10 @@ public class SurveysService {
 	SurveysSessionRepository repo;
 
 	@Autowired
+	SurveyExcludeRepository surveyExcludeRepository;
+
+
+	@Autowired
 	private UsersService usersService;
 
 
@@ -61,6 +67,10 @@ public class SurveysService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SurveysService.class);
 
+
+	public List<SurveyExclude> getSurveyExcludeListBySurveyId(Integer surveyId) {
+		return surveyExcludeRepository.getSurveyExcludeListBySurveyId(surveyId);
+	}
 
 	public Integer insertSurveys(Surveys survey) {
 		return repo.insertSurveys(survey);
