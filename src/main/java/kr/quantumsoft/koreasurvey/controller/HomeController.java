@@ -314,7 +314,7 @@ public class HomeController {
             }
         }
 
-        return filterSurveys;
+        return auth != null ? filterSurveys : resultSurveys;
     }
 
 
