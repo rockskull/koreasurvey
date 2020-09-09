@@ -23,11 +23,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -94,11 +96,24 @@ public class AccountController {
 		return "account/join";
 	}
 
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public String modifyUserInfo(Users user, Authentication authentication) {
+		Users selectuser = userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId());
+		selectuser.setAge(user.getAge());
+		selectuser.setArea(user.getArea());
+		selectuser.setGender(user.getGender());
+		userService.updateUser(selectuser);
+		return "redirect:/account/modify";
+	}
+
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
 	public String getModify(Model model, Authentication authentication) {
 		model.addAttribute("join", new Users());
+		model.addAttribute("areaList", ProjectConstants.REGION_STRINGS);
+		model.addAttribute("ageList", ProjectConstants.AGE_RANGES);
 
-		model.addAttribute("user", SpringSecurityUtil.getUserFromAuth(authentication));
+
+		model.addAttribute("user", userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId()));
 		return "account/modify";
 	}
 

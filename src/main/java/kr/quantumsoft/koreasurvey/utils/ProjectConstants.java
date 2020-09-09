@@ -15,6 +15,8 @@
  */
 package kr.quantumsoft.koreasurvey.utils;
 
+import org.apache.commons.lang.math.IntRange;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class ProjectConstants {
 	public static final Integer TRADING_SUBMIT = 2;
 
 	public static final List<String> REGION_STRINGS = Arrays.asList("서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "대전광역시", "울산광역시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
-
+	public static final int[] AGE_RANGES = new IntRange(1920, 2020).toArray();
 	public static final Integer SURVEY_EXCLUDE_TYPE_AGE = 1;
 	public static final Integer SURVEY_EXCLUDE_TYPE_REGION = 2;
 	public static final Integer SURVEY_EXCLUDE_TYPE_GENDER = 3;

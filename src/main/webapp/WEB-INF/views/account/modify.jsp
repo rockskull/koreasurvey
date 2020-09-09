@@ -87,7 +87,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<form id="join" class="md-float-material form-material" action="/koreasurvey/account/join" method="post">
+				<form id="join" class="md-float-material form-material" action="<c:url value="/account/modify" />" method="post">
 					<div class="text-center">
 						<img src="/koreasurvey/resources/images/basic-logo.png" alt="logo.png">
 					</div>
@@ -109,35 +109,35 @@
 							<div class="form-group form-primary">
 								<select id="age" name="age" class="form-control fill">
 									<option value="출생년을 선택해주세요.">출생년을 선택해주세요.</option>
-
+									<c:forEach items="${ageList}" var="age">
+										<c:if test="${age == user.age}">
+											<option value="${age}" selected>${age}</option>
+										</c:if>
+										<c:if test="${age != user.age}">
+											<option value="${age}">${age}</option>
+										</c:if>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="form-group form-primary">
 								<select id="gender" name="gender" class="form-control fill">
 									<option value="성별을 선택해주세요.">성별을 선택해주세요.</option>
-									<option value="여성">여성</option>
-									<option value="남성">남성</option>
+									<option value="여성" selected="${user.gender == '여성'}">여성</option>
+									<option value="남성" selected="${user.gender == '남성'}">남성</option>
 								</select>
 							</div>
 							<div class="form-group form-primary">
 								<select id="area" name="area" class="form-control fill">
 									<option value="지역을 선택해주세요.">지역을 선택해주세요.</option>
-									<option value="서울특별시">서울특별시</option>
-									<option value="부산광역시">부산광역시</option>
-									<option value="대구광역시">대구광역시</option>
-									<option value="인천광역시">인천광역시</option>
-									<option value="광주광역시">광주광역시</option>
-									<option value="대전광역시">대전광역시</option>
-									<option value="울산광역시">울산광역시</option>
-									<option value="경기도">경기도</option>
-									<option value="강원도">강원도</option>
-									<option value="충청북도">충청북도</option>
-									<option value="충청남도">충청남도</option>
-									<option value="전라북도">전라북도</option>
-									<option value="전라남도">전라남도</option>
-									<option value="경상북도">경상북도</option>
-									<option value="경상남도">경상남도</option>
-									<option value="제주특별자치도">제주특별자치도</option>
+									<c:forEach items="${areaList}" var="item">
+										<c:if test="${item == user.area}">
+											<option value="${item}" selected="${item == user.area}">${item}</option>
+										</c:if>
+										<c:if test="${item != user.area}">
+											<option value="${item}" >${item}</option>
+										</c:if>
+									</c:forEach>
+
 								</select>
 							</div>
 							<div class="row m-t-30">
@@ -234,24 +234,7 @@
 			// alert();
 			// return false;
 			// if ()
-			if ($("input[name=privacy-agree]").is(":checked") == false) {
-				alert("개인정보 약관에 동의하지 않으면 서비스를 사용 할 수 없습니다.");
-				return false;
-			}
-			if($("#email").val() == "") {
-				alert("이메일을 입력해 주십시오.");
-				return false;
-			}
 
-			if($("#password").val() == "") {
-				alert("암호를 입력해 주십시오.");
-				return false;
-			}
-
-			if($("#password").val() != $("#confirm-password").val()) {
-				alert("입력하신 암호가 일치하지 않습니다.");
-				return false;
-			}
 
 			if($("#age").val() == "연령대를 선택해주세요.") {
 				alert("연령대를 선택해주십시오.");
@@ -269,22 +252,6 @@
 			}
 
 			return true;
-		});
-
-		$("#recommanderemail").autocomplete({
-			source: function(request, response) {
-				// request.item
-				$.ajax({
-					url: "searchEmail",
-					data: {
-						term: request.term
-					},
-					success: function(data) {
-						response(data);
-					}
-				});
-			},
-			minLength: 2
 		});
 	});
 </script>
