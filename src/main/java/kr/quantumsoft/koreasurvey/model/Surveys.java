@@ -51,9 +51,49 @@ public class Surveys implements Serializable {
 	private Date created;
 	private Integer qcount;
 	private Integer status;
-	
+	private boolean exclude;
+
+
+
 	private Boolean isJoined = false;
 	private Integer answerUserCount;
+
+	private String region;
+	private String gender;
+	private String age;
+
+	public boolean isExclude() {
+		return exclude;
+	}
+
+	public void setExclude(boolean exclude) {
+		this.exclude = exclude;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
 	public Integer getId() {
 		return id;
 	}

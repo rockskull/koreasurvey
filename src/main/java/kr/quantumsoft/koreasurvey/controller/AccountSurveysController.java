@@ -16,9 +16,12 @@
 package kr.quantumsoft.koreasurvey.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.model.*;
+import kr.quantumsoft.koreasurvey.service.*;
 import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -29,22 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import kr.quantumsoft.koreasurvey.model.Options;
-import kr.quantumsoft.koreasurvey.model.Questions;
-import kr.quantumsoft.koreasurvey.model.Surveys;
-import kr.quantumsoft.koreasurvey.model.Tradings;
-import kr.quantumsoft.koreasurvey.model.Users;
-import kr.quantumsoft.koreasurvey.service.AnswersService;
-import kr.quantumsoft.koreasurvey.service.OptionsService;
-import kr.quantumsoft.koreasurvey.service.QuestionsService;
-import kr.quantumsoft.koreasurvey.service.SurveysService;
-import kr.quantumsoft.koreasurvey.service.TradingsService;
-import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 
 /**  
@@ -87,6 +76,9 @@ public class AccountSurveysController {
 	
 	@Autowired
 	TradingsService tradingService;
+
+	@Autowired
+	SurveyExcludeService surveyExcludeService;
 
 	@ResponseBody
 	@RequestMapping(value = "/exit-survey", method = RequestMethod.POST)
@@ -156,9 +148,47 @@ public class AccountSurveysController {
 			doc.setTo(null);
 		}*/
 		doc.setStatus(ProjectConstants.SURVEY_STATE_RUNNING);
-		
 		surveyService.insertSurveys(doc);
-		
+		//TODO : Insert Exclude Info
+
+		for (String value: doc.getGender().split(",")) {
+			if (value.equals("all")) {
+				continue;
+			}
+			SurveyExclude surveyExclude = new SurveyExclude();
+			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER);
+			surveyExclude.setExcludeValue(value);
+			surveyExclude.setSurveyId(doc.getId());
+			surveyExclude.setCreated(new Date());
+			surveyExcludeService.insertExclude(surveyExclude);
+		}
+
+		for (String value: doc.getRegion().split(",")) {
+			if (value.equals("all")) {
+				continue;
+			}
+
+			SurveyExclude surveyExclude = new SurveyExclude();
+			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION);
+			surveyExclude.setExcludeValue(value);
+			surveyExclude.setSurveyId(doc.getId());
+			surveyExclude.setCreated(new Date());
+			surveyExcludeService.insertExclude(surveyExclude);
+		}
+
+		for (String value: doc.getAge().split(",")) {
+			if (value.equals("all")) {
+				continue;
+			}
+			SurveyExclude surveyExclude = new SurveyExclude();
+			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE);
+			surveyExclude.setExcludeValue(value);
+			surveyExclude.setSurveyId(doc.getId());
+			surveyExclude.setCreated(new Date());
+			surveyExcludeService.insertExclude(surveyExclude);
+		}
+
+
 		user.setPoint(user.getPoint()-doc.getTotalcost());
 		usersService.updateUser(user);
 		

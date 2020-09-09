@@ -294,6 +294,14 @@
 			}
 		}
 
+		function getCheckedButtonValue($selector) {
+			var exclude = [];
+			$selector.each(function() {
+				exclude.push($(this).val());
+			});
+			return exclude;
+		}
+
 		$(function() {
 
 			$("#people, #unitcost").keyup(function() {
@@ -305,9 +313,17 @@
 					return false;
 				}
 				console.log($("#doc").find("select, textarea, input").serialize());
-
+				var parameter = {
+					"age" : getCheckedButtonValue($("#age-range input:checked")).join(","),
+					"gender" : getCheckedButtonValue($("#gender input:checked")).join(","),
+					"region" : getCheckedButtonValue($("#region input:checked")).join(","),
+				};
+				var form = $("#doc").find("select, textarea, input").serializeArray();
+				for (var key in form ) {
+					parameter[form[key].name] = form[key].value;
+				}
 				if($("#id").val() === "") {
-					$.post("saveSurveyDoc", $("#doc").find("select, textarea, input").serialize(), function(id) {
+					$.post("saveSurveyDoc", parameter, function(id) {
 						$("#id").val(id);
 
 						$("#listQuestion > .item").each(function(i) {
