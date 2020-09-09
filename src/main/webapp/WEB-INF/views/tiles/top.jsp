@@ -73,6 +73,12 @@
 											</a>
 										</li>
 										<li>
+											<a href="<c:url value="/account/modify" />">
+												<i class="feather icon-activity"></i>
+												내 정보 수정
+											</a>
+										</li>
+										<li>
 											<a href="<c:url value="/account/logoutProcess" />">
 												<i class="feather icon-log-out"></i>
 												로그아웃
