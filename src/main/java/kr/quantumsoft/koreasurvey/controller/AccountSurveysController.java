@@ -23,6 +23,7 @@ import java.util.List;
 import kr.quantumsoft.koreasurvey.model.*;
 import kr.quantumsoft.koreasurvey.service.*;
 import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -136,6 +137,23 @@ public class AccountSurveysController {
 		
 		return "redirect:/account/surveys";
 	}
+
+	private void insertExcludes(Integer excludeType, String data, Integer surveyId) {
+		if (StringUtils.isEmpty(data)) {
+			return;
+		}
+		for (String value : data.split(",")) {
+			if (value.equals("all")) {
+				continue;
+			}
+			SurveyExclude surveyExclude = new SurveyExclude();
+			surveyExclude.setExcludeType(excludeType);
+			surveyExclude.setExcludeValue(value);
+			surveyExclude.setSurveyId(surveyId);
+			surveyExclude.setCreated(new Date());
+			surveyExcludeService.insertExclude(surveyExclude);
+		}
+	}
 	
 	@ResponseBody
 	@RequestMapping(value="/saveSurveyDoc", method=RequestMethod.POST)
@@ -149,45 +167,10 @@ public class AccountSurveysController {
 		}*/
 		doc.setStatus(ProjectConstants.SURVEY_STATE_RUNNING);
 		surveyService.insertSurveys(doc);
-		//TODO : Insert Exclude Info
 
-		for (String value: doc.getGender().split(",")) {
-			if (value.equals("all")) {
-				continue;
-			}
-			SurveyExclude surveyExclude = new SurveyExclude();
-			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER);
-			surveyExclude.setExcludeValue(value);
-			surveyExclude.setSurveyId(doc.getId());
-			surveyExclude.setCreated(new Date());
-			surveyExcludeService.insertExclude(surveyExclude);
-		}
-
-		for (String value: doc.getRegion().split(",")) {
-			if (value.equals("all")) {
-				continue;
-			}
-
-			SurveyExclude surveyExclude = new SurveyExclude();
-			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION);
-			surveyExclude.setExcludeValue(value);
-			surveyExclude.setSurveyId(doc.getId());
-			surveyExclude.setCreated(new Date());
-			surveyExcludeService.insertExclude(surveyExclude);
-		}
-
-		for (String value: doc.getAge().split(",")) {
-			if (value.equals("all")) {
-				continue;
-			}
-			SurveyExclude surveyExclude = new SurveyExclude();
-			surveyExclude.setExcludeType(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE);
-			surveyExclude.setExcludeValue(value);
-			surveyExclude.setSurveyId(doc.getId());
-			surveyExclude.setCreated(new Date());
-			surveyExcludeService.insertExclude(surveyExclude);
-		}
-
+		this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER, doc.getGender(), doc.getId());
+		this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE, doc.getAge(), doc.getId());
+		this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION, doc.getRegion(), doc.getId());
 
 		user.setPoint(user.getPoint()-doc.getTotalcost());
 		usersService.updateUser(user);
