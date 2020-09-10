@@ -89,6 +89,29 @@ public class AccountSurveysController {
         return;
     }
 
+    @RequestMapping("/result/{surveyId}")
+    public String index(@PathVariable Integer surveyId,  Model model, Authentication authentication) {
+        Surveys surveys = surveyService.selectSurveysById(surveyId);
+        if (surveys == null) {
+            throw new RuntimeException("");
+        }
+        Users user = SpringSecurityUtil.getUserFromAuth(authentication);
+
+        if (user == null || surveys.getUserid().equals(user.getId()) == false) {
+            throw new RuntimeException("");
+        }
+        Integer answerCount = answerService.countAnswersUsers(surveyId);
+
+        List<SurveyExclude> excludeList = surveyService.getSurveyExcludeListBySurveyId(surveyId);
+        model.addAttribute("survey", surveys);
+        model.addAttribute("exclude", excludeList);
+        model.addAttribute("answerCount", answerCount);
+        model.addAttribute("questions", questionService.selectQuestionsBySurveyId(surveyId));
+
+
+        return "surveyResult";
+    }
+
 
     @RequestMapping(value = {"", "/"})
     public String index(Model model, Authentication auth) {

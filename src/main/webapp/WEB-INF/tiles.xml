@@ -74,6 +74,13 @@
 		<put-attribute name="menu" cascade="true" value="about" />
 	</definition>
 
+	<definition name="surveyResult" extends="accountLayout">
+		<put-attribute name="contents" value="/WEB-INF/views/account/surveyResult.jsp" />
+		<put-attribute name="definition" cascade="true" value="main" />
+		<put-attribute name="menu" cascade="true" value="about" />
+	</definition>
+
+
 	<definition name="adminLayout" template="/WEB-INF/views/tiles/adminLayout.jsp">
 	</definition>
 
