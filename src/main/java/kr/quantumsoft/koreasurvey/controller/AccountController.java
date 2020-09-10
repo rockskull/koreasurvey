@@ -88,6 +88,12 @@ public class AccountController {
 	public String login() {
 		return "account/login";
 	}
+
+	@ResponseBody
+	@RequestMapping("/join/check-email")
+	public boolean checkEmail(@RequestParam("email") final String email) {
+		return userService.selectUserByEmail(email) == null;
+	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
 	public String getJoin(Model model, @RequestParam(value = "email", required = false) String email) {

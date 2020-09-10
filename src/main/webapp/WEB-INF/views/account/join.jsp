@@ -99,9 +99,24 @@
 								</div>
 							</div>
 							<p class="text-muted text-center p-b-5">일반 회원으로 가입합니다.</p>
-							<div class="form-group form-primary">
-								<form:input path="email" cssClass="form-control" /> <span class="form-bar"></span> <label class="float-label">이메일을 입력하십시오.</label>
+
+							<div class="row">
+								<div class="col-sm-9">
+									<div class="form-group form-primary">
+										<form:input path="email" cssClass="form-control" />
+										<span class="form-bar"></span> <label class="float-label">이메일을 입력하십시오.</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group form-primary" id="id-check">
+										<button class="btn btn-primary" type="button" >중복확인</button>
+										<input type="hidden" id="check-email" value="false">
+									</div>
+								</div>
+
+
 							</div>
+
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="form-group form-primary">
@@ -255,6 +270,19 @@
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		$("#id-check button").click(function() {
+			$.get("<c:url value="/account/join/check-email" />", { "email" : $("#email").val() }, function (resp) {
+				if (resp) {
+					$("#id-check #check-email").val("true");
+					alert("사용할 수 있는 이메일 입니다");
+					$(this).attr("disabled", true);
+				} else {
+					alert("이미 가입된 이메일입니다.");
+				}
+			}).fail(function () {
+				alert("알 수 없는 오류가 발생하였습니다\n잠시후 다시 시도해주세요");
+			});
+		});
 		$("#email, #password, #confirm-password").focusin(function() {
 			$(this).addClass("fill");
 		}).focusout(function() {
@@ -265,9 +293,6 @@
 		//feather.replace();
 
 		$("#join").submit(function() {
-			// alert();
-			// return false;
-			// if ()
 			if ($("input[name=privacy-agree]").is(":checked") == false) {
 				alert("개인정보 약관에 동의하지 않으면 서비스를 사용 할 수 없습니다.");
 				return false;
@@ -299,6 +324,12 @@
 
 			if($("#area").val() == "지역을 선택해주세요.") {
 				alert("지역을 선택해주세요.");
+				return false;
+			}
+
+			if ($("#check-email").val() !== "true") {
+				alert("아이디 중복확인이 필요합니다.");
+
 				return false;
 			}
 
