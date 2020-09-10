@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="pcoded-inner-content" style="margin-bottom: 20px;">
+    <div class="pcoded-inner-content" style="margin-bottom: 40px;">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
@@ -42,7 +42,21 @@
 														<c:when test="${item.excludeType == 3}">지역</c:when>
 													</c:choose>
 												</th>
-												<th style="width : 90%">${item.excludeValue}</th>
+												<th style="width : 90%">
+													<c:choose>
+														<c:when test="${item.excludeValue == 'F'}">여성</c:when>
+														<c:when test="${item.excludeValue == 'M'}">남성</c:when>
+														<c:when test="${item.excludeValue == '10'}">10대</c:when>
+														<c:when test="${item.excludeValue == '20'}">20대</c:when>
+														<c:when test="${item.excludeValue == '30'}">30대</c:when>
+														<c:when test="${item.excludeValue == '40'}">40대</c:when>
+														<c:when test="${item.excludeValue == '50'}">50대</c:when>
+														<c:when test="${item.excludeValue == '60+'}">60대 이상</c:when>
+
+														<c:otherwise>${item.excludeValue}</c:otherwise>
+
+													</c:choose>
+												</th>
 											</tr>
 										</c:forEach>
 										</tbody>
@@ -129,9 +143,12 @@
 						<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 					</div>
 
-
-					<div class="tab-content" id="info">
+					<div class="text-center">
+						<a href="<c:url value="/account/surveys/" />">
+							<button class="btn btn-primary">확인</button>
+						</a>
 					</div>
+
                 </div>
             </div>
         </div>

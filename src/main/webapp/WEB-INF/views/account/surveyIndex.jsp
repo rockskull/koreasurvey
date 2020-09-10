@@ -60,7 +60,7 @@
 											</thead>
 											<tbody>
 											<c:forEach items="${list}" var="item" varStatus="status">
-												<tr>
+												<tr class="survey" data-survey-id="${item.id}">
 <%--													<td><input class="check-item" type="checkbox" data-item-id="${item.id }" /></td>--%>
 													 <td>${item.id}</td>
 													<td>${item.title }</td>
@@ -181,5 +181,8 @@ $(function() {
 				})
 			}
 		});
+		$(".survey").click(function () {
+			location.href = "<c:url value="/account/surveys/result"/>/" + $(this).data("survey-id");
+		})
 	</script>
 </c:set>
