@@ -103,8 +103,7 @@
 								<input id="email" name="email" class="form-control" type="text" value="${user.email}" disabled>
 							</div>
 							<div class="form-group form-primary">
-								<button class="btn btn-primary" style="width : 100%">비밀번호 변경 </button>
-<%--								<input id="pas" name="email" class="form-control" type="text" value="${user.email}" disabled>--%>
+								<button type="button" class="btn btn-primary" style="width : 100%" id="change-pw-btn">비밀번호 변경 </button>
 							</div>
 							<div class="form-group form-primary">
 								<select id="age" name="age" class="form-control fill">
@@ -211,6 +210,47 @@
 <![endif]-->
 
 
+<div class="modal fade" id="change-password-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+
+				<img class="img-fluid" src="<c:url value="/resources/images/basic-logo.png"  />" alt="Logo">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div style="text-align: center;">
+					<h5>비밀번호 변경 </h5>
+				</div>
+				<div id="change-password-form">
+					<div class="form-group" id="now-password">
+						<label for="now-password">현재 비밀번호</label>
+						<input type="password" class="form-control"  aria-describedby="emailHelp">
+						<small class="form-text text-danger" style="display: none">비밀번호가 상이합니다</small>
+					</div>
+					<div class="form-group" id="new-password">
+						<label for="new-password">새 비밀번호</label>
+						<input type="password" class="form-control" >
+					</div>
+					<div class="form-group" id="new-password-check">
+						<label for="new-password-check">새 비밀번호 확인</label>
+						<input type="password" class="form-control">
+						<small class="form-text text-danger" style="display: none">비밀번호가 일치하지 않습니다</small>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<div style="text-align: center">
+					<button type="submit" class="btn btn-primary" id="pw-change-btn">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.min.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-ui.min.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.slimscroll.js" />"></script>
@@ -220,6 +260,41 @@
 <script src="<c:url value="/resources/js/script.js" />"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 <script type="text/javascript">
+	$("#change-pw-btn").click(function() {
+		$("#change-password-modal").modal("show");
+	});
+
+	$("#pw-change-btn").click(function () {
+		var nowPassword = $("#change-password-form #now-password");
+		var newPassword = $("#change-password-form #new-password");
+		var newPassWordCheck = $("#change-password-form #new-password-check");
+
+		//init
+		newPassWordCheck.find(".form-text").hide();
+		nowPassword.find(".form-text").hide();
+
+
+		if (newPassword.find("input").val() != newPassWordCheck.find("input").val()) {
+			newPassWordCheck.find(".form-text").show();
+			return false;
+		}
+
+		$.post("<c:url value="/account/modify-password" />", {
+			"now-password" : nowPassword.find("input").val(),
+			"new-password" : nowPassword.find("input").val()
+		}, function (resp) {
+			if (resp == false) {
+				return nowPassword.find(".form-text").show();
+			}
+			location.href = "<c:url value="/account/logoutProcess" />"
+		});
+
+
+
+	});
+
+
+
 	$(function() {
 		$("#email, #password, #confirm-password").focusin(function() {
 			$(this).addClass("fill");

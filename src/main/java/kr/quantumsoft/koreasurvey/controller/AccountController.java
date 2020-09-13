@@ -49,191 +49,207 @@ import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.utils.CommonUtils;
 import kr.quantumsoft.koreasurvey.utils.ProjectUtils;
 
-/**  
+/**
+ * @author QuantumSoft Inc.
+ * @version 1.0
  * @Class Name : AccountController.java
  * @Project Name : koreasurvey
- * @Description : 
- * @Modification Information  
+ * @Description :
+ * @Modification Information
  * @
- * @  수정일      수정자              수정내용
+ * @ 수정일      수정자              수정내용
  * @ ------------   ---------   -------------------------------
  * @ 2019. 12. 19.                     최초생성
- * 
- * @author QuantumSoft Inc.
+ * @see Copyright (C) by QuantumSoft Inc. All right reserved.
  * @since 2015. 8.
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by QuantumSoft Inc. All right reserved.
  */
 @Controller
-@RequestMapping(value="/account")
+@RequestMapping(value = "/account")
 public class AccountController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
-	
-	@Autowired
-	private UsersService userService;
-	
-	@Autowired
-	private TradingsService tradingService;
-	
-	@Autowired
-	private SurveysService surveyService;
-	
-	@Autowired
-	private AnswersService answersService;
-	
-	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public String login() {
-		return "account/login";
-	}
 
-	@ResponseBody
-	@RequestMapping("/join/check-email")
-	public boolean checkEmail(@RequestParam("email") final String email) {
-		return userService.selectUserByEmail(email) == null;
-	}
-	
-	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String getJoin(Model model, @RequestParam(value = "email", required = false) String email) {
-		model.addAttribute("join", new Users());
-		model.addAttribute("email", email);
-		return "account/join";
-	}
+    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
+//    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modifyUserInfo(Users user, Authentication authentication) {
-		Users selectuser = userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId());
-		selectuser.setAge(user.getAge());
-		selectuser.setArea(user.getArea());
-		selectuser.setGender(user.getGender());
-		userService.updateUser(selectuser);
-		return "redirect:/account/modify";
-	}
+    @Autowired
+    private UsersService userService;
 
-	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String getModify(Model model, Authentication authentication) {
-		model.addAttribute("join", new Users());
-		model.addAttribute("areaList", ProjectConstants.REGION_STRINGS);
-		model.addAttribute("ageList", ProjectConstants.AGE_RANGES);
+    @Autowired
+    private TradingsService tradingService;
 
+    @Autowired
+    private SurveysService surveyService;
 
-		model.addAttribute("user", userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId()));
-		return "account/modify";
-	}
+    @Autowired
+    private AnswersService answersService;
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "account/login";
+    }
 
-	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String postJoin(Users user) {
+    @ResponseBody
+    @RequestMapping("/join/check-email")
+    public boolean checkEmail(@RequestParam("email") final String email) {
+        return userService.selectUserByEmail(email) == null;
+    }
+
+    @RequestMapping(value = "/join", method = RequestMethod.GET)
+    public String getJoin(Model model, @RequestParam(value = "email", required = false) String email) {
+        model.addAttribute("join", new Users());
+        model.addAttribute("email", email);
+        return "account/join";
+    }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    public String modifyUserInfo(Users user, Authentication authentication) {
+        Users selectuser = userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId());
+        selectuser.setAge(user.getAge());
+        selectuser.setArea(user.getArea());
+        selectuser.setGender(user.getGender());
+        userService.updateUser(selectuser);
+        return "redirect:/account/modify";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/modify-password", method = RequestMethod.POST)
+    public boolean modifyPassword(@RequestParam("now-password") String nowPassword,
+                                 @RequestParam("new-password") String newPassword,
+                                 Authentication authentication) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		// 추천인 추가.
-		if(!user.getRecommanderemail().isEmpty()) {
-			Users recommanderUser = userService.selectUserByEmail(user.getRecommanderemail());
-			
-			if(recommanderUser != null) {
-				user.setRecommanderid(recommanderUser.getId());
-			}
+        Users selectuser = userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId());
+		if (selectuser == null) {
+			return false;
 		}
-		
-		userService.insertUsers(user);
-		
-		return "account/joinComplete";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="/searchEmail")
-	public List<String> searchEmail(String term) {
-		List<String> listEmail = new ArrayList<String>();
-		List<Users> userList = userService.searchUsersByEmail(term);
-		
-		for(int i=0;i<userList.size();i++) {
-			if(i<6) {
-				listEmail.add(userList.get(i).getEmail());
-			} else {
-				break;
-			}
+		if (passwordEncoder.matches(selectuser.getPassword(), passwordEncoder.encode(nowPassword)) == false) {
+			return false;
 		}
-		
-		return listEmail;
-	}
+        selectuser.setPassword(passwordEncoder.encode(newPassword));
+        userService.updateUser(selectuser);
+        return true;
+    }
 
-	@ResponseBody
-	@RequestMapping("/tradings")
-	public List<Tradings> tradings(Authentication auth, @RequestParam("page") int page) {
-		Users user = SpringSecurityUtil.getUserFromAuth(auth);
-		return tradingService.selectTradingsByUserId(user.getId(), page, 5);
-	}
-	
-	@RequestMapping(value={"", "/"})
-	public String index(Model model, Authentication auth) {
-		Users user = (Users)auth.getPrincipal();
-		Users dbUser = userService.selectUserById(user.getId());
-		user.setPoint(dbUser.getPoint());
-		
-		HashMap<String, Object> param = new HashMap<String, Object>();
-		param.put("userid", user.getId());
-		param.put("from", CommonUtils.getDateString(-7));
-		param.put("to", CommonUtils.getDateString(0)+" 23:00:00");
-		
-		List<Tradings> tradings = tradingService.selectTradingsByUserId(param);
-		
-		Integer diff = ProjectUtils.calcDiffrential(tradings);
-		
-		//LIMIT #{offset}, #{limit}
-		param.put("offset", 0);
-		param.put("limit", 5);
-		
-		List<Answers> joinedList = answersService.selectAnswersByUserIdGroupBySurveyId(user.getId());
-				
-		List<Surveys> joinedSurveys = new ArrayList<Surveys>();
-		
-		for(Answers answerItem : joinedList) {
-			joinedSurveys.add(surveyService.selectSurveysById(answerItem.getSurveyid()));
-		}
-		
-		model.addAttribute("diff", diff);
-		model.addAttribute("tradings", tradings);
-		model.addAttribute("joined", joinedSurveys);
-		model.addAttribute("user", user);
-		return "account";
-	}
-	
-	@RequestMapping(value="/charge")
-	public String getCharge(Model model, Authentication auth) {
-		Users user = (Users)auth.getPrincipal();
-		
-		HashMap<String, Object> param = new HashMap<String, Object>();
-		param.put("userid", user.getId());
-		param.put("from", CommonUtils.getDateString(-7));
-		param.put("to", CommonUtils.getDateString(0)+" 23:00:00");
-		
-		List<Tradings> tradings = tradingService.selectTradingsByUserId(param);
-		
-		Integer diff = ProjectUtils.calcDiffrential(tradings);
-		
-		model.addAttribute("diff", diff);
-		model.addAttribute("user", user);
-		return "charge";
-	}
-	
-	@RequestMapping(value="/charge", method=RequestMethod.POST)
-	public String postCharge(Integer amount, Authentication auth) {
-		Users user = (Users)auth.getPrincipal();
-		
-		Tradings trading = new Tradings();
-		trading.setUserid(user.getId());
-		trading.setType(1);
-		trading.setAmount(amount);
-		
-		tradingService.insertTradings(trading);
-		
-		user.setPoint(user.getPoint()+amount);
-		
-		userService.updateUser(user);
-		
-		return "redirect:/account";
-	}
+    @RequestMapping(value = "/modify", method = RequestMethod.GET)
+    public String getModify(Model model, Authentication authentication) {
+        model.addAttribute("join", new Users());
+        model.addAttribute("areaList", ProjectConstants.REGION_STRINGS);
+        model.addAttribute("ageList", ProjectConstants.AGE_RANGES);
+
+
+        model.addAttribute("user", userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId()));
+        return "account/modify";
+    }
+
+
+    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    public String postJoin(Users user) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // 추천인 추가.
+        if (!user.getRecommanderemail().isEmpty()) {
+            Users recommanderUser = userService.selectUserByEmail(user.getRecommanderemail());
+
+            if (recommanderUser != null) {
+                user.setRecommanderid(recommanderUser.getId());
+            }
+        }
+
+        userService.insertUsers(user);
+
+        return "account/joinComplete";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/searchEmail")
+    public List<String> searchEmail(String term) {
+        List<String> listEmail = new ArrayList<String>();
+        List<Users> userList = userService.searchUsersByEmail(term);
+
+        for (int i = 0; i < userList.size(); i++) {
+            if (i < 6) {
+                listEmail.add(userList.get(i).getEmail());
+            } else {
+                break;
+            }
+        }
+
+        return listEmail;
+    }
+
+    @ResponseBody
+    @RequestMapping("/tradings")
+    public List<Tradings> tradings(Authentication auth, @RequestParam("page") int page) {
+        Users user = SpringSecurityUtil.getUserFromAuth(auth);
+        return tradingService.selectTradingsByUserId(user.getId(), page, 5);
+    }
+
+    @RequestMapping(value = {"", "/"})
+    public String index(Model model, Authentication auth) {
+        Users user = (Users) auth.getPrincipal();
+        Users dbUser = userService.selectUserById(user.getId());
+        user.setPoint(dbUser.getPoint());
+
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("userid", user.getId());
+        param.put("from", CommonUtils.getDateString(-7));
+        param.put("to", CommonUtils.getDateString(0) + " 23:00:00");
+
+        List<Tradings> tradings = tradingService.selectTradingsByUserId(param);
+
+        Integer diff = ProjectUtils.calcDiffrential(tradings);
+
+        //LIMIT #{offset}, #{limit}
+        param.put("offset", 0);
+        param.put("limit", 5);
+
+        List<Answers> joinedList = answersService.selectAnswersByUserIdGroupBySurveyId(user.getId());
+
+        List<Surveys> joinedSurveys = new ArrayList<Surveys>();
+
+        for (Answers answerItem : joinedList) {
+            joinedSurveys.add(surveyService.selectSurveysById(answerItem.getSurveyid()));
+        }
+
+        model.addAttribute("diff", diff);
+        model.addAttribute("tradings", tradings);
+        model.addAttribute("joined", joinedSurveys);
+        model.addAttribute("user", user);
+        return "account";
+    }
+
+    @RequestMapping(value = "/charge")
+    public String getCharge(Model model, Authentication auth) {
+        Users user = (Users) auth.getPrincipal();
+
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("userid", user.getId());
+        param.put("from", CommonUtils.getDateString(-7));
+        param.put("to", CommonUtils.getDateString(0) + " 23:00:00");
+
+        List<Tradings> tradings = tradingService.selectTradingsByUserId(param);
+
+        Integer diff = ProjectUtils.calcDiffrential(tradings);
+
+        model.addAttribute("diff", diff);
+        model.addAttribute("user", user);
+        return "charge";
+    }
+
+    @RequestMapping(value = "/charge", method = RequestMethod.POST)
+    public String postCharge(Integer amount, Authentication auth) {
+        Users user = (Users) auth.getPrincipal();
+
+        Tradings trading = new Tradings();
+        trading.setUserid(user.getId());
+        trading.setType(1);
+        trading.setAmount(amount);
+
+        tradingService.insertTradings(trading);
+
+        user.setPoint(user.getPoint() + amount);
+
+        userService.updateUser(user);
+
+        return "redirect:/account";
+    }
 }
