@@ -272,7 +272,12 @@
 		//init
 		newPassWordCheck.find(".form-text").hide();
 		nowPassword.find(".form-text").hide();
-
+		if(nowPassword.find("input").val() == "" ||
+				newPassword.find("input").val() == "" ||
+				newPassWordCheck.find("input").val() == "") {
+			alert("모두 입력되지 않았습니다");
+			return false;
+		}
 
 		if (newPassword.find("input").val() != newPassWordCheck.find("input").val()) {
 			newPassWordCheck.find(".form-text").show();
