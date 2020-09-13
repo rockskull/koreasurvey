@@ -292,6 +292,8 @@
 				return nowPassword.find(".form-text").show();
 			}
 			location.href = "<c:url value="/account/logoutProcess" />"
+		}).fail(function () {
+			alert("처리 중 오류가 발생하였습니다.\n잠시후 다시시도 해주세요.")
 		});
 
 
