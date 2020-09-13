@@ -72,8 +72,8 @@
                                role="tab" aria-controls="nav-home" aria-selected="true">설문</a>
                             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
                                role="tab" aria-controls="nav-profile" aria-selected="false">결과</a>
-                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                               role="tab" aria-controls="nav-contact" aria-selected="false">참여자통계</a>
+<%--                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"--%>
+<%--                               role="tab" aria-controls="nav-contact" aria-selected="false">참여자통계</a>--%>
                         </div>
                     </nav>
 
