@@ -98,4 +98,6 @@
 	<script src="<c:url value="/resources/js/horizontal-layout.min.js" />"></script>
 	<script src="<c:url value="/resources/js/script.js" />"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
 	<!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script> -->

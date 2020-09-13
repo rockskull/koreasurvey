@@ -139,7 +139,11 @@
 
 							</div>
 						</div>
-						<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+						<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+							<div></div>
+
+
+						</div>
 						<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 					</div>
 
@@ -154,3 +158,12 @@
         </div>
     </div>
 </div>
+
+<c:set var="js" scope="request">
+	<script>
+		$.get("<c:url value="/account/surveys/result/answer"/>/${survey.id}", function () {
+			console.log(1);
+		});
+
+	</script>
+</c:set>

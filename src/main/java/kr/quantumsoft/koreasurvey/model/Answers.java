@@ -45,6 +45,25 @@ public class Answers implements Serializable {
 	private String answer;
 	private Integer rewardpoint;
 	private Date created;
+	private Integer count;
+	private String questionTitle;
+
+	public void setQuestionTitle(String question) {
+		this.questionTitle = question;
+	}
+
+	public String getQuestionTitle() {
+		return questionTitle;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public Integer getId() {
 		return id;
 	}

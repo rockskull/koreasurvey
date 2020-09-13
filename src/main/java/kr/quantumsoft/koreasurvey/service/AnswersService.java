@@ -60,4 +60,8 @@ public class AnswersService {
 	public Integer countAnswersUsers(Integer surveyid) {
 		return repo.countAnswersUsers(surveyid);
 	}
+
+	public List<Answers> selectCountBySurveyIdGroupByQuestion(Answers answers) {
+		return repo.selectCountBySurveyIdGroupByQuestion(answers);
+	}
 }
