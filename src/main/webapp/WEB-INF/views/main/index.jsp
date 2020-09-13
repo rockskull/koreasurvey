@@ -45,27 +45,28 @@
 																</c:if>
 																<c:if test="${not empty user }">
 																	<div class="row">
-																		<div class="col-xl-9">
-																			<h1>내 포인트 현황</h1>
+																		<div class="col-xl-9" style="margin-bottom: 10px">
+																			<h3>내 포인트 현황</h3>
 																			<p>조사에 참여하거나 초대한 친구가 설문에 참여할 때마다 적립금이 쌓이고, 10000원 이상 쌓이면 출금하실 수 있습니다.</p>
 																			<div>
 																				<h4><c:out value="${user.point}"></c:out>P</h4>
 																			</div>
-																			<a href="<c:url value="/account" />">
+																			<a href="<c:url value="/account" />" style="display: inline-block;width: 50%">
 																				<button class="btn btn-info" style="width : 100%">출금</button>
 																			</a>
+
+																			<a href="<c:url value="/account" />" style="display: inline;">
+																				<button class="btn btn-primary" style="width : 48%">친구 초대하기</button>
+																			</a>
+
 																		</div>
 
 																		<div class="col-xl-3">
-																			<div id="intive-section" style="margin-bottom:10px;">
-																				<a href="<c:url value="/account" />">
-																					<button class="btn btn-primary" style="width : 100%">친구 초대하기</button>
-																				</a>
-																			</div>
+
 
 																			<div id="notice-section">
 																				<h3>공지사항 <a href="<c:url value="/notice" />">더보기</a></h3>
-																				<table class="table">
+																				<table class="table notice_main">
 																					<tbody>
 																					<c:forEach items="${notices}" var="noticeItem">
 																						<tr>
@@ -80,8 +81,8 @@
 																			</div>
 
 																			<div style="text-align: center">
-																				<h2>도움이 필요하신가요?</h2>
-																				<h3>1544-0000</h3>
+																				<h3>도움이 필요하신가요?</h3>
+																				<h4>1544-0000</h4>
 																				<p>
 																					평일 오전 10시 ~ 오후 6시<br>
 																					(점심시간 13~14시)
