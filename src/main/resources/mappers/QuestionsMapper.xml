@@ -1,59 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.quantumsoft.koreasurvey.QuestionsMapper">
-<resultMap type="kr.quantumsoft.koreasurvey.model.Questions" id="questionResultMap">
-	<id property="id" column="id" />
-	<result property="surveyid" column="surveyid" />
-	<result property="title" column="title" />
-	<result property="question" column="question" />
-	<result property="type" column="type" />
-	<collection property="options" javaType="java.util.List"
-	column="id" ofType="kr.quantumsoft.koreasurvey.model.Options" select="selectOptionsByQuestionId" />
-</resultMap>
-<insert id="insertQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions"
-	useGeneratedKeys="true" keyProperty="id">
-	INSERT INTO `questions` (
-		`surveyid`,
-		`title`,
-		`question`,
-		`type`
-	) VALUES (
-		#{surveyid},
-		#{title},
-		#{question},
-		#{type}
-	)
-</insert>
-<update id="updateQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions">
-	UPDATE `questions`
-	SET
-		`title` = #{title},
-		`question` = #{question},
-		`type` = #{type}
-	WHERE `id` = #{id}
-</update>
-<select id="selectQuestionsBySurveyId" parameterType="Integer"
-	resultMap="questionResultMap">
-	SELECT * FROM `questions` WHERE `surveyid` = #{id} ORDER BY `title` ASC
-	<!-- SELECT
-		q.id, q.surveyid, q.title, q.question, q.type,
-		o.id, o.questionid, o.option, o.type
-	FROM `questions` q LEFT JOIN options o
-	ON q.id = o.questionid
-	WHERE q.surveyid = #{id}
-	ORDER BY `title` ASC -->
-</select>
-<select id="selectQuestionsById" parameterType="Integer"
-	resultMap="questionResultMap">
-	SELECT * FROM `questions` WHERE `id` = #{id}
-</select>
-<delete id="deleteQuestionBySurveyId" parameterType="Integer">
-	DELETE FROM `questions` WHERE `surveyid` = #{id}
-</delete>
+	<resultMap type="kr.quantumsoft.koreasurvey.model.Questions" id="questionResultMap">
+		<id property="id" column="id" />
+		<result property="surveyid" column="surveyid" />
+		<result property="title" column="title" />
+		<result property="question" column="question" />
+		<result property="type" column="type" />
+		<collection property="options" javaType="java.util.List"
+		column="id" ofType="kr.quantumsoft.koreasurvey.model.Options" select="selectOptionsByQuestionId" />
+	</resultMap>
+	<insert id="insertQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `questions` (
+			`surveyid`,
+			`title`,
+			`question`,
+			`type`
+		) VALUES (
+			#{surveyid},
+			#{title},
+			#{question},
+			#{type}
+		)
+	</insert>
+	<update id="updateQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions">
+		UPDATE `questions`
+		SET
+			`title` = #{title},
+			`question` = #{question},
+			`type` = #{type}
+		WHERE `id` = #{id}
+	</update>
+	<select id="selectQuestionsBySurveyId" parameterType="Integer"
+		resultMap="questionResultMap">
+		SELECT * FROM `questions` WHERE `surveyid` = #{id} ORDER BY `title` ASC
+		<!-- SELECT
+			q.id, q.surveyid, q.title, q.question, q.type,
+			o.id, o.questionid, o.option, o.type
+		FROM `questions` q LEFT JOIN options o
+		ON q.id = o.questionid
+		WHERE q.surveyid = #{id}
+		ORDER BY `title` ASC -->
+	</select>
+	<select id="selectQuestionsById" parameterType="Integer"
+		resultMap="questionResultMap">
+		SELECT * FROM `questions` WHERE `id` = #{id}
+	</select>
+	<delete id="deleteQuestionBySurveyId" parameterType="Integer">
+		DELETE FROM `questions` WHERE `surveyid` = #{id}
+	</delete>
 
 
-<!-- Sub Query -->
-<select id="selectOptionsByQuestionId" resultType="kr.quantumsoft.koreasurvey.model.Options">
-	SELECT * FROM `options` WHERE `questionid` = #{id}
-</select>
+	<!-- Sub Query -->
+	<select id="selectOptionsByQuestionId" resultType="kr.quantumsoft.koreasurvey.model.Options">
+		SELECT * FROM `options` WHERE `questionid` = #{id}
+	</select>
+
+
 </mapper>

@@ -89,8 +89,35 @@ public class AccountSurveysController {
         return;
     }
 
+    @ResponseBody
+    @RequestMapping("/result/answer/{surveyId}")
+    public List<Answers> getAnswerResult(@PathVariable Integer surveyId, Authentication authentication) {
+//        model.addAttribute("answerResult", );
+
+        Surveys surveys = surveyService.selectSurveysById(surveyId);
+        if (surveys == null) {
+            throw new RuntimeException("");
+        }
+        Users user = SpringSecurityUtil.getUserFromAuth(authentication);
+
+        if (user == null || surveys.getUserid().equals(user.getId()) == false) {
+            throw new RuntimeException("");
+        }
+        Answers param = new Answers();
+        param.setSurveyid(surveys.getId());
+        param.setQuestiontype(ProjectConstants.ANSWER_TYPE_MULTI_CHOICE);
+        List<Answers> answersList = answerService.selectCountBySurveyIdGroupByQuestion(param);
+        for (Answers answers : answersList) {
+            Questions question = questionService.selectQuestionsById(answers.getQuestionid());
+            answers.setQuestionTitle(question.getTitle());
+
+        }
+        return answersList;
+
+    }
+
     @RequestMapping("/result/{surveyId}")
-    public String index(@PathVariable Integer surveyId,  Model model, Authentication authentication) {
+    public String index(@PathVariable Integer surveyId, Model model, Authentication authentication) {
         Surveys surveys = surveyService.selectSurveysById(surveyId);
         if (surveys == null) {
             throw new RuntimeException("");
@@ -107,8 +134,6 @@ public class AccountSurveysController {
         model.addAttribute("exclude", excludeList);
         model.addAttribute("answerCount", answerCount);
         model.addAttribute("questions", questionService.selectQuestionsBySurveyId(surveyId));
-
-
         return "surveyResult";
     }
 
@@ -193,7 +218,7 @@ public class AccountSurveysController {
         boolean exclude = this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER, doc.getGender(), doc.getId()) ||
                 this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE, doc.getAge(), doc.getId()) ||
                 this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION, doc.getRegion(), doc.getId());
-		doc.setExclude(exclude);
+        doc.setExclude(exclude);
         surveyService.updateSurveys(doc);
         user.setPoint(user.getPoint() - doc.getTotalcost());
         usersService.updateUser(user);

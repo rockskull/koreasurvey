@@ -62,4 +62,8 @@ public class AnswersSessionRepository {
 	public Integer countAnswersUsers(Integer surveyid) {
 		return session.selectOne(String.format("%s.countAnswersUsers", namespace), surveyid);
 	}
+
+	public List<Answers> selectCountBySurveyIdGroupByQuestion(Answers answers) {
+		return session.selectList(String.format("%s.selectCountBySurveyIdGroupByQuestion", namespace), answers);
+	}
 }
