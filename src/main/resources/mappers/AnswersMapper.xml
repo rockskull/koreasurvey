@@ -48,14 +48,14 @@
 		) a
 	</select>
 
-	<select id="selectCountBySurveyIdGroupByQuestion" parameterType="kr.quantumsoft.koreasurvey.model.Answers" resultType="kr.quantumsoft.koreasurvey.model.Answers">
+	<select id="selectCountBySurveyIdGroupByValue" parameterType="kr.quantumsoft.koreasurvey.model.Answers" resultType="kr.quantumsoft.koreasurvey.model.Answers">
 		SELECT count(1) as count, answer.*
 		FROM answers answer
 		WHERE answer.surveyid = #{surveyid}
 		<if test="questiontype != null">
 			and answer.questiontype = #{questiontype}
 		</if>
-		GROUP BY answer.questionid
+		GROUP BY answer.answer
 	</select>
 
 </mapper>

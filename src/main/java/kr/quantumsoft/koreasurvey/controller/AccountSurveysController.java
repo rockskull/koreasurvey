@@ -103,18 +103,30 @@ public class AccountSurveysController {
         if (user == null || surveys.getUserid().equals(user.getId()) == false) {
             throw new RuntimeException("");
         }
+
         Answers param = new Answers();
         param.setSurveyid(surveys.getId());
         param.setQuestiontype(ProjectConstants.ANSWER_TYPE_MULTI_CHOICE);
-        List<Answers> answersList = answerService.selectCountBySurveyIdGroupByQuestion(param);
+        List<Answers> answersList = answerService.selectCountBySurveyIdGroupByValue(param);
         for (Answers answers : answersList) {
             Questions question = questionService.selectQuestionsById(answers.getQuestionid());
             answers.setQuestionTitle(question.getTitle());
-
         }
         return answersList;
-
     }
+
+    private List<Answers> getAnswers(Surveys surveys) {
+        Answers param = new Answers();
+        param.setSurveyid(surveys.getId());
+//        param.setQuestiontype(ProjectConstants.ANSWER_TYPE_MULTI_CHOICE);
+        List<Answers> answersList = answerService.selectCountBySurveyIdGroupByValue(param);
+        for (Answers answers : answersList) {
+            Questions question = questionService.selectQuestionsById(answers.getQuestionid());
+            answers.setQuestionTitle(question.getTitle());
+        }
+        return answersList;
+    }
+
 
     @RequestMapping("/result/{surveyId}")
     public String index(@PathVariable Integer surveyId, Model model, Authentication authentication) {
@@ -134,6 +146,7 @@ public class AccountSurveysController {
         model.addAttribute("exclude", excludeList);
         model.addAttribute("answerCount", answerCount);
         model.addAttribute("questions", questionService.selectQuestionsBySurveyId(surveyId));
+        model.addAttribute("answers", this.getAnswers(surveys));
         return "surveyResult";
     }
 

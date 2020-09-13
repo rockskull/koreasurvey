@@ -63,7 +63,7 @@ public class AnswersSessionRepository {
 		return session.selectOne(String.format("%s.countAnswersUsers", namespace), surveyid);
 	}
 
-	public List<Answers> selectCountBySurveyIdGroupByQuestion(Answers answers) {
-		return session.selectList(String.format("%s.selectCountBySurveyIdGroupByQuestion", namespace), answers);
+	public List<Answers> selectCountBySurveyIdGroupByValue(Answers answers) {
+		return session.selectList(String.format("%s.selectCountBySurveyIdGroupByValue", namespace), answers);
 	}
 }

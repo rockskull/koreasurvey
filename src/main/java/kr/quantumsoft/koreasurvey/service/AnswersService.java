@@ -61,7 +61,7 @@ public class AnswersService {
 		return repo.countAnswersUsers(surveyid);
 	}
 
-	public List<Answers> selectCountBySurveyIdGroupByQuestion(Answers answers) {
-		return repo.selectCountBySurveyIdGroupByQuestion(answers);
+	public List<Answers> selectCountBySurveyIdGroupByValue(Answers answers) {
+		return repo.selectCountBySurveyIdGroupByValue(answers);
 	}
 }
