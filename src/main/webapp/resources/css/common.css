@@ -11927,6 +11927,10 @@ div.DTS div.dataTables_paginate {
     padding: 1.25rem .75rem
 }
 
+.notice_main td{
+    padding: .75rem;
+}
+
 .table thead th {
     border-bottom: 1px solid #d6dde1
 }
