@@ -17,11 +17,15 @@
     <property name="maxUploadSize" value="102400000"></property>
     </bean> -->
 
+    <context:property-placeholder
+            location="classpath:properties/app.properties"/>
+
+
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.gmail.com"/>
-        <property name="port" value="587"/>
-        <property name="username" value="yangs.nas@gmail.com"/>
-        <property name="password" value="yangslove12!!"/>
+        <property name="host" value="${smtp.host}"/>
+        <property name="port" value="${smtp.port}"/>
+        <property name="username" value="${smtp.username}"/>
+        <property name="password" value="${smtp.password}"/>
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.smtp.auth">true</prop>

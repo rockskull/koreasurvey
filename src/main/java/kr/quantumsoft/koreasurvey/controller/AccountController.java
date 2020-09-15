@@ -30,6 +30,8 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -90,9 +92,15 @@ public class AccountController {
 
     @Autowired
     private JavaMailSenderImpl mailSender;
+//    @Autowired
+//    private Environment env;
+    @Value("${smtp.email}")
+    private String fromEmail;
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+
+
+@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "account/login";
     }
@@ -127,14 +135,14 @@ public class AccountController {
         if (user == null) {
             return false;
         }
-        final String newPassword = RandomStringUtils.randomAlphabetic(20);
+        final String newPassword = RandomStringUtils.randomAlphabetic(10);
         user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateUser(user);
         final MimeMessagePreparator preparator = new MimeMessagePreparator() {
             @Override
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-                helper.setFrom("yangs.nas@gmail.com");
+                helper.setFrom(fromEmail);
                 helper.setTo(user.getEmail());
                 helper.setSubject("[큐플] 비밀번호 찾기 메일 입니다.");
                 helper.setText(String.format("안녕하세요 큐플입니다.</br>" +
