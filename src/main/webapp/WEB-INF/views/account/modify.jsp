@@ -286,12 +286,16 @@
 
 		$.post("<c:url value="/account/modify-password" />", {
 			"now-password" : nowPassword.find("input").val(),
-			"new-password" : nowPassword.find("input").val()
+			"new-password" : newPassword.find("input").val()
 		}, function (resp) {
 			if (resp == false) {
 				return nowPassword.find(".form-text").show();
+			} else {
+				alert("비밀번호 변경에 성공하였습니다.");
+				location.href = "<c:url value="/account/logoutProcess" />"
+
 			}
-			location.href = "<c:url value="/account/logoutProcess" />"
+
 		}).fail(function () {
 			alert("처리 중 오류가 발생하였습니다.\n잠시후 다시시도 해주세요.")
 		});

@@ -120,7 +120,7 @@ public class AccountController {
 		if (selectuser == null) {
 			return false;
 		}
-		if (passwordEncoder.matches(selectuser.getPassword(), passwordEncoder.encode(nowPassword)) == false) {
+		if (passwordEncoder.matches(nowPassword, selectuser.getPassword()) == false) {
 			return false;
 		}
         selectuser.setPassword(passwordEncoder.encode(newPassword));
