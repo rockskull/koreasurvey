@@ -119,7 +119,8 @@
 											</label> -->
 										</div>
 										<div class="forgot-phone text-right float-right">
-											<a href="" class="text-right f-w-600">패스워드 찾기</a>
+											<a href="#"  data-toggle="modal"
+											   data-target="#find-password-modal" class="text-right f-w-600">패스워드 찾기</a>
 										</div>
 									</div>
 								</div>
@@ -144,6 +145,34 @@
 		</div>
 
 	</section>
+	<div class="modal fade" id="find-password-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+
+					<img class="img-fluid" src="<c:url value="/resources/images/basic-logo.png"  />" alt="Logo">
+					<%--					<h5 class="modal-title" id="exampleModalLabel">친구초대 링크 </h5>--%>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-group" id="now-password">
+						<label for="now-password">이메일 주소</label>
+						<input type="email" class="form-control"  aria-describedby="emailHelp" placeholder="비밀번호 찾기를 할 이메일을 입력해주세요." id="find-password-email">
+						<small class="form-text" ></small>
+					</div>
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" id="modal-password-find-btn">비밀번호 찾기</button>
+					<%--					<button type="button" class="btn btn-primary">Save changes</button>--%>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<!--[if lt IE 10]>
@@ -222,6 +251,23 @@ $(function() {
 		$("#loginForm").submit();
 	});
 });
+</script>
+
+<script>
+	$("#modal-password-find-btn").click(function () {
+		$.post("<c:url value="/account/find-password" />", {
+			"email" : $("#find-password-email").val()
+		}, function (ret) {
+			console.log(ret);
+			if (ret) {
+				alert("이메일로 임시 비밀번호가 발송되었습니다.");
+			} else {
+				alert("존재하지 않는 계정 정보 입니다.");
+			}
+		}).fail(function () {
+			alert("오류가 발생하였습니다.\n잠시 후 다시시도 해주세요.");
+		})
+	});
 </script>
 </body>
 

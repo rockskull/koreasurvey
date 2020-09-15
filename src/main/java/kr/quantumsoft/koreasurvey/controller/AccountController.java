@@ -21,13 +21,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
+import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,7 +74,7 @@ import kr.quantumsoft.koreasurvey.utils.ProjectUtils;
 public class AccountController {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
-//    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UsersService userService;
@@ -81,6 +87,10 @@ public class AccountController {
 
     @Autowired
     private AnswersService answersService;
+
+    @Autowired
+    private JavaMailSenderImpl mailSender;
+
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -111,18 +121,49 @@ public class AccountController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/find-password", method = RequestMethod.POST)
+    public boolean findPassword(@RequestParam("email") final String email) {
+        final Users user = userService.selectUserByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        final String newPassword = RandomStringUtils.randomAlphabetic(20);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.updateUser(user);
+        final MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                helper.setFrom("yangs.nas@gmail.com");
+                helper.setTo(user.getEmail());
+                helper.setSubject("[큐플] 비밀번호 찾기 메일 입니다.");
+                helper.setText(String.format("안녕하세요 큐플입니다.</br>" +
+                        "비밀번호 분실로 인해 새로운 비밀번호를 송부 드립니다.</br>" +
+                        "귀하의 새 비밀번호는 </br>" +
+                        "%s</br>" +
+                        "입니다.</br>" +
+                        "로그인 후 비밀번호 변경 부탁 드리겠습니다.</br>" +
+                        "감사합니다.", newPassword), true);
+            }
+        };
+
+        mailSender.send(preparator);
+        return true;
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/modify-password", method = RequestMethod.POST)
     public boolean modifyPassword(@RequestParam("now-password") String nowPassword,
-                                 @RequestParam("new-password") String newPassword,
-                                 Authentication authentication) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                                  @RequestParam("new-password") String newPassword,
+                                  Authentication authentication) {
+//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Users selectuser = userService.selectUserById(SpringSecurityUtil.getUserFromAuth(authentication).getId());
-		if (selectuser == null) {
-			return false;
-		}
-		if (passwordEncoder.matches(nowPassword, selectuser.getPassword()) == false) {
-			return false;
-		}
+        if (selectuser == null) {
+            return false;
+        }
+        if (passwordEncoder.matches(nowPassword, selectuser.getPassword()) == false) {
+            return false;
+        }
         selectuser.setPassword(passwordEncoder.encode(newPassword));
         userService.updateUser(selectuser);
         return true;
@@ -142,7 +183,7 @@ public class AccountController {
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
     public String postJoin(Users user) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         // 추천인 추가.
