@@ -19,4 +19,15 @@ public class NoticeService {
     public List<Notice> getNotices(int size) {
         return noticeRepository.getNoticeList(size);
     }
+
+    public List<Notice> getNoticeAll() {
+        return noticeRepository.getNoticeAll();
+    }
+
+    public Notice getNoticeById(Integer id) {
+        return noticeRepository.getNoticeById(id);
+    }
+    public void update(Notice notice) {
+        noticeRepository.update(notice);
+    }
 }

@@ -1,8 +1,10 @@
 package kr.quantumsoft.koreasurvey.controller;
 
+import kr.quantumsoft.koreasurvey.model.Notice;
 import kr.quantumsoft.koreasurvey.model.Surveys;
 import kr.quantumsoft.koreasurvey.model.Tradings;
 import kr.quantumsoft.koreasurvey.model.Users;
+import kr.quantumsoft.koreasurvey.service.NoticeService;
 import kr.quantumsoft.koreasurvey.service.SurveysService;
 import kr.quantumsoft.koreasurvey.service.TradingsService;
 import kr.quantumsoft.koreasurvey.service.UsersService;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,6 +36,9 @@ public class AdminController {
     private SurveysService surveysService;
 
 
+    @Autowired
+    private NoticeService noticeService;
+
 
     @RequestMapping("")
     public ModelAndView index() {
@@ -42,12 +48,31 @@ public class AdminController {
     @RequestMapping("notice/list")
     public ModelAndView notices() {
         Map<String, Object> items = new HashMap<String, Object>();
-//        items.put("data", userService.search(email, start, end));
-//        items.put("start", start);
-//        items.put("end", end);
-//        items.put("email", email);
-
+        items.put("items", noticeService.getNoticeAll());
         return new ModelAndView("admin/notice/list", items);
+    }
+
+    @RequestMapping(value = "notice/edit/{index}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable int index) {
+        Map<String, Object> items = new HashMap<String, Object>();
+
+        items.put("notice", noticeService.getNoticeById(index));
+        return new ModelAndView("admin/notice/edit", items);
+    }
+
+    @RequestMapping(value = "notice/edit", method = RequestMethod.POST)
+    public void editRun(@RequestParam("index") int index,
+                        @RequestParam("title") final String title,
+                        @RequestParam("content") final String content,
+                        @RequestParam("show") final boolean show) {
+        Notice notice = noticeService.getNoticeById(index);
+        if (notice == null) {
+            throw new RuntimeException("");
+        }
+        notice.setTitle(title);
+        notice.setContent(content);
+        notice.setActive(show);
+        noticeService.update(notice);
     }
 
     @RequestMapping("user/list")

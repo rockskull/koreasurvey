@@ -37,4 +37,18 @@ public class NoticeRepository {
 	}
 
 
+	public List<Notice> getNoticeAll() {
+		return session.selectList(String.format("%s.selectAll", namespace));
+	}
+
+	public Notice getNoticeById(Integer id) {
+		return session.selectOne(String.format("%s.selectById", namespace), id);
+	}
+
+	public void update(Notice notice) {
+		session.update(String.format("%s.update", namespace), notice);
+//		return
+	}
+
+
 }

@@ -8,6 +8,7 @@ public class Notice implements Serializable {
     private String title;
     private String content;
     private Integer userid;
+    private boolean active;
     private Date created;
 
     public Integer getId() {
@@ -48,5 +49,13 @@ public class Notice implements Serializable {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
