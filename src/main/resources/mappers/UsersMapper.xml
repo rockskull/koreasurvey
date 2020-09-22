@@ -65,7 +65,8 @@
 		`point` = #{point},
 		`age` = #{age},
 		`gender` = #{gender},
-		`area` = #{area}
+		`area` = #{area},
+		`active` = #{active}
 	WHERE `id` = #{id}
 </update>
 <select id="search" parameterType="HashMap" resultType="kr.quantumsoft.koreasurvey.model.Users">

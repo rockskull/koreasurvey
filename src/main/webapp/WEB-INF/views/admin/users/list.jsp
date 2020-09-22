@@ -68,10 +68,10 @@
                     <td>${item.active ? '정상' : '중지'}</td>
                     <td>
                         <c:if test="${item.active}">
-                            <button class="btn btn-sm btn-danger">사용정지</button>
+                            <button class="btn btn-sm btn-danger" data-btn-type="delete-user" type="button" data-user-id="${item.id}">사용정지</button>
                         </c:if>
                         <c:if test="${item.active == false}">
-                            <button class="btn btn-sm btn-primary">사용</button>
+                            <button class="btn btn-sm btn-primary" data-btn-type="use-user" type="button" data-user-id="${item.id}">사용</button>
                         </c:if>
 
                     </td>
@@ -86,4 +86,15 @@
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd'
     });
+    $("td button").click(function () {
+        // console.log( );
+        $.post("<c:url value="/admin/user/change-status" />",{
+            "user-id" : $(this).data("user-id")
+        }, function () {
+            alert("수정이 완료되었습니다");
+            location.reload();
+        }).fail(function () {
+            alert("오류가 발생하였습니다");
+        })
+    })
 </script>

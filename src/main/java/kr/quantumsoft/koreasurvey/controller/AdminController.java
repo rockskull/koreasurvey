@@ -11,11 +11,9 @@ import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,8 +39,20 @@ public class AdminController {
 
 
     @RequestMapping("")
-    public ModelAndView index() {
-        return new ModelAndView("admin/index");
+    public String index() {
+        return "redirect:/admin/user/list";
+    }
+
+    @ResponseBody
+    @RequestMapping("user/change-status")
+    public boolean changeUserStatus(@RequestParam("user-id") final Integer userId) {
+        Users user = userService.selectUserById(userId);
+        if (user == null) {
+            return false;
+        }
+        user.setActive(!user.isActive());
+        userService.updateUser(user);
+        return true;
     }
 
     @RequestMapping("notice/list")
