@@ -3,7 +3,7 @@
 <mapper namespace="kr.quantumsoft.koreasurvey.NoticeMapper">
 
 	<select id="selectTop"  parameterType="Integer" resultType="kr.quantumsoft.koreasurvey.model.Notice">
-		SELECT * FROM notice limit #{id}
+		SELECT * FROM notice where active = 1 limit #{id}
 	</select>
 	<select id="selectAll"  resultType="kr.quantumsoft.koreasurvey.model.Notice">
 		SELECT * FROM notice
