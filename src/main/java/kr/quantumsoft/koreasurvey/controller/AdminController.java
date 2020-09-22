@@ -1,7 +1,9 @@
 package kr.quantumsoft.koreasurvey.controller;
 
+import kr.quantumsoft.koreasurvey.model.Surveys;
 import kr.quantumsoft.koreasurvey.model.Tradings;
 import kr.quantumsoft.koreasurvey.model.Users;
+import kr.quantumsoft.koreasurvey.service.SurveysService;
 import kr.quantumsoft.koreasurvey.service.TradingsService;
 import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
@@ -26,6 +28,9 @@ public class AdminController {
 
     @Autowired
     private TradingsService tradingsService;
+
+    @Autowired
+    private SurveysService surveysService;
 
 
 
@@ -70,7 +75,14 @@ public class AdminController {
         if (tradingsList.size() != 0) {
 
         }
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("userid", user.getId());
+        param.put("offset", 0);
+        param.put("limit", 20);
+
+        List<Surveys> listSurveys = surveysService.selectSurveysByUserId(param);
         Map<String, Object> items = new HashMap<String, Object>();
+        items.put("surveys", listSurveys);
         items.put("data", user);
         items.put("regions", ProjectConstants.REGION_STRINGS);
         return new ModelAndView("admin/users/detail", items);

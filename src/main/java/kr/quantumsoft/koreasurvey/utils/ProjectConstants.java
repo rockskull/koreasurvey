@@ -60,4 +60,6 @@ public class ProjectConstants {
 	public static final Integer SURVEY_EXCLUDE_TYPE_AGE = 1;
 	public static final Integer SURVEY_EXCLUDE_TYPE_REGION = 2;
 	public static final Integer SURVEY_EXCLUDE_TYPE_GENDER = 3;
+
+	public static final String ADMIN_FLAG = "ADMIN";
 }

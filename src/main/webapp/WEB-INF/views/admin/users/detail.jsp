@@ -40,7 +40,8 @@
             <td>추천인</td>
             <td>
                 <c:choose>
-                    <c:when test="${data.recommanderid != 0}"><a href="/admin/user/detail/${data.recommanderid}">${data.recommanderemail}</a></c:when>
+                    <c:when test="${data.recommanderid != 0}"><a
+                            href="/admin/user/detail/${data.recommanderid}">${data.recommanderemail}</a></c:when>
                     <c:otherwise>없음</c:otherwise>
                 </c:choose>
             </td>
@@ -58,17 +59,75 @@
     </div>
     <table class="table">
         <tbody>
-            <tr>
-                <td>현재 포인트</td>
-                <td colspan="3">${data.point}</td>
-            </tr>
-            <tr>
-                <td>총 적립 포인트</td>
-                <td>-1</td>
-                <td>총 출금 포인트</td>
-                <td>-1</td>
+        <tr>
+            <td>현재 포인트</td>
+            <td colspan="3">${data.point}</td>
+        </tr>
+        <tr>
+            <td>총 적립 포인트</td>
+            <td>-1</td>
+            <td>총 출금 포인트</td>
+            <td>-1</td>
 
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="surveys">
+    <h1>설문 등록 내역</h1>
+
+    <table class="table table-hover m-b-0">
+        <thead>
+        <tr>
+            <%--													<th>선택</th>--%>
+            <!-- <th>순번</th> -->
+            <th>설문 번호</th>
+            <th>설문 제목</th>
+            <th>문항 수</th>
+            <th>총 배당액</th>
+            <th>인당 배당액</th>
+            <th>응답수</th>
+            <th>남은 배당액</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${surveys}" var="item" varStatus="status">
+            <tr class="survey" data-survey-id="${item.id}">
+                    <%--													<td><input class="check-item" type="checkbox" data-item-id="${item.id }" /></td>--%>
+                <td><a href="<c:url value="/account/surveys/result/${item.id}" />"> ${item.id}</a></td>
+                <td>${item.title }</td>
+                <td>${item.qcount } 개</td>
+                <td>${item.totalcost } P</td>
+                <td>${item.unitcost } P</td>
+                <td>${item.answerUserCount } / <fmt:formatNumber type="number" pattern="0"
+                                                                 value="${item.totalcost / item.unitcost} "/>명
+                </td>
+                <td>${item.totalcost-item.qcount*item.unitcost*item.answerUserCount } P</td>
+                <td><span class="text-primary">
+
+														<c:choose>
+                                                            <c:when test="${item.status == 0}">
+                                                                종료
+                                                            </c:when>
+                                                            <c:when test="${item.status == 1}">
+                                                                진행
+                                                            </c:when>
+                                                            <c:when test="${item.status == 2}">
+                                                                중지
+                                                            </c:when>
+                                                            <c:when test="${item.status == 3}">
+                                                                차단
+                                                            </c:when>
+
+                                                            <c:otherwise>
+                                                                알수없음
+                                                            </c:otherwise>
+                                                        </c:choose>
+													</span></td>
             </tr>
+        </c:forEach>
         </tbody>
     </table>
 </div>

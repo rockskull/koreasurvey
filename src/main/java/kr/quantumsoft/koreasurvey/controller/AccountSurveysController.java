@@ -136,7 +136,7 @@ public class AccountSurveysController {
         }
         Users user = SpringSecurityUtil.getUserFromAuth(authentication);
 
-        if (user == null || surveys.getUserid().equals(user.getId()) == false) {
+        if (user == null || (surveys.getUserid().equals(user.getId()) == false && user.getPermission().equalsIgnoreCase(ProjectConstants.ADMIN_FLAG) == false)) {
             throw new RuntimeException("");
         }
         Integer answerCount = answerService.countAnswersUsers(surveyId);
