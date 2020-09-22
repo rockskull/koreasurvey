@@ -96,7 +96,7 @@
         <c:forEach items="${surveys}" var="item" varStatus="status">
             <tr class="survey" data-survey-id="${item.id}">
                     <%--													<td><input class="check-item" type="checkbox" data-item-id="${item.id }" /></td>--%>
-                <td><a href="<c:url value="/account/surveys/result/${item.id}" />"> ${item.id}</a></td>
+                <td><a target="_blank" href="<c:url value="/account/surveys/result/${item.id}" />"> ${item.id}</a></td>
                 <td>${item.title }</td>
                 <td>${item.qcount } 개</td>
                 <td>${item.totalcost } P</td>
@@ -131,3 +131,26 @@
         </tbody>
     </table>
 </div>
+<div>
+    <c:if test="${data.active}">
+        <button class="btn btn-danger" id="user-btn" style="width: 100%;" type="button" data-user-id="${data.id}">사용 정지</button>
+    </c:if>
+    <c:if test="${data.active == false}">
+        <button class="btn btn-primary" id="user-btn" style="width: 100%;" type="button" data-user-id="${data.id}">사용</button>
+    </c:if>
+</div>
+<c:set var="javascript" scope="request">
+    <script>
+        $("#user-btn").click(function () {
+            // console.log( );
+            $.post("<c:url value="/admin/user/change-status" />",{
+                "user-id" : $(this).data("user-id")
+            }, function () {
+                alert("수정이 완료되었습니다");
+                location.reload();
+            }).fail(function () {
+                alert("오류가 발생하였습니다");
+            })
+        })
+    </script>
+</c:set>
