@@ -87,13 +87,15 @@ public class AdminController {
 
     @RequestMapping("user/list")
     public ModelAndView users(@RequestParam(value = "start", required = false) String start,
+                              @RequestParam(value = "user-status", required = false) Boolean userStatus,
                               @RequestParam(value = "end", required = false) String end,
                               @RequestParam(value = "email", required = false) String email) {
         Map<String, Object> items = new HashMap<String, Object>();
-        items.put("data", userService.search(email, start, end));
+        items.put("data", userService.search(email, start, end, userStatus));
         items.put("start", start);
         items.put("end", end);
         items.put("email", email);
+        items.put("user-status", userStatus);
 
         return new ModelAndView("admin/users/list", items);
     }

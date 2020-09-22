@@ -85,7 +85,7 @@ public class UsersSessionRepository {
 		return session.update(String.format("%s.updateUser", namespace), user);
 	}
 
-	public List<Users> search(HashMap<String, String> search) {
+	public List<Users> search(HashMap<String, Object> search) {
 		return session.selectList(String.format("%s.search", namespace), search);
 	}
 

@@ -77,6 +77,10 @@
 	<if test="start != null and end != null">
 		and created BETWEEN #{start} and #{end}
 	</if>
+	<if test="userStatus != null">
+		and active = #{userStatus}
+	</if>
+
 </select>
 
 </mapper>

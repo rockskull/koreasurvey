@@ -101,14 +101,17 @@ public class UsersService implements UserDetailsService {
 		return repo.updateUser(user);
 	}
 
-	public List<Users> search(String email, String start, String end) {
-		HashMap<String, String> param = new HashMap<String, String>();
+	public List<Users> search(String email, String start, String end, Boolean userStatus) {
+		HashMap<String, Object> param = new HashMap<String, Object>();
 		if (StringUtils.isNotEmpty(end) && StringUtils.isNotEmpty(start)) {
 			param.put("start", start);
 			param.put("end", end);
 		}
 		if (StringUtils.isNotEmpty(email)) {
 			param.put("email", email);
+		}
+		if (userStatus != null) {
+			param.put("userStatus", userStatus);
 		}
 		return repo.search(param);
 	}
