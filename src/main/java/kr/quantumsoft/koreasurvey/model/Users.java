@@ -54,6 +54,15 @@ public class Users implements Serializable, UserDetails {
 	private Integer point;
 	private String permission;
 	private Date created;
+	private boolean active;
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public String getPermission() {
 		return permission;
@@ -142,7 +151,7 @@ List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return this.isActive();
 	}
 
 	public Integer getId() {

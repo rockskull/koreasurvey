@@ -128,5 +128,7 @@ public class UsersService implements UserDetailsService {
 
 		tradingService.insertTradings(updateTrading);
 	}
+
+
 	
 }
