@@ -5,6 +5,9 @@
 <%@ page session="false" %>
 <div id="userinfo">
     <h1>회원정보</h1>
+    <c:if test="${data.active == false}">
+        <div class="alert alert-danger" role="alert">사용 정지</div>
+    </c:if>
     <table class="table">
         <tbody>
         <tr>
@@ -50,7 +53,9 @@
 </div>
 
 <div id="point">
-    <h1>포인트 현황</h1>
+    <div>
+        <h1>포인트 현황</h1>
+    </div>
     <table class="table">
         <tbody>
             <tr>

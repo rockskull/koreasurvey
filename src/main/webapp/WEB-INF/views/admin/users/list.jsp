@@ -62,12 +62,18 @@
             </c:if>
             <c:forEach items="${data}" var="item">
                 <tr>
-                    <td><a href="/admin/user/detail/${item.id}">${item.id}</a></td>
+                    <td><a href="<c:url value="/admin/user/detail/${item.id}" />">${item.id}</a></td>
                     <td>${item.email}</td>
                     <td><fmt:formatDate pattern="YYYY-MM-dd" value="${item.created}"></fmt:formatDate></td>
-                    <td>?</td>
+                    <td>${item.active ? '정상' : '중지'}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary">사용정지</button>
+                        <c:if test="${item.active}">
+                            <button class="btn btn-sm btn-danger">사용정지</button>
+                        </c:if>
+                        <c:if test="${item.active == false}">
+                            <button class="btn btn-sm btn-primary">사용</button>
+                        </c:if>
+
                     </td>
                 </tr>
             </c:forEach>
