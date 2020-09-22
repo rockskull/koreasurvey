@@ -10,20 +10,25 @@
         <input type="text" class="form-control" id="notice-title" name="title" aria-describedby="withdrawal-amount-help" value="${notice.title}">
     </div>
     <div>
-        <label for="content">제목</label>
+        <label for="content">내용</label>
         <textarea id="content">${notice.content}</textarea>
     </div>
     <div class="form-group">
         <label for="show-notice-toggle">공지사항 노출</label>
         <div>
-            <input type="checkbox" data-toggle="toggle" data-size="sm" id="show-notice-toggle" name="show">
+            <c:if test="${notice.active}">
+                <input type="checkbox" data-toggle="toggle" data-size="sm" id="show-notice-toggle" name="show"  checked>
+            </c:if>
+            <c:if test="${notice.active == false}">
+                <input type="checkbox" data-toggle="toggle" data-size="sm" id="show-notice-toggle" name="show" >
+            </c:if>
+
         </div>
     </div>
     <div class="text-right">
         <button class="btn btn-primary" type="submit">확인</button>
         <button class="btn btn-default">취소</button>
     </div>
-    <input type="hidden" name="content" id="result">
 </form>
 <c:set var="javascript" scope="request">
     <script>
