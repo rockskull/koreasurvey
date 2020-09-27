@@ -95,7 +95,16 @@ public class SurveysService {
 	}
 	
 	public Surveys selectSurveysById(Integer id) {
-		return repo.selectSurveysById(id);
+		Surveys survey = repo.selectSurveysById(id);
+		if (survey == null) {
+			return null;
+		}
+
+		Integer countUsers = answersSessionRepository.countAnswersUsers(survey.getId());
+		if(countUsers == null) countUsers = 0;
+		survey.setAnswerUserCount(countUsers);
+
+		return survey;
 	}
 	
 	public Integer deleteSurveyById(Integer id) {

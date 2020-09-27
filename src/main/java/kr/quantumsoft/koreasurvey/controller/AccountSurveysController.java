@@ -322,6 +322,7 @@ public class AccountSurveysController {
         model.addAttribute("survey", selectItem);
         model.addAttribute("listQuestions", listQuestions);
         model.addAttribute("user", user);
+        model.addAttribute("regions", ProjectConstants.REGION_STRINGS);
         return "surveyEdit";
     }
 

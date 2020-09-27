@@ -43,7 +43,7 @@
                 "show" : $("#show-notice-toggle:checked").val() === "on"
             }, function () {
                 alert("처리가 완료되었습니다");
-                history.back();
+                location.href = "<c:url value="/admin/notice/list">"
             }).fail(function () {
                 alert("처리중 오류가 발생하였습니다");
             })

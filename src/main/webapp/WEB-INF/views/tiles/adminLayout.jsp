@@ -43,7 +43,7 @@
                     <a href="<c:url value="/admin/user/list" />">회원관리</a>
                 </li>
                 <li>
-                    <a href="<c:url value="/admin/survey/list" />">설문관리</a>
+                    <a href="<c:url value="/admin/surveys" />">설문관리</a>
                 </li>
                 <li>
                     <a href="<c:url value="/admin/point/list" />">적립금관리</a>
