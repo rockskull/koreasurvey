@@ -121,4 +121,15 @@ public class SurveysService {
 		survey.setStatus(ProjectConstants.SURVEY_STATE_SUSPEND);
 		this.updateSurveys(survey);
     }
+
+    public List<Surveys> search(HashMap<String, Object> param) {
+		List<Surveys> surveys = repo.search(param);
+		for (Surveys survey : surveys) {
+			Integer countUsers = answersSessionRepository.countAnswersUsers(survey.getId());
+			if(countUsers == null) countUsers = 0;
+			survey.setAnswerUserCount(countUsers);
+
+		}
+		return surveys;
+	}
 }

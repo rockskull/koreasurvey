@@ -9,6 +9,7 @@ import kr.quantumsoft.koreasurvey.service.SurveysService;
 import kr.quantumsoft.koreasurvey.service.TradingsService;
 import kr.quantumsoft.koreasurvey.service.UsersService;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,22 @@ public class AdminController {
     @Autowired
     private NoticeService noticeService;
 
+
+    @RequestMapping("surveys")
+    public ModelAndView surveys(@RequestParam(value = "start", required = false) String start,
+                              @RequestParam(value = "end", required = false) String end,
+                              @RequestParam(value = "title", required = false) String title) {
+        HashMap<String, Object> items = new HashMap<String, Object>();
+        if (StringUtils.isNotEmpty(start) && StringUtils.isNotEmpty(end)) {
+            items.put("start", start);
+            items.put("end", end);
+        }
+        if (StringUtils.isNotEmpty(title)) {
+            items.put("title", title);
+        }
+        items.put("data", surveysService.search(items));
+        return new ModelAndView("admin/survey/surveys", items);
+    }
 
     @RequestMapping("")
     public String index() {

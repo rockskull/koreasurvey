@@ -75,4 +75,25 @@
 		`deleted` = CURRENT_TIMESTAMP()
 	WHERE `id` = #{id}
 </update>
+<select id="search" parameterType="HashMap"
+		resultType="kr.quantumsoft.koreasurvey.model.Surveys">
+	SELECT *,
+		(
+			SELECT COUNT(*) FROM `questions` WHERE `surveyid` = `s`.`id`
+		) AS `qcount`
+	FROM `surveys` `s`
+	WHERE 1=1
+	<if test="start != null and end != null">
+		and s.created BETWEEN #{start} and #{end}
+	</if>
+	<if test="delete != null">
+		and s.deleted IS NOT NULL
+	</if>
+	<if test="title != null">
+		and s.title like CONCAT('%',#{title},'%')
+
+	</if>
+	ORDER BY `id` DESC
+</select>
+
 </mapper>

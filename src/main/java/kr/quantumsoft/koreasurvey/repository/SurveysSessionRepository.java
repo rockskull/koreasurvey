@@ -71,4 +71,7 @@ public class SurveysSessionRepository {
 	public Integer deleteSurveyById(Integer id) {
 		return session.update(String.format("%s.deleteSurveyById", namespace), id);
 	}
+	public List<Surveys> search(HashMap<String, Object> param) {
+		return session.selectList(String.format("%s.search", namespace), param);
+	}
 }
