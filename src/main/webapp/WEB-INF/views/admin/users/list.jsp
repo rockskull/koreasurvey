@@ -26,10 +26,10 @@
         <div class="form-group">
             <label>계정상태</label>
             <label class="checkbox-inline">
-                <input type="checkbox" value="1" name="status"> 정상
+                <input type="checkbox" value="true" name="user-status"> 정상
             </label>
             <label class="checkbox-inline">
-                <input type="checkbox" value="2" name="status"> 중지
+                <input type="checkbox" value="false" name="user-status"> 중지
             </label>
         </div>
 
