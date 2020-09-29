@@ -38,4 +38,8 @@ public class SurveyExcludeRepository {
 		return session.selectList(String.format("%s.getSurveyExcludeListBySurveyId", namespace), surveyId);
 	}
 
+	public void deleteExcludeBySurveyId(int surveyId) {
+		session.delete(String.format("%s.deleteExcludeBySurveyId", namespace), surveyId);
+	}
+
 }

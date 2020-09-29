@@ -19,4 +19,8 @@
 		SELECT * FROM survey_exclude
 		WHERE surveyid = #{surveyid}
 	</select>
+	<delete id="deleteExcludeBySurveyId" parameterType="Integer">
+		DELETE FROM survey_exclude
+		WHERE surveyid= #{surveyid}
+	</delete>
 </mapper>

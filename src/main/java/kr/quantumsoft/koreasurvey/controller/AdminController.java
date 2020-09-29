@@ -1,13 +1,7 @@
 package kr.quantumsoft.koreasurvey.controller;
 
-import kr.quantumsoft.koreasurvey.model.Notice;
-import kr.quantumsoft.koreasurvey.model.Surveys;
-import kr.quantumsoft.koreasurvey.model.Tradings;
-import kr.quantumsoft.koreasurvey.model.Users;
-import kr.quantumsoft.koreasurvey.service.NoticeService;
-import kr.quantumsoft.koreasurvey.service.SurveysService;
-import kr.quantumsoft.koreasurvey.service.TradingsService;
-import kr.quantumsoft.koreasurvey.service.UsersService;
+import kr.quantumsoft.koreasurvey.model.*;
+import kr.quantumsoft.koreasurvey.service.*;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -38,11 +30,14 @@ public class AdminController {
     @Autowired
     private NoticeService noticeService;
 
+    @Autowired
+    private SurveyExcludeService surveyExcludeService;
+
 
     @RequestMapping("surveys")
     public ModelAndView surveys(@RequestParam(value = "start", required = false) String start,
-                              @RequestParam(value = "end", required = false) String end,
-                              @RequestParam(value = "title", required = false) String title) {
+                                @RequestParam(value = "end", required = false) String end,
+                                @RequestParam(value = "title", required = false) String title) {
         HashMap<String, Object> items = new HashMap<String, Object>();
         if (StringUtils.isNotEmpty(start) && StringUtils.isNotEmpty(end)) {
             items.put("start", start);
@@ -54,6 +49,61 @@ public class AdminController {
         items.put("data", surveysService.search(items));
         return new ModelAndView("admin/survey/surveys", items);
     }
+
+
+    @RequestMapping(value = "surveys/detail/{surveyId}", method = RequestMethod.GET)
+    public ModelAndView surveys(@PathVariable int surveyId) {
+        HashMap<String, Object> items = new HashMap<String, Object>();
+        items.put("survey", surveysService.selectSurveysById(surveyId));
+        items.put("regions", ProjectConstants.REGION_STRINGS);
+        items.put("exclude", surveysService.getSurveyExcludeListBySurveyId(surveyId));
+        return new ModelAndView("admin/survey/detail", items);
+    }
+
+    @RequestMapping(value = "surveys/detail/{surveyId}", method = RequestMethod.POST)
+    public String surveyEdit(@PathVariable int surveyId, Surveys edit) {
+        Surveys surveys = surveysService.selectSurveysById(surveyId);
+        surveys.setTitle(edit.getTitle());
+        surveys.setDetail(edit.getDetail());
+        surveysService.updateSurveys(surveys);
+        return "redirect:/admin/surveys/detail/" + surveyId;
+    }
+
+    private boolean insertExcludes(Integer excludeType, String data, Integer surveyId) {
+        if (StringUtils.isEmpty(data)) {
+            return false;
+        }
+        boolean ret = false;
+        for (String value : data.split(",")) {
+            if (value.equals("all")) {
+                continue;
+            }
+            ret = true;
+            SurveyExclude surveyExclude = new SurveyExclude();
+            surveyExclude.setExcludeType(excludeType);
+            surveyExclude.setExcludeValue(value);
+            surveyExclude.setSurveyId(surveyId);
+            surveyExclude.setCreated(new Date());
+            surveyExcludeService.insertExclude(surveyExclude);
+        }
+        return ret;
+    }
+    @ResponseBody
+    @RequestMapping(value = "surveys/exclude/{surveyId}", method = RequestMethod.POST)
+    public boolean surveyExcludeEdit(@PathVariable int surveyId, Surveys doc) {
+        Surveys surveys = surveysService.selectSurveysById(surveyId);
+        if (surveys == null) {
+            return false;
+        }
+        surveyExcludeService.deleteExcludeBySurveyId(surveyId);
+        //TODO : Delete From SurveyExclude
+        //
+        this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER, doc.getGender(), surveyId);
+        this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE, doc.getAge(), surveyId);
+        this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION, doc.getRegion(), surveyId);
+        return true;
+    }
+
 
     @RequestMapping("")
     public String index() {

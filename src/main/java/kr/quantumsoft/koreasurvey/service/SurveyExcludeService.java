@@ -10,6 +10,9 @@ public class SurveyExcludeService {
     @Autowired
     private SurveyExcludeRepository repo;
 
+    public void deleteExcludeBySurveyId(int surveyId) {
+        repo.deleteExcludeBySurveyId(surveyId);
+    }
 
     public void insertExclude(SurveyExclude surveyExclude) {
         repo.insertExclude(surveyExclude);
