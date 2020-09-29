@@ -66,6 +66,15 @@
                                                     My Messages
                                                 </a>
                                             </li>-->
+											<c:if test="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.permission == 'ADMIN'}">
+												<li>
+													<a href="<c:url value="/admin/" />">
+														<i class="feather icon-users"></i>
+														관리자
+													</a>
+												</li>
+											</c:if>
+
 											<li>
 												<a href="<c:url value="/account" />">
 													<i class="feather icon-settings"></i>
