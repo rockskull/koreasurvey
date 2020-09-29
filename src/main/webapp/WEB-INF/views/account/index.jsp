@@ -301,7 +301,7 @@
                     returnText = "테스트 충전";
                     break;
                 case 2:
-                    returnText = "설문 배당";
+                    returnText = "설문 배당 </br> " + (item.recommanderemail !== null ? item.recommanderemail : "");
                     break;
                 default:
                     returnText = "알수없음";
@@ -320,7 +320,7 @@
                     const $tr = $("<tr />");
                     $tr.append($("<td />").text(moment(item.created).format("yyyy-MM-DD")));
                     $tr.append($("<td />").text((item.amount > 0 ? "+" : "") + item.amount).addClass(item.amount > 0 ? "text-c-red" : "text-c-blue"));
-                    $tr.append($("<td />").text(getTradingType(item)));
+                    $tr.append($("<td />").html(getTradingType(item)));
 
                     $("#trading tbody").append($tr);
                 })

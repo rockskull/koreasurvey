@@ -18,7 +18,8 @@
 		`gender`,
 		`area`,
 		`recommanderid`,
-		`recommanderemail`
+		`recommanderemail`,
+		`active`
 	) VALUES (
 		#{email},
 		#{password},
@@ -26,7 +27,8 @@
 		#{gender},
 		#{area},
 		#{recommanderid},
-		#{recommanderemail}
+		#{recommanderemail},
+		1
 	)
 </insert>
 <select id="countTotalUser" resultType="Integer">

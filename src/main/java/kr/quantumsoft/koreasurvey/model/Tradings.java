@@ -17,57 +17,82 @@ package kr.quantumsoft.koreasurvey.model;
 
 import java.util.Date;
 
-/**  
+/**
+ * @author QuantumSoft Inc.
+ * @version 1.0
  * @Class Name : Tradings.java
  * @Project Name : koreasurvey
- * @Description : 
- * @Modification Information  
+ * @Description :
+ * @Modification Information
  * @
- * @  수정일      수정자              수정내용
+ * @ 수정일      수정자              수정내용
  * @ ------------   ---------   -------------------------------
  * @ 2020. 5. 28.                     최초생성
- * 
- * @author QuantumSoft Inc.
+ * @see Copyright (C) by QuantumSoft Inc. All right reserved.
  * @since 2015. 8.
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by QuantumSoft Inc. All right reserved.
  */
 public class Tradings {
-	private Integer id;
-	private Integer userid;
-	private Integer type;	// -1: 소비, 0: 현금 충전, 1: 카드 충전, 2: 배당 충전
-	private Integer amount;
-	private Date created;
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Integer getUserid() {
-		return userid;
-	}
-	public void setUserid(Integer userid) {
-		this.userid = userid;
-	}
-	public Integer getType() {
-		return type;
-	}
-	public void setType(Integer type) {
-		this.type = type;
-	}
-	public Integer getAmount() {
-		return amount;
-	}
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-	public Date getCreated() {
-		return created;
-	}
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+    private Integer id;
+    private Integer userid;
+    private Integer type;    // -1: 소비, 0: 현금 충전, 1: 카드 충전, 2: 배당 충전
+    private Integer amount;
+    private Integer recommanderid;
+    private String recommanderemail;
+    private Date created;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Integer getRecommanderid() {
+        return recommanderid;
+    }
+
+    public void setRecommanderid(Integer recommanderid) {
+        this.recommanderid = recommanderid;
+    }
+
+    public String getRecommanderemail() {
+        return recommanderemail;
+    }
+
+    public void setRecommanderemail(String recommanderemail) {
+        this.recommanderemail = recommanderemail;
+    }
 }

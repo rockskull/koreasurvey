@@ -6,11 +6,15 @@
 	INSERT INTO `tradings` (
 		`userid`,
 		`type`,
-		`amount`
+		`amount`,
+		`recommanderid`,
+		`recommanderemail`
 	) VALUES (
 		#{userid},
 		#{type},
-		#{amount}
+		#{amount},
+		#{recommanderid},
+		#{recommanderemail}
 	)
 </insert>
 <select id="selectTradingsByUserId" parameterType="HashMap"

@@ -153,17 +153,9 @@ public class SurveysController {
 			Integer parentPoint = (int) Math.floor((totalAmount/10)*ProjectConstants.PARENT_POINT_RATE);
 			Tradings trading = new Tradings();
 			trading.setType(2);
-			
-			user.setPoint(user.getPoint()+myPoint);
-			userService.updateUser(user);
-			
-			trading.setAmount(myPoint);
-			trading.setUserid(user.getId());
-		
-			tradingService.insertTradings(trading);
+
 
 			if(user.getRecommanderid() != null && user.getRecommanderid() != 0) {
-
 				// 첫번째 윗사람
 				Users firstParent = userService.selectUserById(user.getRecommanderid());
 				firstParent.setPoint(firstParent.getPoint()+parentPoint);
@@ -171,6 +163,8 @@ public class SurveysController {
 
 				trading.setAmount(parentPoint);
 				trading.setUserid(firstParent.getId());
+				trading.setRecommanderid(user.getId());
+				trading.setRecommanderemail(user.getEmail());
 
 				tradingService.insertTradings(trading);
 				if(firstParent.getRecommanderid() != null && firstParent.getRecommanderid() != 0) {
@@ -180,10 +174,22 @@ public class SurveysController {
 					userService.updateUser(secondParent);
 
 					trading.setUserid(secondParent.getId());
-
+					trading.setRecommanderid(firstParent.getId());
+					trading.setRecommanderemail(firstParent.getEmail());
 					tradingService.insertTradings(trading);
 				}
 			}
+
+			user.setPoint(user.getPoint()+myPoint);
+			userService.updateUser(user);
+
+			trading.setAmount(myPoint);
+			trading.setUserid(user.getId());
+			trading.setRecommanderemail(null);
+			trading.setRecommanderid(null);
+
+			tradingService.insertTradings(trading);
+
 			return totalAmount;
 		}
 		return -1;
