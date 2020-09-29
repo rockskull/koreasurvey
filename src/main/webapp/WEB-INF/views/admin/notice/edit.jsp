@@ -36,14 +36,14 @@
     </script>
     <script>
         $("#notice-edit").submit(function () {
-            $.post("<c:url  value="/admin/notice/edit"/>", {
+            $.post("<c:url  value="/admin/notice/edit" />", {
                 "index" : ${notice.id},
                 "title" : $("input[name=title]").val(),
                 "content" : CKEDITOR.instances.content.getData(),
                 "show" : $("#show-notice-toggle:checked").val() === "on"
             }, function () {
                 alert("처리가 완료되었습니다");
-                location.href = "<c:url value="/admin/notice/list">"
+                location.href = "<c:url value="/admin/notice/list" />"
             }).fail(function () {
                 alert("처리중 오류가 발생하였습니다");
             })
