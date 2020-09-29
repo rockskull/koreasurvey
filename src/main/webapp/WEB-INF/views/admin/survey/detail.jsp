@@ -3,15 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page session="false" %>
-<link rel="stylesheet" type="text/css" href="/koreasurvey/resources/css/bootstrap4-toggle.min.css">
 
 <div>
-    <h3>설문정보</h3>
-    <div class="text-right">
-        <button class="btn btn-primary" type="submit">저장</button>
-    </div>
 
     <form method="post">
+        <h3>설문정보</h3>
+        <div class="text-right">
+            <button class="btn btn-primary" type="submit">저장</button>
+        </div>
 
         <table class="table">
             <tbody>
