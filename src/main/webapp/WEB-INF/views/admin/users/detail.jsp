@@ -41,7 +41,7 @@
             <td>
                 <c:choose>
                     <c:when test="${data.recommanderid != 0}"><a
-                            href="/admin/user/detail/${data.recommanderid}">${data.recommanderemail}</a></c:when>
+                            href="<c:url value="/admin/user/detail/${data.recommanderid}" />">${data.recommanderemail}</a></c:when>
                     <c:otherwise>없음</c:otherwise>
                 </c:choose>
             </td>
