@@ -74,4 +74,9 @@ public class SurveysSessionRepository {
 	public List<Surveys> search(HashMap<String, Object> param) {
 		return session.selectList(String.format("%s.search", namespace), param);
 	}
+
+
+	public Integer inspectionSurveyById(Integer id) {
+		return session.update(String.format("%s.inspectionSurveyById", namespace), id);
+	}
 }

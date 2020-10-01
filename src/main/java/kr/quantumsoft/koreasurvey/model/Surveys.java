@@ -52,8 +52,7 @@ public class Surveys implements Serializable {
 	private Integer qcount;
 	private Integer status;
 	private boolean exclude;
-
-
+	private Date inspection;
 
 	private Boolean isJoined = false;
 	private Integer answerUserCount;
@@ -180,4 +179,14 @@ public class Surveys implements Serializable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+
+
+	public Date getInspection() {
+		return inspection;
+	}
+
+	public void setInspection(Date inspection) {
+		this.inspection = inspection;
+	}
+
 }

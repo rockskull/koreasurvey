@@ -88,6 +88,7 @@ public class AdminController {
         }
         return ret;
     }
+
     @ResponseBody
     @RequestMapping(value = "surveys/exclude/{surveyId}", method = RequestMethod.POST)
     public boolean surveyExcludeEdit(@PathVariable int surveyId, Surveys doc) {
@@ -101,6 +102,17 @@ public class AdminController {
         this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_GENDER, doc.getGender(), surveyId);
         this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_AGE, doc.getAge(), surveyId);
         this.insertExcludes(ProjectConstants.SURVEY_EXCLUDE_TYPE_REGION, doc.getRegion(), surveyId);
+        return true;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/inspection/{surveyId}", method = RequestMethod.POST)
+    public boolean surveyInspection(@PathVariable int surveyId) {
+        Surveys surveys = surveysService.selectSurveysById(surveyId);
+        if (surveys == null) {
+            return false;
+        }
+        surveysService.inspection(surveys);
         return true;
     }
 

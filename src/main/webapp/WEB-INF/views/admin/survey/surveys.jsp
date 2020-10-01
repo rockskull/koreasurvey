@@ -24,12 +24,16 @@
             </div>
         </div>
         <div class="form-group">
-            <label>계정상태</label>
+            <label>설문 상태</label>
             <label class="checkbox-inline">
-                <input type="checkbox" value="true" name="user-status"> 정상
+                <input type="checkbox" value="-1" name="status"> 검수중
             </label>
             <label class="checkbox-inline">
-                <input type="checkbox" value="false" name="user-status"> 중지
+                <input type="checkbox" value="1" name="status"> 중지
+            </label>
+
+            <label class="checkbox-inline">
+                <input type="checkbox" value="2" name="status"> 종료
             </label>
         </div>
 
@@ -56,6 +60,8 @@
                 <td>응답수</td>
                 <td>남은배당액</td>
                 <td>등록일</td>
+                <td>설문상태</td>
+
             </tr>
         </thead>
         <tbody>
@@ -66,7 +72,11 @@
         </c:if>
         <c:forEach items="${data}" var="item">
             <tr>
-                <td><button class="btn btn-primary btn-sm">버튼</button> </td>
+                <td>
+                    <c:if test="${item.status == -1}">
+                        <button class="btn btn-primary btn-sm" data-id="${item.id}">검수 완료</button>
+                    </c:if>
+                </td>
                 <td>
                     <a href="<c:url value="/account/surveys/edit?surveyId=${item.id}" />">
                             ${item.id}
@@ -79,6 +89,27 @@
                 <td>${item.answerUserCount } / <fmt:formatNumber type="number"  pattern="0" value="${item.totalcost / item.unitcost} " />명</td>
                 <td>${item.totalcost-item.qcount*item.unitcost*item.answerUserCount } P</td>
                 <td><fmt:formatDate pattern="YYYY-MM-dd" value="${item.created}"></fmt:formatDate></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${item.status == -1}">
+                            검수중
+                        </c:when>
+                        <c:when test="${item.status == 0}">
+                            종료
+                        </c:when>
+                        <c:when test="${item.status == 1}">
+                            진행
+                        </c:when>
+                        <c:when test="${item.status == 2}">
+                            중지
+                        </c:when>
+                        <c:otherwise>
+                            차단
+                        </c:otherwise>
+
+                    </c:choose>
+                </td>
+
             </tr>
         </c:forEach>
 
@@ -93,7 +124,7 @@
     });
     $("td button").click(function () {
         // console.log( );
-        $.post("<c:url value="/admin/user/change-status" />",{
+        $.post("<c:url value="/admin/surveys/inspection/" />" + $(this).data("id"),{
             "user-id" : $(this).data("user-id")
         }, function () {
             alert("수정이 완료되었습니다");

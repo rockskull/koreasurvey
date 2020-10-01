@@ -46,7 +46,8 @@
 		`unitcost` = #{unitcost},
 		`to` = #{to},
 		`status` = #{status},
-		`exclude` = #{exclude}
+		`exclude` = #{exclude},
+		`inspection` = #{inspection}
 
 	WHERE `id` = #{id}
 </update>
@@ -75,7 +76,15 @@
 		`deleted` = CURRENT_TIMESTAMP()
 	WHERE `id` = #{id}
 </update>
-<select id="search" parameterType="HashMap"
+<update id="inspectionSurveyById" parameterType="Integer">
+	UPDATE `surveys`
+	SET
+		`inspection` = CURRENT_TIMESTAMP(),
+		`status` = 1
+	WHERE `id` = #{id}
+</update>
+
+	<select id="search" parameterType="HashMap"
 		resultType="kr.quantumsoft.koreasurvey.model.Surveys">
 	SELECT *,
 		(

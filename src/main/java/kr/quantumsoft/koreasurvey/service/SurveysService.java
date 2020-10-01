@@ -141,4 +141,8 @@ public class SurveysService {
 		}
 		return surveys;
 	}
+
+    public void inspection(Surveys surveys) {
+		repo.inspectionSurveyById(surveys.getId());
+    }
 }

@@ -55,7 +55,7 @@
                     <td><fmt:formatDate pattern="YYYY-MM-dd" value="${survey.created}"></fmt:formatDate></td>
 
                     <th>검수일</th>
-                    <td>????</td>
+                    <td><fmt:formatDate pattern="YYYY-MM-dd" value="${survey.inspection}"></fmt:formatDate></td>
                 </tr>
 
             </tbody>
