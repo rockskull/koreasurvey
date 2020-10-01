@@ -33,7 +33,7 @@
 		#{totalcost},
 		#{unitcost},
 		#{to},
-		1
+		-1
 	)
 </insert>
 <update id="updateSurveys" parameterType="kr.quantumsoft.koreasurvey.model.Surveys">
