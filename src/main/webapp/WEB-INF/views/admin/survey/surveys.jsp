@@ -78,7 +78,7 @@
                     </c:if>
                 </td>
                 <td>
-                    <a href="<c:url value="/account/surveys/edit?surveyId=${item.id}" />">
+                    <a href="<c:url value="/admin/surveys/detail/${item.id}" />">
                             ${item.id}
                     </a>
                 </td>
