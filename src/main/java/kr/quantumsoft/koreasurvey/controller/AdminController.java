@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -32,6 +33,13 @@ public class AdminController {
 
     @Autowired
     private SurveyExcludeService surveyExcludeService;
+
+    @Autowired
+    private QuestionsService questionService;
+
+    @Autowired
+    private OptionsService optionsService;
+
 
 
     @RequestMapping("surveys")
@@ -54,7 +62,10 @@ public class AdminController {
     @RequestMapping(value = "surveys/detail/{surveyId}", method = RequestMethod.GET)
     public ModelAndView surveys(@PathVariable int surveyId) {
         HashMap<String, Object> items = new HashMap<String, Object>();
+//        List<Questions> questions = ;
+
         items.put("survey", surveysService.selectSurveysById(surveyId));
+        items.put("questions", questionService.selectQuestionsBySurveyId(surveyId));
         items.put("regions", ProjectConstants.REGION_STRINGS);
         items.put("exclude", surveysService.getSurveyExcludeListBySurveyId(surveyId));
         return new ModelAndView("admin/survey/detail", items);
@@ -68,6 +79,21 @@ public class AdminController {
         surveysService.updateSurveys(surveys);
         return "redirect:/admin/surveys/detail/" + surveyId;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/question/{qId}", method = RequestMethod.GET)
+    public Questions question(@PathVariable int qId) {
+        return questionService.selectQuestionsById(qId);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/question/{oId}/delete", method = RequestMethod.POST)
+    public boolean questionDelete(@PathVariable int oId) {
+        optionsService.deleteOptionsById(oId);
+        return true;
+    }
+
 
     private boolean insertExcludes(Integer excludeType, String data, Integer surveyId) {
         if (StringUtils.isEmpty(data)) {

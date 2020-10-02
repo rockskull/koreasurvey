@@ -66,4 +66,8 @@ public class OptionsSessionRepository {
 	public Integer deleteOptionsByQuestionId(Integer questionid) {
 		return session.delete(String.format("%s.deleteOptionsByQuestionId", namespace), questionid);
 	}
+
+	public Integer deleteOptionsById(Integer oId) {
+		return session.delete(String.format("%s.deleteOptionsById", namespace), oId);
+	}
 }

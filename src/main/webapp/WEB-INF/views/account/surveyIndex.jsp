@@ -84,6 +84,10 @@
 													<td><span class="text-primary">
 
 														<c:choose>
+															<c:when test = "${item.status == -1}">
+																검수중
+															</c:when>
+
 															<c:when test = "${item.status == 0}">
 																종료
 															</c:when>

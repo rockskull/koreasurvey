@@ -17,6 +17,7 @@ package kr.quantumsoft.koreasurvey.service;
 
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.repository.OptionsSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,10 @@ import kr.quantumsoft.koreasurvey.repository.QuestionsSessionRepository;
 public class QuestionsService {
 	@Autowired
 	private QuestionsSessionRepository repo;
+
+	@Autowired
+	private OptionsSessionRepository optionsSessionRepository;
+
 	
 	public Integer insertQuestions(Questions question) {
 		return repo.insertQuestions(question);
@@ -58,10 +63,18 @@ public class QuestionsService {
 	}
 	
 	public Questions selectQuestionsById(Integer id) {
-		return repo.selectQuestionsById(id);
+		Questions questions = repo.selectQuestionsById(id);
+		questions.setOptions(
+				optionsSessionRepository.selectOptionsByQuestionId(id)
+		);
+		return questions;
 	}
 	
 	public Integer deleteQuestionBySurveyId(Integer id) {
 		return repo.deleteQuestionBySurveyId(id);
+	}
+
+	public Integer deleteQuestionById(Integer id) {
+		return repo.deleteQuestionById(id);
 	}
 }

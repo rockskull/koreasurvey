@@ -64,4 +64,9 @@ public class OptionsService {
 	public Integer deleteOptionsByQuestionId(Integer questionid) {
 		return repo.deleteOptionsByQuestionId(questionid);
 	}
+
+
+	public Integer deleteOptionsById(Integer questionid) {
+		return repo.deleteOptionsById(questionid);
+	}
 }

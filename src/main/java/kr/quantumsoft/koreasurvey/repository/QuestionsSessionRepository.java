@@ -66,4 +66,8 @@ public class QuestionsSessionRepository {
 	public Integer deleteQuestionBySurveyId(Integer id) {
 		return session.delete(String.format("%s.deleteQuestionBySurveyId", namespace), id);
 	}
+
+	public Integer deleteQuestionById(Integer id) {
+		return session.delete(String.format("%s.deleteQuestionById", namespace), id);
+	}
 }
