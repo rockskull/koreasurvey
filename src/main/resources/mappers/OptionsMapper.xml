@@ -33,4 +33,8 @@
 <delete id="deleteOptionsByQuestionId" parameterType="Integer">
 	DELETE FROM `options` WHERE `questionid` = #{id}
 </delete>
+
+<delete id="deleteOptionsById" parameterType="Integer">
+	DELETE FROM `options` WHERE `id` = #{id}
+</delete>
 </mapper>

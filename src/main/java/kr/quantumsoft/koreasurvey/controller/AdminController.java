@@ -3,6 +3,7 @@ package kr.quantumsoft.koreasurvey.controller;
 import kr.quantumsoft.koreasurvey.model.*;
 import kr.quantumsoft.koreasurvey.service.*;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
+import kr.quantumsoft.koreasurvey.vo.AdminQuestionEditVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -88,9 +89,40 @@ public class AdminController {
 
 
     @ResponseBody
-    @RequestMapping(value = "surveys/question/{oId}/delete", method = RequestMethod.POST)
-    public boolean questionDelete(@PathVariable int oId) {
+    @RequestMapping(value = "surveys/question/{qId}/edit", method = RequestMethod.POST)
+    public Questions questionEdit(@PathVariable int qId, @RequestBody AdminQuestionEditVo adminQuestionEditVo) {
+        for (Options option: adminQuestionEditVo.getOptions()) {
+            option.setQuestionid(qId);
+            if (option.getId() == 0) {
+                option.setType(0);
+                optionsService.insertOptions(option);
+            } else {
+                Options changeOption = optionsService.selectOptionsById(option.getId());
+                changeOption.setOption(option.getOption());
+//                optionsService.updateOptions(option);
+            }
+        }
+        Questions questions = questionService.selectQuestionsById(qId);
+        questions.setTitle(adminQuestionEditVo.getTitle());
+        questions.setQuestion(adminQuestionEditVo.getQuestion());
+        questionService.updateQuestions(questions);
+
+        return questionService.selectQuestionsById(qId);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/question/option/{oId}/delete", method = RequestMethod.POST)
+    public boolean optionDelete(@PathVariable int oId) {
         optionsService.deleteOptionsById(oId);
+        return true;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/question/{qId}/delete", method = RequestMethod.POST)
+    public boolean questionDelete(@PathVariable int qId) {
+        questionService.deleteQuestionById(qId);
+
         return true;
     }
 

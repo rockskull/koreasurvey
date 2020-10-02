@@ -187,7 +187,7 @@
                     <button class="btn btn-default btn-sm question-modify-modal" data-q-type="${item.type}"
                             data-q-id="${item.id}">문항수정
                     </button>
-                    <button class="btn btn-danger btn-sm">삭제</button>
+                    <button class="btn btn-danger btn-sm question-delete-btn" data-q-id="${item.id}">삭제</button>
                 </td>
             </tr>
         </c:forEach>
@@ -205,6 +205,7 @@
                 <h4 class="modal-title" id="myModalLabel">문항 수정</h4>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="question-id">
                 <div class="form-group">
                     <label for="modal-title">문항 제목</label>
                     <input type="text" class="form-control" name="title" id="modal-title">
@@ -212,8 +213,8 @@
                 <div class="form-group">
                     <label for="modal-title">문항 유형</label>
                     <p id="q-type"></p>
-                    <p class="text-danger">* 문항유형은 <b>수정 할 수 없습니다.</b></p>
                 </div>
+
                 <div id="modal-type-1" style="display: none">
                     <div class="form-group">
                         <label for="modal-title">내용</label>
@@ -222,13 +223,19 @@
                 </div>
 
                 <div id="modal-type-0" style="display: none">
+                    <label>항목</label>
+                    <a href="#" id="add-question-option">선택 항목 추가</a>
+                    <div id="modal-question"></div>
+                </div>
+
+                <div id="modal-add">
 
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="modify-question-btn">저장</button>
             </div>
         </div>
     </div>
@@ -246,16 +253,33 @@
             return exclude;
         }
 
+        function addQuestion() {
+            $("#modal-add")
+        }
+
         $("input[value=all]").click(function () {
             $("input[name=" + $(this).attr("name") + "]").each(function () {
                 $(this).attr("checked", true);
             })
         });
+
+        function getQuestion(id, option) {
+            const $parent = $("<div>").addClass("form-group").addClass("option-edit");
+            const $input = $("<input>").addClass("form-control").val(option);
+            $parent.append($input);
+            $parent.append($("<p>").append(
+                $("<a>").text("삭제하기").attr("href", "#").attr("data-option-id", id)
+            ));
+            $parent.attr("data-option-id", id);
+            return $parent;
+        }
+
         $(".question-modify-modal").click(function () {
             const qId = $(this).data("q-id");
             $("#modal-type-0").hide();
             $("#modal-type-1").hide();
-            $("#modal-type-0").html("");
+            $("#modal-type-0 #modal-question").html("");
+            $("#question-id").val(qId);
             $.get("<c:url value="/admin/surveys/question/" />" + qId, function (resp) {
                 console.log(qId, "=>", resp);
                 $("#question-modify-modal input[name=title]").val(resp.title);
@@ -266,13 +290,7 @@
                 //TODO : Add Option
                 for (let i = 0; i < resp.options.length; i++) {
                     const $item = resp.options[i];
-                    const $parent = $("<div>").addClass("form-group").addClass("option-edit");
-                    const $input = $("<input>").addClass("form-control").val($item.option);
-                    $parent.append($input);
-                    $parent.append($("<p>").append(
-                        $("<a>").text("삭제하기").attr("href", "#").attr("data-option-id", $item.id)
-                    ));
-                    $("#modal-type-0").append($parent);
+                    $("#modal-type-0 #modal-question").append(getQuestion($item.id, $item.option));
                 }
 
                 $("#question-modify-modal").modal("show");
@@ -296,20 +314,77 @@
         });
         $(document).on("click", ".option-edit a", function (e) {
             e.preventDefault();
-            // console.log();
             const optionId = $(this).data("option-id");
+            if ($(".option-edit a").length == 1) {
+                alert("항목이 한가지만 남았을때는 삭제 할 수 없습니다");
+                return false;
+            }
+            const $root = $(this).parent().parent();
+            if (optionId !== 0) {
 
+                if (confirm("항목을 삭제해도 이미 해당 항목을 선택한 설문 결과는 남아있습니다. 진행하시겠습니까?")) {
+                    $.post("<c:url value="/admin/surveys/question/option/" />" + optionId + "/delete", function () {
+                        $root.remove();
+
+                    }).fail(function () {
+                        alert("오류가 발생하였습니다");
+                    })
+                }
+            } else {
+                $root.remove();
+
+            }
+            return false;
+        });
+        $("#add-question-option").click(function () {
+            $("#modal-type-0 #modal-question").append(getQuestion(0, ""));
+        });
+        $(".question-delete-btn").click(function () {
             if (confirm("항목을 삭제해도 이미 해당 항목을 선택한 설문 결과는 남아있습니다. 진행하시겠습니까?")) {
-                $.post("<c:url value="/admin/surveys/question/" />" + optionId + "/delete", function () {
-                    alert("삭제가 완료되었습니다");
+                $.post("<c:url value="/admin/surveys/question/" />" + $(this).data("q-id") + "/delete", function () {
+                    alert("삭제에 성공하였습니다.");
                     location.reload();
                 }).fail(function () {
                     alert("오류가 발생하였습니다");
-                })
+                });
+
             }
-            // alert();
-            console.log($(this));
-            return false;
-        })
+        });
+        $("#modify-question-btn").click(function () {
+            const parameter = {};
+            const options = [];
+            $("#modal-type-0 input").each(function () {
+                const $option = $(this).val();
+                const $optionId = $(this).parent().data("option-id");
+                if ($option.length == 0) {
+                    return true;
+                }
+                options.push({
+                    "option": $option,
+                    "id": $optionId
+                });
+            });
+            parameter["options"] = options;
+            parameter["title"] = $("input[name=title]").val();
+            parameter["question"] = $("input[name=question]").val();
+            console.log(parameter);
+
+            $.ajax({
+                url: "<c:url value="/admin/surveys/question/"/>" + $("#question-id").val() + "/edit",
+                type: "post",
+                accept: "application/json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(parameter),
+                dataType: "json",
+                success: function (data) {
+                    alert("수정이 완료되었습니다");
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("수정에 실패하였습니다.");
+
+                }
+            });
+        });
     </script>
 </c:set>

@@ -52,10 +52,14 @@
 	</delete>
 
 
+	<delete id="deleteQuestionById" parameterType="Integer">
+		DELETE FROM `questions` WHERE `id` = #{id}
+	</delete>
 	<!-- Sub Query -->
 	<select id="selectOptionsByQuestionId" resultType="kr.quantumsoft.koreasurvey.model.Options">
 		SELECT * FROM `options` WHERE `questionid` = #{id}
 	</select>
+
 
 
 </mapper>
