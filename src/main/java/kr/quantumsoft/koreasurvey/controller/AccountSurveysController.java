@@ -119,12 +119,12 @@ public class AccountSurveysController {
         Answers param = new Answers();
         param.setSurveyid(surveys.getId());
 //        param.setQuestiontype(ProjectConstants.ANSWER_TYPE_MULTI_CHOICE);
-        List<Answers> answersList = answerService.selectCountBySurveyIdGroupByValue(param);
-        for (Answers answers : answersList) {
-            Questions question = questionService.selectQuestionsById(answers.getQuestionid());
-            answers.setQuestionTitle(question.getTitle());
-        }
-        return answersList;
+//        List<Answers> answersList =
+//        for (Answers answers : answersList) {
+//            Questions question = questionService.selectQuestionsById(answers.getQuestionid());
+//            answers.setQuestionTitle(question.getTitle());
+//        }
+        return answerService.selectCountBySurveyIdGroupByValue(param);
     }
 
 
@@ -252,19 +252,19 @@ public class AccountSurveysController {
         Users user = (Users) auth.getPrincipal();
         Surveys previousSurvey = surveyService.selectSurveysById(doc.getId());
 
-        Integer diffCost = previousSurvey.getTotalcost() - doc.getTotalcost();
-        if (diffCost != 0) {
-            // 배당금의 변화가 있음.
-            user.setPoint(user.getPoint() + diffCost);
-            usersService.updateUser(user);
-
-            Tradings updateTrading = new Tradings();
-            updateTrading.setAmount(diffCost);
-            updateTrading.setType(ProjectConstants.TRADING_USE);
-            updateTrading.setUserid(user.getId());
-
-            tradingService.insertTradings(updateTrading);
-        }
+//        Integer diffCost = previousSurvey.getTotalcost() - doc.getTotalcost();
+//        if (diffCost != 0) {
+//            // 배당금의 변화가 있음.
+//            user.setPoint(user.getPoint() + diffCost);
+//            usersService.updateUser(user);
+//
+//            Tradings updateTrading = new Tradings();
+//            updateTrading.setAmount(diffCost);
+//            updateTrading.setType(ProjectConstants.TRADING_USE);
+//            updateTrading.setUserid(user.getId());
+//
+//            tradingService.insertTradings(updateTrading);
+//        }
 
         surveyService.updateSurveys(doc);
 

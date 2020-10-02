@@ -64,6 +64,9 @@ public class QuestionsService {
 	
 	public Questions selectQuestionsById(Integer id) {
 		Questions questions = repo.selectQuestionsById(id);
+		if (questions == null) {
+			return null;
+		}
 		questions.setOptions(
 				optionsSessionRepository.selectOptionsByQuestionId(id)
 		);
