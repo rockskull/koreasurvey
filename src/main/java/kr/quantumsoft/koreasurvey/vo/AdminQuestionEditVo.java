@@ -8,6 +8,15 @@ public class AdminQuestionEditVo {
     private List<Options> options;
     private String title;
     private String question;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getQuestion() {
         return question;

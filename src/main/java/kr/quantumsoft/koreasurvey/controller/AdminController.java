@@ -99,7 +99,6 @@ public class AdminController {
             } else {
                 Options changeOption = optionsService.selectOptionsById(option.getId());
                 changeOption.setOption(option.getOption());
-//                optionsService.updateOptions(option);
             }
         }
         Questions questions = questionService.selectQuestionsById(qId);
@@ -107,6 +106,24 @@ public class AdminController {
         questions.setQuestion(adminQuestionEditVo.getQuestion());
         questionService.updateQuestions(questions);
 
+        return questionService.selectQuestionsById(qId);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "surveys/question/{surveyId}/create", method = RequestMethod.POST)
+    public Questions addQuestion(@PathVariable int surveyId, @RequestBody AdminQuestionEditVo adminQuestionEditVo) {
+        Questions questions = new Questions();
+        questions.setQuestion(adminQuestionEditVo.getQuestion());
+        questions.setTitle(adminQuestionEditVo.getTitle());
+        questions.setSurveyid(surveyId);
+        questions.setType(adminQuestionEditVo.getType());
+
+        Integer qId = questionService.insertQuestions(questions);
+        for (Options option: adminQuestionEditVo.getOptions()) {
+            option.setType(0);
+            option.setQuestionid(questions.getId());
+            optionsService.insertOptions(option);
+        }
         return questionService.selectQuestionsById(qId);
     }
 

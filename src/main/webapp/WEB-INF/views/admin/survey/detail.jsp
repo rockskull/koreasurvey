@@ -152,10 +152,8 @@
 <div>
     <h3>문항정보</h3>
     <div class="text-right">
-        <button class="btn btn-default" type="button">초기화</button>
-        <button class="btn btn-primary" type="button" id="submit-question-btn">저장</button>
+        <button class="btn btn-primary" id="add-question">문항 추가</button>
     </div>
-    <br/>
     <table class="table">
         <thead>
         <tr>
@@ -207,18 +205,18 @@
             <div class="modal-body">
                 <input type="hidden" id="question-id">
                 <div class="form-group">
-                    <label for="modal-title">문항 제목</label>
-                    <input type="text" class="form-control" name="title" id="modal-title">
+                    <label>문항 제목</label>
+                    <input type="text" class="form-control" name="title">
                 </div>
                 <div class="form-group">
-                    <label for="modal-title">문항 유형</label>
+                    <label>문항 유형</label>
                     <p id="q-type"></p>
                 </div>
 
                 <div id="modal-type-1" style="display: none">
                     <div class="form-group">
-                        <label for="modal-title">내용</label>
-                        <input type="text" name="question" class="form-control">
+                        <label>주관식</label>
+                        <textarea type="text" name="question" class="form-control"></textarea>
                     </div>
                 </div>
 
@@ -227,11 +225,6 @@
                     <a href="#" id="add-question-option">선택 항목 추가</a>
                     <div id="modal-question"></div>
                 </div>
-
-                <div id="modal-add">
-
-                </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
@@ -242,8 +235,80 @@
 </div>
 
 
+<div class="modal fade" id="question-add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">문항 추가</h4>
+            </div>
+            <div class="modal-body">
+                <%--                <input type="hidden" id="question-id">--%>
+                <div class="form-group">
+                    <label>문항 제목</label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+                <div class="form-group">
+                    <label>문항 유형</label>
+                    <select class="form-control" name="type">
+                        <option value="1">주관식</option>
+                        <option value="0">객관식</option>
+                    </select>
+                </div>
+                <div class="modal-type-0" style="display:none">
+                    <label>객관식</label>
+                    <a href="#" class="add-question-option">선택 항목 추가</a>
+                    <div class="content"></div>
+                </div>
+
+                <div class="modal-type-1" style="display:none">
+                    <label>주관식</label>
+                    <div class="content"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="save-question-btn">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <c:set scope="request" var="javascript">
     <script>
+        $("#add-question").click(function () {
+            questionTypeChangeEventHandler();
+            $("#question-add-modal").modal("show");
+        });
+        $("#question-add-modal select[name=type]").change(questionTypeChangeEventHandler);
+
+        function questionTypeChangeEventHandler() {
+            $("#question-add-modal .modal-type-1").hide();
+            $("#question-add-modal .modal-type-0").hide();
+
+            $("#question-add-modal .modal-type-1 .content").html("");
+            $("#question-add-modal .modal-type-0 .content").html("");
+
+            const type = $("#question-add-modal select[name=type] option:selected").val();
+            if (type == 0) {
+                //todo : Add Textarea
+
+                $("#question-add-modal .modal-type-0").show();
+
+                $("#question-add-modal .modal-type-0 .content").append(getQuestion(0, ""));
+            } else {
+                $("#question-add-modal .modal-type-1").show();
+                $("#question-add-modal .modal-type-1 .content").append(
+                    $("<textarea>").addClass("form-control")
+                )
+            }
+        }
+
+        $("#question-add-modal .add-question-option").click(function () {
+            $("#question-add-modal .modal-type-0 .content").append(getQuestion(0, ""));
+        });
 
         function getCheckedButtonValue($selector) {
             var exclude = [];
@@ -251,10 +316,6 @@
                 exclude.push($(this).val());
             });
             return exclude;
-        }
-
-        function addQuestion() {
-            $("#modal-add")
         }
 
         $("input[value=all]").click(function () {
@@ -283,7 +344,7 @@
             $.get("<c:url value="/admin/surveys/question/" />" + qId, function (resp) {
                 console.log(qId, "=>", resp);
                 $("#question-modify-modal input[name=title]").val(resp.title);
-                $("#question-modify-modal input[name=question]").val(resp.question);
+                $("#question-modify-modal textarea[name=question]").text(resp.question);
                 $("#question-modify-modal #modal-type-" + resp.type).show();
                 $("#question-modify-modal #q-type").text(resp.type === 1 ? "주관식" : "객관식");
                 console.log(resp.options);
@@ -350,6 +411,41 @@
 
             }
         });
+
+        $("#save-question-btn").click(function () {
+            const parameter = {};
+            const options = [];
+            $("#question-add-modal .modal-type-0 input").each(function () {
+                const $option = $(this).val();
+                options.push({
+                    "option": $option,
+                    "id": 0
+                });
+            });
+            parameter["options"] = options;
+            parameter["title"] = $("#question-add-modal input[name=title]").val();
+            parameter["question"] = $("#question-add-modal textarea[name=question]").text();
+            parameter["type"] = $("#question-add-modal select[name=type] option:selected").val();
+            console.log(parameter);
+            $.ajax({
+                url: "<c:url value="/admin/surveys/question/${survey.id}"/>/create",
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(parameter),
+                // dataType: "json",
+                success: function (data) {
+                    alert("수정이 완료되었습니다");
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                    alert("수정에 실패하였습니다.");
+
+                }
+            });
+
+        });
+
         $("#modify-question-btn").click(function () {
             const parameter = {};
             const options = [];
@@ -366,7 +462,7 @@
             });
             parameter["options"] = options;
             parameter["title"] = $("input[name=title]").val();
-            parameter["question"] = $("input[name=question]").val();
+            parameter["question"] = $("textarea[name=question]").text();
             console.log(parameter);
 
             $.ajax({
