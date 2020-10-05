@@ -8,13 +8,15 @@
 		`type`,
 		`amount`,
 		`recommanderid`,
-		`recommanderemail`
+		`recommanderemail`,
+		`withdrawsid`
 	) VALUES (
 		#{userid},
 		#{type},
 		#{amount},
 		#{recommanderid},
-		#{recommanderemail}
+		#{recommanderemail},
+		#{withdrawsid}
 	)
 </insert>
 <select id="selectTradingsByUserId" parameterType="HashMap"

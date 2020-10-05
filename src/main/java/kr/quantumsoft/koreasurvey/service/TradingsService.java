@@ -18,47 +18,60 @@ package kr.quantumsoft.koreasurvey.service;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.quantumsoft.koreasurvey.model.Withdraw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.quantumsoft.koreasurvey.model.Tradings;
 import kr.quantumsoft.koreasurvey.repository.TradingsSessionRepository;
 
-/**  
+/**
+ * @author QuantumSoft Inc.
+ * @version 1.0
  * @Class Name : TradingsService.java
  * @Project Name : koreasurvey
- * @Description : 
- * @Modification Information  
+ * @Description :
+ * @Modification Information
  * @
- * @  수정일      수정자              수정내용
+ * @ 수정일      수정자              수정내용
  * @ ------------   ---------   -------------------------------
  * @ 2020. 5. 28.                     최초생성
- * 
- * @author QuantumSoft Inc.
+ * @see Copyright (C) by QuantumSoft Inc. All right reserved.
  * @since 2015. 8.
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by QuantumSoft Inc. All right reserved.
  */
 @Service
 public class TradingsService {
-	@Autowired
-	private TradingsSessionRepository repo;
-	
-	public Integer insertTradings(Tradings trading) {
-		return repo.insertTradings(trading);
-	}
-	
-	public List<Tradings> selectTradingsByUserId(HashMap<String, Object> param) {
-		return repo.selectTradingsByUserId(param);
-	}
+    @Autowired
+    private TradingsSessionRepository repo;
 
-	public List<Tradings> selectTradingsByUserId(int userId, int page, int pageSize) {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("userid", userId);
-		params.put("offset", page == 1 ? 0 : page * pageSize);
-		params.put("limit", pageSize);
-		return repo.selectTradingsLimitByUserId(params);
-	}
+    @Autowired
+    private WithDrawsService withDrawsService;
+
+    public Integer insertTradings(Tradings trading) {
+        return repo.insertTradings(trading);
+    }
+
+    public List<Tradings> selectTradingsByUserId(HashMap<String, Object> param) {
+        return repo.selectTradingsByUserId(param);
+    }
+
+    public List<Tradings> selectTradingsByUserId(int userId, int page, int pageSize) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userid", userId);
+        params.put("offset", page == 1 ? 0 : page * pageSize);
+        params.put("limit", pageSize);
+        List<Tradings> tradings = repo.selectTradingsLimitByUserId(params);
+        for (Tradings trading : tradings) {
+            if (trading.getWithdrawsid() != null) {
+                trading.setWithdraw(
+                        withDrawsService.getWithdrawById(trading.getWithdrawsid())
+                );
+
+            }
+
+
+        }
+        return tradings;
+//		return ;
+    }
 }

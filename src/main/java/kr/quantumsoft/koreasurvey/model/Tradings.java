@@ -38,7 +38,17 @@ public class Tradings {
     private Integer amount;
     private Integer recommanderid;
     private String recommanderemail;
+    private Integer withdrawsid;
     private Date created;
+    private Withdraw withdraw;
+
+    public Withdraw getWithdraw() {
+        return withdraw;
+    }
+
+    public void setWithdraw(Withdraw withdraw) {
+        this.withdraw = withdraw;
+    }
 
     public Integer getId() {
         return id;
@@ -94,5 +104,13 @@ public class Tradings {
 
     public void setRecommanderemail(String recommanderemail) {
         this.recommanderemail = recommanderemail;
+    }
+
+    public Integer getWithdrawsid() {
+        return withdrawsid;
+    }
+
+    public void setWithdrawsid(Integer withdrawsid) {
+        this.withdrawsid = withdrawsid;
     }
 }

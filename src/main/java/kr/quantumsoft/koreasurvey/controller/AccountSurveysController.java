@@ -164,7 +164,6 @@ public class AccountSurveysController {
 
         List<Surveys> listSurveys = surveyService.selectSurveysByUserId(param);
 
-
         model.addAttribute("user", user);
         model.addAttribute("list", listSurveys);
         return "surveyList";
@@ -189,7 +188,7 @@ public class AccountSurveysController {
         survey.setUseremail(user.getEmail());
         survey.setUserid(user.getId());
 
-        survey.setStatus(ProjectConstants.SURVEY_STATE_RUNNING);
+        survey.setStatus(ProjectConstants.SURVEY_STATE_INSPECTION);
         surveyService.insertSurveys(survey);
 
         return "redirect:/account/surveys";

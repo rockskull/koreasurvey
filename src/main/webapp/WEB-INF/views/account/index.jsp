@@ -224,16 +224,18 @@
                 <p>출금을 신청하시면 입력해주신 입금계좌로 입금해드립니다.(최대 2-3 영업일 소요)</p>
                 <div class="form-group">
                     <label for="withdrawal-amount">출금 금액</label>
-                    <input type="number" class="form-control" id="withdrawal-amount" name="withdrawal-amount" aria-describedby="withdrawal-amount-help">
+                    <input type="number" class="form-control" id="withdrawal-amount" name="withdraw" aria-describedby="withdrawal-amount-help">
                     <small id="withdrawal-amount-help" class="form-text text-muted">출금 가능 금액 : ${user.point}원</small>
                 </div>
                 <div class="form-group">
                     <label for="bank-address">입금 계좌</label>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
-                            <select class="custom-select" name="bank-option">
+                            <select class="custom-select" name="bank">
                                 <option value="">선택</option>
-                                <option value="">은행은행</option>
+                                <c:forEach items="${banks}" var="item">
+                                    <option value="${item}">${item}</option>
+                                </c:forEach>
                             </select>
                         </div>
                         <input type="text" class="form-control" name="bank-address" id="bank-address">
@@ -250,9 +252,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">출금신청</button>
-                <%--					<button type="button" class="btn btn-primary">Save changes</button>--%>
+                <button type="button" class="btn btn-secondary" id="withdraw-btn">출금신청</button>
             </div>
         </div>
     </div>
@@ -280,8 +280,41 @@
 <c:set var="js" scope="request">
     <script src="<c:url value="/resources/js/moment.js" />"></script>
     <script>
+
+        $("#withdraw-btn").click(function () {
+            const withdraw = $("input[name=withdraw]").val();
+            const bankAddress = $("input[name=bank-address]").val();
+            const bankOption = $("select[name=bank]").val();
+            const accountHolder = $("input[name=account-holder]").val();
+            if (point < withdraw) {
+                alert("출금 가능 금액을 초과 하였습니다.");
+                return false;
+            }
+            if (bankOption.length == 0) {
+                alert("입금 계좌를 선택하세요");
+                return false;
+            }
+            $.post("<c:url value="/account/withdraw" />", {
+                "withdraw" : withdraw,
+                "bank-address" : bankAddress,
+                "bank" : bankOption,
+                "account-holder" : accountHolder
+            }, function () {
+                alert("출금 신청이 완료되었습니다");
+                location.reload();
+            }).fail(function () {
+                alert("오류가 발생하였습니다. 잠시후 다시시도해주세요.");
+            });
+            console.log(withdraw, bankAddress, bankOption, accountHolder);
+
+        });
+        const point = ${user.point};
+
         $("#withdraw").click(function() {
-            alert("만원 단위로 출금 가능합니다.");
+            if (point <= 10000) {
+                alert("만원 단위로 출금 가능합니다.");
+                return false;
+            }
             $("#withdraw-modal").modal("show");
         });
 
@@ -290,9 +323,14 @@
 
         function getTradingType(item) {
             let returnText = "";
+            console.log(item);
             switch (item.type) {
                 case -1:
-                    returnText = item.amount > 0 ? "설문 환급" : "설문 작성";
+                    if (item.withdraw !== null) {
+                        returnText = "출금" + (item.withdraw.status == 0 ? " - 진행중" : "");
+                    } else {
+                        returnText = item.amount > 0 ? "설문 환급" : "설문 작성";
+                    }
                     break;
                 case 0:
                     returnText = "현금 충전";

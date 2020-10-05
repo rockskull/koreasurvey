@@ -15,29 +15,22 @@
  */
 package kr.quantumsoft.koreasurvey.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-
+import kr.quantumsoft.koreasurvey.model.*;
+import kr.quantumsoft.koreasurvey.service.*;
+import kr.quantumsoft.koreasurvey.utils.CommonUtils;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
+import kr.quantumsoft.koreasurvey.utils.ProjectUtils;
 import kr.quantumsoft.koreasurvey.utils.SpringSecurityUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,16 +39,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.quantumsoft.koreasurvey.model.Answers;
-import kr.quantumsoft.koreasurvey.model.Surveys;
-import kr.quantumsoft.koreasurvey.model.Tradings;
-import kr.quantumsoft.koreasurvey.model.Users;
-import kr.quantumsoft.koreasurvey.service.AnswersService;
-import kr.quantumsoft.koreasurvey.service.SurveysService;
-import kr.quantumsoft.koreasurvey.service.TradingsService;
-import kr.quantumsoft.koreasurvey.service.UsersService;
-import kr.quantumsoft.koreasurvey.utils.CommonUtils;
-import kr.quantumsoft.koreasurvey.utils.ProjectUtils;
+import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author QuantumSoft Inc.
@@ -92,15 +79,49 @@ public class AccountController {
 
     @Autowired
     private JavaMailSenderImpl mailSender;
-//    @Autowired
+
+    @Autowired
+    private WithDrawsService withDrawsService;
+
+    //    @Autowired
 //    private Environment env;
     @Value("${smtp.email}")
     private String fromEmail;
 
+    @ResponseBody
+    @RequestMapping(value = "/withdraw")
+    public void withdraw(@RequestParam("bank") final String bank,
+                         @RequestParam("account-holder") final String accountHolder,
+                         @RequestParam("bank-address") final String address,
+                         @RequestParam("withdraw") final Integer money,
+                         Authentication auth) {
+        Users sessionUser = (Users) auth.getPrincipal();
+
+        Users user = userService.selectUserById(sessionUser.getId());
+        user.setPoint(user.getPoint() - money);
+        userService.updateUser(user);
+
+        Withdraw withdraw = new Withdraw();
+        withdraw.setAccountHolder(accountHolder);
+        withdraw.setBank(bank);
+        withdraw.setUserid(user.getId());
+        withdraw.setWithdraw(money);
+        withdraw.setStatus(ProjectConstants.WITHDRAWS_RUNNING);
+        withdraw.setAddress(address);
+        withDrawsService.insert(withdraw);
+
+        Tradings tradings = new Tradings();
+        tradings.setWithdrawsid(withdraw.getId());
+        tradings.setAmount(-money);
+        tradings.setUserid(user.getId());
+        tradings.setType(ProjectConstants.TRADING_USE);
+
+        tradingService.insertTradings(tradings);
+        //TODO :
+    }
 
 
-
-@RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "account/login";
     }
@@ -258,7 +279,7 @@ public class AccountController {
         for (Answers answerItem : joinedList) {
             joinedSurveys.add(surveyService.selectSurveysById(answerItem.getSurveyid()));
         }
-
+        model.addAttribute("banks", ProjectConstants.BANKS);
         model.addAttribute("diff", diff);
         model.addAttribute("tradings", tradings);
         model.addAttribute("joined", joinedSurveys);

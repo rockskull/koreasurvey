@@ -238,7 +238,7 @@
 					]
 				});
 			}
-
+            console.log(datasets);
 			return {
 				labels: labels,
 				datasets: datasets
@@ -281,7 +281,6 @@
 
 		$(".result").each(function (item) {
 			var current = $(this);
-			console.log(current.find(".list")[0]);
 			switch (current.data("q-type")) {
 				case 1:
 					makeResultType1(current, answers[current.data("q-id")]);

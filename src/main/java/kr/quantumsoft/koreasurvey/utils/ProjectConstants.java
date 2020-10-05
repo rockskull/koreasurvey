@@ -37,7 +37,7 @@ import java.util.List;
 public class ProjectConstants {
     public static final Double MY_POINT_RATE = 6.0;
     public static final Double PARENT_POINT_RATE = 2.0;
-
+    public static final Integer SURVEY_STATE_INSPECTION = -1;
     public static final Integer SURVEY_STATE_CLOSE = 0;    // 설문 종료 상태
     public static final Integer SURVEY_STATE_RUNNING = 1; // 설문 진행 중
     public static final Integer SURVEY_STATE_SUSPEND = 2; // 설문 중지
@@ -52,7 +52,11 @@ public class ProjectConstants {
     public static final Integer ANSWER_TYPE_MULTI_CHOICE = 0;
     public static final Integer ANSWER_SHORT_ANSWER = 0;
 
+    public static final Integer WITHDRAWS_RUNNING = 0;
+    public static final Integer WITHDRAWS_COMPLETE = 0;
 
+
+    public static final List<String> BANKS = Arrays.asList("KB국민", "우리", "신한", "KEB하나", "IBK기업", "SC제일", "한국씨티", "농협중앙회", "단위농협", "우체국", "새마을금고", "대구", "부산", "광주", "경남", "전북", "제주", "수협", "신협", "KDB산업", "케이뱅크", "카카오뱅크");
     public static final List<String> REGION_STRINGS = Arrays.asList("서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "대전광역시", "울산광역시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
     public static final int[] AGE_RANGES = new IntRange(1920, 2020).toArray();
     public static final Integer SURVEY_EXCLUDE_TYPE_AGE = 1;
