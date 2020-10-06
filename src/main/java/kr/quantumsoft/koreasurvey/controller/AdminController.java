@@ -55,19 +55,23 @@ public class AdminController {
 
     @RequestMapping("/tradings")
     public ModelAndView tradings(@RequestParam(value = "start", required = false) String start,
-                                 @RequestParam(value = "end", required = false) String end) {
+                                 @RequestParam(value = "end", required = false) String end,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                 @RequestParam(value = "max-row", required = false, defaultValue = "10") Integer maxRow) {
         ModelAndView mav = new ModelAndView("admin/tradings/index");
         HashMap<String, Object> param = new HashMap<String, Object>();
-        if (start != null && end != null) {
+        if (StringUtils.isNotEmpty(start) &&  StringUtils.isNotEmpty(end)) {
             param.put("from", start + " 00:00:00");
             param.put("to", end + " 23:59:59");
         }
-        param.put("offset", 0);
-        param.put("limit", 100);
+        param.put("offset", page == 1 ? 0 : page * maxRow);
+        param.put("limit", maxRow);
 
         mav.addObject("data", tradingsService.selectTradings(param));
         mav.addObject("start", start);
         mav.addObject("end", end);
+        mav.addObject("page", page);
+
         return mav;
     }
 

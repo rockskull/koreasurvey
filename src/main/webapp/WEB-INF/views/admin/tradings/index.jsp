@@ -112,6 +112,24 @@
 
         </tbody>
     </table>
+    <div class="text-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:if test="${page == 1}">
+                    <li class="page-item"><a class="page-link" href="#">이전</a></li>
+                </c:if>
+
+                <c:if test="${page != 1}">
+                    <li class="page-item"><a class="page-link" href="<c:url value="/admin/tradings?page=${page-1}&start=${start}&end=${end}" />">이전</a></li>
+                </c:if>
+                <li class="page-item active"><a class="page-link" href="#">${page}</a> </li>
+
+                <li class="page-item"><a class="page-link" href="<c:url value="/admin/tradings?page=${page+1}&start=${start}&end=${end}" />">다음</a></li>
+            </ul>
+        </nav>
+
+    </div>
+
 </div>
 
 <script>
