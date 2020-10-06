@@ -2,6 +2,7 @@ package kr.quantumsoft.koreasurvey.controller;
 
 import kr.quantumsoft.koreasurvey.model.*;
 import kr.quantumsoft.koreasurvey.service.*;
+import kr.quantumsoft.koreasurvey.utils.CommonUtils;
 import kr.quantumsoft.koreasurvey.utils.ProjectConstants;
 import kr.quantumsoft.koreasurvey.vo.AdminQuestionEditVo;
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +29,9 @@ public class AdminController {
     @Autowired
     private SurveysService surveysService;
 
+    @Autowired
+    private WithDrawsService withDrawsService;
+
 
     @Autowired
     private NoticeService noticeService;
@@ -41,6 +45,31 @@ public class AdminController {
     @Autowired
     private OptionsService optionsService;
 
+    @ResponseBody
+    @RequestMapping("/tradings/bank-deposit")
+    public void bankDeposit(@RequestParam("id") final Integer id) {
+        Withdraw item = withDrawsService.getWithdrawById(id);
+        item.setStatus(ProjectConstants.WITHDRAWS_COMPLETE);
+        withDrawsService.update(item);
+    }
+
+    @RequestMapping("/tradings")
+    public ModelAndView tradings(@RequestParam(value = "start", required = false) String start,
+                                 @RequestParam(value = "end", required = false) String end) {
+        ModelAndView mav = new ModelAndView("admin/tradings/index");
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        if (start != null && end != null) {
+            param.put("from", start + " 00:00:00");
+            param.put("to", end + " 23:59:59");
+        }
+        param.put("offset", 0);
+        param.put("limit", 100);
+
+        mav.addObject("data", tradingsService.selectTradings(param));
+        mav.addObject("start", start);
+        mav.addObject("end", end);
+        return mav;
+    }
 
 
     @RequestMapping("surveys")
@@ -91,7 +120,7 @@ public class AdminController {
     @ResponseBody
     @RequestMapping(value = "surveys/question/{qId}/edit", method = RequestMethod.POST)
     public Questions questionEdit(@PathVariable int qId, @RequestBody AdminQuestionEditVo adminQuestionEditVo) {
-        for (Options option: adminQuestionEditVo.getOptions()) {
+        for (Options option : adminQuestionEditVo.getOptions()) {
             option.setQuestionid(qId);
             if (option.getId() == 0) {
                 option.setType(0);
@@ -119,7 +148,7 @@ public class AdminController {
         questions.setType(adminQuestionEditVo.getType());
 
         Integer qId = questionService.insertQuestions(questions);
-        for (Options option: adminQuestionEditVo.getOptions()) {
+        for (Options option : adminQuestionEditVo.getOptions()) {
             option.setType(0);
             option.setQuestionid(questions.getId());
             optionsService.insertOptions(option);

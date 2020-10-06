@@ -19,4 +19,8 @@ public class WithDrawsService {
         return repo.selectById(id);
     }
 
+    public void update(Withdraw item) {
+        repo.update(item);
+    }
+
 }

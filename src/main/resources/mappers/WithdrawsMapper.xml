@@ -26,4 +26,15 @@
 		WHERE id = #{id}
 	</select>
 
+	<update id="update" parameterType="kr.quantumsoft.koreasurvey.model.Withdraw" >
+		UPDATE withdraws set
+		`bank` =  #{bank},
+		`accountHolder` = #{accountHolder},
+		`withdraw` = #{withdraw},
+		`userid` = #{userid},
+		`status` = #{status},
+		`address` = #{address}
+		WHERE id = #{id}
+	</update>
+
 </mapper>

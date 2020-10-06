@@ -53,7 +53,7 @@ public class ProjectConstants {
     public static final Integer ANSWER_SHORT_ANSWER = 0;
 
     public static final Integer WITHDRAWS_RUNNING = 0;
-    public static final Integer WITHDRAWS_COMPLETE = 0;
+    public static final Integer WITHDRAWS_COMPLETE = 1;
 
 
     public static final List<String> BANKS = Arrays.asList("KB국민", "우리", "신한", "KEB하나", "IBK기업", "SC제일", "한국씨티", "농협중앙회", "단위농협", "우체국", "새마을금고", "대구", "부산", "광주", "경남", "전북", "제주", "수협", "신협", "KDB산업", "케이뱅크", "카카오뱅크");

@@ -47,12 +47,31 @@ public class TradingsService {
     @Autowired
     private WithDrawsService withDrawsService;
 
+    @Autowired
+    private UsersService usersService;
+
+
     public Integer insertTradings(Tradings trading) {
         return repo.insertTradings(trading);
     }
 
+    public List<Tradings> selectTradings(HashMap<String, Object> param) {
+        return this.selectTradingsByUserId(param);
+    }
+
     public List<Tradings> selectTradingsByUserId(HashMap<String, Object> param) {
-        return repo.selectTradingsByUserId(param);
+        List<Tradings> tradings = repo.selectTradingsByUserId(param);
+        for (Tradings trading : tradings) {
+            if (trading.getWithdrawsid() != null) {
+                trading.setWithdraw(
+                        withDrawsService.getWithdrawById(trading.getWithdrawsid())
+                );
+            }
+            trading.setUser(usersService.selectUserById(trading.getUserid()));
+
+        }
+        return tradings;
+
     }
 
     public List<Tradings> selectTradingsByUserId(int userId, int page, int pageSize) {
@@ -68,8 +87,6 @@ public class TradingsService {
                 );
 
             }
-
-
         }
         return tradings;
 //		return ;

@@ -46,7 +46,7 @@
                     <a href="<c:url value="/admin/surveys" />">설문관리</a>
                 </li>
                 <li>
-                    <a href="<c:url value="/admin/point/list" />">적립금관리</a>
+                    <a href="<c:url value="/admin/tradings" />">적립금관리</a>
                 </li>
                 <li>
                     <a href="<c:url value="/admin/notice/list" />">공지사항관리</a>

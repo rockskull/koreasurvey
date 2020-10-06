@@ -41,6 +41,15 @@ public class Tradings {
     private Integer withdrawsid;
     private Date created;
     private Withdraw withdraw;
+    private Users user;
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
 
     public Withdraw getWithdraw() {
         return withdraw;

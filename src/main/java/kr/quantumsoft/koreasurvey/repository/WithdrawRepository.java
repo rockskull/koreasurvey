@@ -35,4 +35,8 @@ public class WithdrawRepository {
 		return session.selectOne(String.format("%s.selectById", namespace), id);
 	}
 
+	public void update(Withdraw item) {
+		session.update(String.format("%s.update", namespace), item);
+	}
+
 }
