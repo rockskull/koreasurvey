@@ -128,7 +128,7 @@ function makeDom(list) {
 		if(item.category != null) {
 		//addhtml += "<span class=\"mr-2\">"+item.category+"</span>";
 		}
-		addhtml += "<span class=\"badge badge-inverse-warning\">"+item.unitcost*item.qcount+" P</span>";
+		addhtml += "<span class=\"badge badge-inverse-warning\">"+item.unitcost+" P</span>";
 		if (item.isJoined) {
 		addhtml += "<span class=\"badge badge-inverse-success\">참여완료</span>";
 		}
@@ -136,7 +136,7 @@ function makeDom(list) {
 		addhtml += "</div>";
 		addhtml += "<span class=\"f-w-700 f-26\">";
 		addhtml += item.title;
-		addhtml += "<span class=\"text-c-green m-l-10 f-16\">"+((item.answerUserCount/(item.totalcost/(item.unitcost*item.qcount)))*100).toFixed(2)+"% 진행</span>";
+		addhtml += "<span class=\"text-c-green m-l-10 f-16\">"+((item.answerUserCount/(item.totalcost/(item.unitcost)))*100).toFixed(2)+"% 진행</span>";
 		if(item.to != null) {
 		//addhtml += "<span class=\"text-c-red m-l-10 f-16\">"+item.to.substring(0,10)+"까지 진행</span>";
 		}
