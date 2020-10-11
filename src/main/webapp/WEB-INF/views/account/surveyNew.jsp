@@ -253,23 +253,12 @@
 
 <c:set var="js" scope="request">
 	<script>
-		$("input[name=age]").change(function() {
-			if ($(this).val() === "all") {
-				$("input[name=age]").click();
-			}
-		});
-
-		$("input[name=gender]").change(function() {
-			if ($(this).val() === "all") {
-				$("input[name=gender]").click();
-			}
-		});
-
-		$("input[name=region]").change(function() {
-			if ($(this).val() === "all") {
-				$("input[name=region]").click();
-			}
-		});
+		let canUpload = false;
+		$("input[value=all]").click(function () {
+			$("input[name=" + $(this).attr("name") + "]").each(function () {
+				$(this).attr("checked", true);
+			})
+		})
 
 
 		$("#exclude-toggle").change(function() {
@@ -309,6 +298,11 @@
 			});
 
 			$("#save").click(function() {
+				if (canUpload === false) {
+					alert("1개 이상의 질문을 등록해야 합니다.");
+					return false;
+				}
+
 				if (confirm("저장 후에는 항목을 수정하실 수 없습니다. 질문과 항목을 모두 확인하셨습니까?") == false) {
 					return false;
 				}
@@ -334,6 +328,8 @@
 								question : $(this).find(".question-view").find(".view-content").html(),
 								type : $(this).find(".question-edit").find(".question-type").val(),
 							};
+							console.log(questionItem.title);
+							// if ()
 
 							$.post("saveQuestion", questionItem, function(questionId) {
 								currentItem.find(".q-id").val(questionId);
@@ -524,6 +520,8 @@
 						viewBox.removeClass("d-none");
 						$("#addQuestion").removeClass("d-none");
 						$(".card-header-right .card-mini-option").removeClass("d-none");
+						//question-save
+						canUpload = true;
 					});
 
 					$(".card-header-right .card-mini-option .open-card-option").unbind();
@@ -668,6 +666,7 @@
 				viewBox.removeClass("d-none");
 				$("#addQuestion").removeClass("d-none");
 				$(".card-header-right .card-mini-option").removeClass("d-none");
+				canUpload = true;
 			});
 
 			$(".card-header-right .card-mini-option .open-card-option").unbind();
