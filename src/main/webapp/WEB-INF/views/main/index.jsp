@@ -152,13 +152,10 @@ function makeDom(list) {
 }
 
 $(function() {
-	$.post("getSurveyList", {start: startPage}, function(list) {
 
-		$("#surveyArea").append(makeDom(list));
-		
-		$(".survey").click(function() {
-			<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
-			<c:if test="${not empty user }">
+	$(document).on("click", ".survey", function() {
+		<c:if test="${empty user }">alert("로그인이 필요한 서비스 입니다.");</c:if>
+		<c:if test="${not empty user }">
 			if($(this).data("survey-id") === 0) {
 				location.href = "mainTop";
 			} else {
@@ -168,9 +165,11 @@ $(function() {
 					location.href = "surveys/?surveyId="+$(this).data("survey-id");
 				}
 			}
-			</c:if>
-		});
-		
+		</c:if>
+	});
+	$.post("getSurveyList", {start: startPage}, function(list) {
+
+		$("#surveyArea").append(makeDom(list));
 		startPage = 10;
 	});
 	
