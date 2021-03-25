@@ -1,0 +1,86 @@
+											<div class="item">
+												<input type="hidden" class="q-id" />
+												<div class="m-0 question-edit">
+													<div class="card">
+														<div class="card-block">
+															<div class="row">
+																<div class="col-sm-4">
+																	<input type="text" class="form-control form-txt-primary question-title" placeholder="문항 제목을 작성하세요." />
+																</div>
+																<div class="col-sm-4">
+																	<div class="row">
+																		<div class="col">
+																			<label class="col-form-label">문항의 유형 :</label>
+																		</div>
+																		<div class="col">
+																			<select class="form-control question-type">
+																				<option value="0">객관식</option>
+																				<option value="1">주관식</option>
+																			</select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<p class="text-muted">문항의 제목과 유형을 선택한 후 내용을 작성하시면 됩니다.</p>
+															<div class="row">
+																<div class="col-12">
+																	<textarea rows="5" class="form-control question-content" placeholder="설문 문항을 작성해 주십시오."></textarea>
+																</div>
+															</div>
+															<div class="row mt-4 question-options">
+																<div class="col-12">
+																	<input type="hidden" class="option-id" />
+																	<div class="row form-group">
+																		<label class="col-sm-2 col-form-label">선택 항목</label>
+																		<div class="col-sm-10 input-group input-group-button">
+																			<input type="text" class="form-control form-control-primary option-value" placeholder="선택 문항을 입력하십시오.">
+																			<div class="input-group-append">
+																				<button class="btn btn-primary option-del" type="button"><i class="fa fa-times"></i></button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-12">
+																	<input type="hidden" class="option-id" />
+																	<div class="row form-group">
+																		<label class="col-sm-2 col-form-label">선택 항목</label>
+																		<div class="col-sm-10 input-group input-group-button">
+																			<input type="text" class="form-control form-control-primary option-value" placeholder="선택 문항을 입력하십시오.">
+																			<div class="input-group-append">
+																				<button class="btn btn-primary option-del" type="button"><i class="fa fa-times"></i></button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-12 text-right add-options-link">
+																<a href="#" class="b-b-primary text-primary add-options">선택 항목 추가</a>
+															</div>
+														</div>
+														<div class="card-footer text-center">
+															<!-- <button type="button" class="btn btn-round question-save"><i class="fa fa-archive"></i> 문항 임시 저장</button>
+															<button type="button" class="btn btn-round question-cancel"><i class="fa fa-times"></i> 취소</button> -->
+															<button type="button" class="btn btn-round question-delete"><i class="fa fa-times"></i> 현재 문항 삭제</button>
+														</div>
+													</div>
+												</div>
+												<div class="m-0 question-view d-none">
+													<div class="card">
+														<div class="card-header">
+															<h5 class="view-title"></h5>
+															<div class="card-header-right">
+																<ul class="list-unstyled card-mini-option">
+																	<li class="first-opt"><i class="feather icon-chevron-left open-card-option"></i></li>
+																	<li><i class="feather icon-edit edit-card"></i></li>
+																	<li><i class="feather icon-trash del-card"></i></li>
+																	<li><i class="feather icon-chevron-left open-card-option"></i></li>
+																</ul>
+															</div>
+														</div>
+														<div class="card-block">
+														<h4 class="sub-title view-type"></h4>
+														<p class="view-content"></p>
+														</div>
+													</div>
+												</div>
+											</div>

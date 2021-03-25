@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.quantumsoft.koreasurvey.BoardsMapper">
+<insert id="insertBoard">
+	INSERT INTO `${boardName}_board` (
+		`userid`,
+		`isnotice`,
+		`title`,
+		`content`
+	) VALUES (
+		#{userid},
+		#{isnotice},
+		#{title},
+		#{content}
+	)
+</insert>
+<select id="selectBoardForList" parameterType="HashMap"
+	resultType="kr.quantumsoft.koreasurvey.model.Boards">
+	SELECT *
+	FROM `${boardName}_board`
+	<if test="search!=null and !search.equals('')">
+		WHERE
+			`title` LIKE '%${search}%'
+			OR
+			`content` LIKE '%${search}%'
+	</if>
+	ORDER BY `created` DESC
+	LIMIT #{limit} OFFSET #{offset}
+</select>
+<select id="countBoardAll" parameterType="HashMap"
+	resultType="Integer">
+	SELECT COUNT(*)
+	FROM `${boardName}_board`
+	<if test="search!=null and !search.equals('')">
+		WHERE
+			`title` LIKE '%${search}%'
+			OR
+			`content` LIKE '%${search}%'
+	</if>
+</select>
+<select id="selectBoardById" parameterType="HashMap"
+	resultType="kr.quantumsoft.koreasurvey.model.Boards">
+	SELECT *
+	FROM `${boardName}_board`
+	WHERE `id` = #{id}
+</select>
+<update id="updateBoardById" parameterType="kr.quantumsoft.koreasurvey.model.Boards">
+	UPDATE `${boardName}_board`
+	SET
+		`title` = #{title},
+		`content` = #{content}
+	WHERE `id` = #{id}
+</update>
+<delete id="deleteBoardById" parameterType="HashMap">
+	DELETE FROM `${boardName}_board` WHERE `id` = #{id}
+</delete>
+</mapper>

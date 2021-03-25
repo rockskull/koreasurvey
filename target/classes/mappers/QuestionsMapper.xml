@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.quantumsoft.koreasurvey.QuestionsMapper">
+<resultMap type="kr.quantumsoft.koreasurvey.model.Questions" id="questionResultMap">
+	<id property="id" column="id" />
+	<result property="surveyid" column="surveyid" />
+	<result property="title" column="title" />
+	<result property="question" column="question" />
+	<result property="type" column="type" />
+	<collection property="options" javaType="java.util.List"
+	column="id" ofType="kr.quantumsoft.koreasurvey.model.Options" select="selectOptionsByQuestionId" />
+</resultMap>
+<insert id="insertQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions"
+	useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO `questions` (
+		`surveyid`,
+		`orderid`,
+		`title`,
+		`question`,
+		`type`
+	) VALUES (
+		#{surveyid},
+		#{orderid},
+		#{title},
+		#{question},
+		#{type}
+	)
+</insert>
+<update id="updateQuestions" parameterType="kr.quantumsoft.koreasurvey.model.Questions">
+	UPDATE `questions`
+	SET
+		`title` = #{title},
+		`question` = #{question},
+		`type` = #{type}
+	WHERE `id` = #{id}
+</update>
+<select id="selectQuestionsBySurveyId" parameterType="Integer"
+	resultMap="questionResultMap">
+	SELECT * FROM `questions` WHERE `surveyid` = #{id} ORDER BY `orderid` ASC
+</select>
+<select id="selectQuestionsById" parameterType="Integer"
+	resultMap="questionResultMap">
+	SELECT * FROM `questions` WHERE `id` = #{id}
+</select>
+<delete id="deleteQuestionBySurveyId" parameterType="Integer">
+	DELETE FROM `questions` WHERE `surveyid` = #{id}
+</delete>
+<delete id="deleteQuestionById" parameterType="Integer">
+	DELETE FROM `questions` WHERE `id` = #{id}
+</delete>
+
+
+<!-- Sub Query -->
+<select id="selectOptionsByQuestionId" resultType="kr.quantumsoft.koreasurvey.model.Options">
+	SELECT * FROM `options` WHERE `questionid` = #{id} ORDER BY `orderid` ASC
+</select>
+</mapper>

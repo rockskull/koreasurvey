@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.quantumsoft.koreasurvey.WithdrawMapper">
+
+    <insert id="insert" parameterType="kr.quantumsoft.koreasurvey.model.Withdraw" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT INTO withdraws (
+			`bank`,
+			`accountHolder`,
+			`withdraw`,
+			`userid`,
+			`status`,
+			`address`
+		) VALUES (
+			#{bank},
+			#{accountHolder},
+			#{withdraw},
+			#{userid},
+			#{status},
+			#{address}
+		)
+	</insert>
+
+    <select id="selectById" parameterType="Integer" resultType="kr.quantumsoft.koreasurvey.model.Withdraw">
+		SELECT * FROM withdraws
+		WHERE id = #{id}
+	</select>
+
+	<update id="update" parameterType="kr.quantumsoft.koreasurvey.model.Withdraw" >
+		UPDATE withdraws set
+		`bank` =  #{bank},
+		`accountHolder` = #{accountHolder},
+		`withdraw` = #{withdraw},
+		`userid` = #{userid},
+		`status` = #{status},
+		`address` = #{address}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

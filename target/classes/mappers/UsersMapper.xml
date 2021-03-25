@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.quantumsoft.koreasurvey.UsersMapper">
+<select id="selectUsers"
+	resultType="kr.quantumsoft.koreasurvey.model.Users">
+</select>
+<select id="selectUserByEmail" parameterType="String"
+	resultType="kr.quantumsoft.koreasurvey.model.Users">
+	SELECT *
+	FROM `users`
+	WHERE `email` = #{value}
+</select>
+<insert id="insertUsers" parameterType="kr.quantumsoft.koreasurvey.model.Users"
+	useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO `users` (
+		`email`,
+		`password`,
+		`age`,
+		`gender`,
+		`area`,
+		`recommanderid`,
+		`recommanderemail`,
+		`point`
+	) VALUES (
+		#{email},
+		#{password},
+		#{age},
+		#{gender},
+		#{area},
+		#{recommanderid},
+		#{recommanderemail},
+		#{point}
+	)
+</insert>
+<select id="countTotalUser" resultType="Integer">
+	SELECT COUNT(*) FROM `users`
+</select>
+<select id="countNewUser" parameterType="Date" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM `users` WHERE `created` > #{monday}
+]]>
+</select>
+<select id="countTotalUserToToday" parameterType="Date" resultType="Integer">
+<![CDATA[
+	SELECT COUNT(*) FROM `users` WHERE `created` < #{today}
+]]>
+</select>
+<select id="countNewUserByRange" parameterType="HashMap"
+	resultType="Integer">
+	SELECT COUNT(*) FROM `users` WHERE `created` BETWEEN #{start} AND #{end}
+</select>
+<select id="countUserByAgeRane" parameterType="HashMap"
+	resultType="Integer">
+	SELECT COUNT(*) FROM `users` WHERE `age` BETWEEN #{start} AND #{end}
+</select>
+<select id="selectUserById" parameterType="Integer"
+	resultType="kr.quantumsoft.koreasurvey.model.Users">
+	SELECT * FROM `users` WHERE `id` = #{id}
+</select>
+<select id="searchUsersByEmail" parameterType="String"
+	resultType="kr.quantumsoft.koreasurvey.model.Users">
+	SELECT * FROM `users` WHERE `email` LIKE CONCAT('%',#{value},'%')
+</select>
+<update id="updateUser" parameterType="kr.quantumsoft.koreasurvey.model.Users">
+	UPDATE `users`
+	SET
+		`password` = #{password},
+		`point` = #{point},
+		`age` = #{age},
+		`gender` = #{gender},
+		`area` = #{area}
+	WHERE `id` = #{id}
+</update>
+<update id="updateUserToken" parameterType="kr.quantumsoft.koreasurvey.model.Users">
+	UPDATE `users`
+	SET
+		`firebasetoken` = #{firebasetoken}
+	WHERE `id` = #{id}
+</update>
+<select id="search" parameterType="HashMap" resultType="kr.quantumsoft.koreasurvey.model.Users">
+	SELECT * FROM `users` WHERE 1=1
+	<if test="email != null">
+		and email = #{email}
+	</if>
+	<if test="start != null and end != null">
+		and created BETWEEN #{start} and #{end}
+	</if>
+	<if test="userStatus != null">
+		and active = #{userStatus}
+	</if>
+</select>
+</mapper>
